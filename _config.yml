@@ -1,21 +1,21 @@
 # Site settings
-title: 坚实的幻想
-SEOTitle: Fantasy
+title: 个人总结
+SEOTitle: sin
 header-img: img/home-bg.jpg
-email: liaoishere@gmail.com
-description: "On A Clear Disk You Can Seek Forever"
+email: xuanmingyi@gmail.com
+description: "Talk Is Cheap,Show Me The Code"
 keyword: ""
-url: "http://liaoph.com"              # your host, for absolute URL
+url: "http://lithum.tech"              # your host, for absolute URL
 baseurl: ""         # for example, '/blog' if your blog hosted on 'host/blog'
-author: "Liao"
+author: "sin"
 
 
 
 # SNS settings
 RSS: true
-weibo_username:     aoLiii
+#weibo_username:     aoLiii
 #zhihu_username:     liaopenghui
-github_username:    liaoishere
+github_username:    xuanmingyi
 #twitter_username:  huxpro
 #facebook_username:  huxpro
 
