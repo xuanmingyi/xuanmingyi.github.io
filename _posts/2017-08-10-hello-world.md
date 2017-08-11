@@ -5,7 +5,7 @@ subtitle:   " \"Hello World, Hello Blog\""
 date:       2017-08-10 07:56:00
 author:     sin
 catalog:    true
-header-img: img/post-bg-2015.jpg
+header-img: img/bg.jpg
 permalink:  /hello-world/
 tags:
     - Life

@@ -1,7 +1,7 @@
 # Site settings
 title: 个人总结
 SEOTitle: sin
-header-img: img/home-bg.jpg
+header-img: img/bg.jpg
 email: xuanmingyi@gmail.com
 description: "Talk Is Cheap,Show Me The Code"
 keyword: ""
@@ -34,7 +34,7 @@ anchorjs: true                          # if you want to customize anchor. check
 
 # Gems
 # from PR#40, to support local preview for Jekyll 3.0
-gems:
+plugins:
   - jekyll-paginate
   - jekyll-feed
 
@@ -51,7 +51,7 @@ kramdown:
 
 
 # Disqus settings
-disqus_username: liaoph
+disqus_username: xmyblog
 
 # Duoshuo settings
 # duoshuo_username: liaoishere
@@ -63,7 +63,7 @@ disqus_username: liaoph
 
 # Analytics settings
 # Baidu Analytics
-ba_track_id: ca24cc0fb86c19c1a88f5f7a020629d3
+#ba_track_id: ca24cc0fb86c19c1a88f5f7a020629d3
 # Google Analytics
 #ga_track_id: 'UA-49627206-1'            # Format: UA-xxxxxx-xx
 #ga_domain: huangxuan.me
@@ -72,8 +72,8 @@ ba_track_id: ca24cc0fb86c19c1a88f5f7a020629d3
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "Proudly uncool and out of fashion"
-sidebar-avatar: /img/avatar-liao.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-about-description: "There are no men like me. Only me."
+sidebar-avatar: /img/avatar.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
@@ -85,14 +85,14 @@ featured-condition-size: 1              # A tag will be featured if the size of 
 
 # Friends
 friends: [
-    {
-        title: "Puppet OpenStack",
-        href: "http://pom.nops.cloud/"
-    },{
-        title: "牛皮糖",
-        href: "http://www.cnblogs.com/yuxc/"
-    },{
-        title: "周维宇日志",
-        href: "https://zhouweiyu.wordpress.com/"
-    }
+#    {
+#        title: "Puppet OpenStack",
+#        href: "http://pom.nops.cloud/"
+#    },{
+#        title: "牛皮糖",
+#        href: "http://www.cnblogs.com/yuxc/"
+#    },{
+#        title: "周维宇日志",
+#        href: "https://zhouweiyu.wordpress.com/"
+#    }
 ]
