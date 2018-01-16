@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Zabbix Server 安装
+title:      "Zabbix Server 安装"
 subtitle:   ""
 date:       2018-01-13 07:56:00
 author:     sin
@@ -18,11 +18,8 @@ tags:
 首先确认使用LTS版本，server数据库采用MySQL
 
 * zabbix-server + MySQL centos7.4
-    * 一张网卡
 * zabbix-proxy  centos7.4
-    * 两张网卡
 * zabbix-agent  centos7.4
-    * 一张网卡
 
 # 安装repo
 
@@ -40,25 +37,23 @@ tags:
     sudo setenforce 0
     sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
-# 安装依赖
+# 安装软件
+
+安装依赖、数据库，以及Zabbix-Server
 
     sudo yum install -y MySQL-python mariadb
-
-# 安装MySQL
-
     sudo yum install -y epel-release mariadb-server
     sudo systemctl start  mariadb
     sudo systemctl enable mariadb
-
-# 安装 Zabbix
-
     sudo yum install -y epel-release zabbix-get zabbix-server-mysql
 
 # 数据库
 
+创建数据库,收据库授权
+
     mysql -e "CREATE DATABASE zabbix DEFAULT CHARSET UTF8;"
-    mysql -e "CREATE USER 'zabbix'@'%' IDENTIFIED BY '123456';"
-    mysql -e "GRANT ALL ON zabbix.* to 'zabbix'@'%';"
+    mysql -e "CREATE USER 'zabbix'@'localhost' IDENTIFIED BY '123456';"
+    mysql -e "GRANT ALL ON zabbix.* to 'zabbix'@'localhost';"
 
 # 导入数据库
 
@@ -66,10 +61,15 @@ tags:
 
 # 修改zabbix-server.conf
 
+修改数据库连接
+
     sed -i "s/# DBPassword=/DBPassword=123456/g" /etc/zabbix/zabbix_server.conf
-    sed -i "s/# DBHost=localhost/DBHost=192.168.199.137/g" /etc/zabbix/zabbix_server.conf
+    sed -i "s/# DBHost=localhost/DBHost=localhost/g" /etc/zabbix/zabbix_server.conf
 
 # 重启zabbix-server
 
     systemctl restart zabbix-server
     systemctl enable zabbix-server
+
+
+下一步[安装Zabbix Web](/zabbix-web-install/)

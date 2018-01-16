@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Zabbix Web 安装
+title:      "Zabbix Web 安装"
 subtitle:   ""
 date:       2018-01-16 15:05:00
 author:     sin
@@ -13,7 +13,10 @@ tags:
 ---
 
 
-#　安装
+# 安装
+
+安装LAMP环境以及Zabbix Web
+
     yum install httpd php php-mysql php-mbstring php-gd php-bcmath php-ldap php-xml
     yum install zabbix-web
 
@@ -25,7 +28,10 @@ tags:
 
     systemctl restart httpd
     systemctl enable httpd
-    systemctl stop firewalld
 
 # 访问
-    http://192.168.199.137/zabbix
+    http://{服务器ＩＰ}/zabbix
+
+# TIPS
+
+* 如果不能访问，尝试关闭firewalld
