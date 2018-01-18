@@ -17,8 +17,8 @@ tags:
 
 安装LAMP环境以及Zabbix Web
 
-    yum install httpd php php-mysql php-mbstring php-gd php-bcmath php-ldap php-xml
-    yum install zabbix-web
+    yum install -y httpd php php-mysql php-mbstring php-gd php-bcmath php-ldap php-xml
+    yum install -y zabbix-web
 
 # 修改时区
 
