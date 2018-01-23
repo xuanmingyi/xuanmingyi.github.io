@@ -9,6 +9,8 @@ header-img: img/bg.jpg
 permalink:  /kubernetes-install/
 tags:
     - Linux
+    - Kubernetes
+    - Docker
 ---
 
 # 介绍
