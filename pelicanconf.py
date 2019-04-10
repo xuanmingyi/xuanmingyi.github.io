@@ -38,5 +38,5 @@ DEFAULT_PAGINATION = 10
 
 THEME = 'Nuja'
 
-STATIC_PATHS = ['extra/CNAME', ]
+STATIC_PATHS = ['extra/CNAME', 'extra/images']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}, }
