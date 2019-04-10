@@ -2,6 +2,12 @@
 <aside class="span3 {%if articles_page%}remove-bs-margin{%endif%} hidden-phone hidden-tablet">
 
     <div class="widget-external-links widget">
+    {% if WECHAT %}
+	<h3 class="widget-header">Wechat</h3>
+	<div class="widget-content">
+        <img src="{{ WECHAT }}">
+    </div>
+    {% endif %}
 	<h3 class="widget-header">External Links</h3>
 	<div class="widget-content">
 	    <ul class="widget-list">

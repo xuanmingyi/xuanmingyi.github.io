@@ -40,3 +40,5 @@ THEME = 'Nuja'
 
 STATIC_PATHS = ['extra/CNAME', 'extra/images']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}, }
+
+WECHAT = "/extra/images/wechat.jpeg"

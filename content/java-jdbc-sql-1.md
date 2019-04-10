@@ -53,10 +53,10 @@ Authors: Xuan Mingyi
 ## 环境设置
 
 下载MySQL的JDBC包
-![](extra/images/jdbc1.png)
+![下载](extra/images/jdbc1.png)
 
 加入项目依赖
-![](extra/images/jdbc2.png)
+![依赖包](extra/images/jdbc2.png)
 
 ## 连接
 
