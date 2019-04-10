@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>- Java</title><link href="/" rel="alternate"></link><link href="/feeds/java.atom.xml" rel="self"></link><id>/</id><updated>2019-04-11T00:22:00+08:00</updated><entry><title>Java与SQL打交道(2) - 连接池</title><link href="/java-connection-pool-2.html" rel="alternate"></link><published>2019-04-11T00:22:00+08:00</published><updated>2019-04-11T00:22:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-11:/java-connection-pool-2.html</id><summary type="html"></summary><content type="html"></content><category term="java"></category><category term="连接池"></category><category term="MySQL"></category></entry><entry><title>Java与SQL打交道(1) - JDBC</title><link href="/java-jdbc-sql-1.html" rel="alternate"></link><published>2019-04-10T07:36:00+08:00</published><updated>2019-04-10T07:36:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-10:/java-jdbc-sql-1.html</id><summary type="html">&lt;p&gt;我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>- Java</title><link href="/" rel="alternate"></link><link href="/feeds/java.atom.xml" rel="self"></link><id>/</id><updated>2019-04-10T07:36:00+08:00</updated><entry><title>Java与SQL打交道(1) - JDBC</title><link href="/java-jdbc-sql-1.html" rel="alternate"></link><published>2019-04-10T07:36:00+08:00</published><updated>2019-04-10T07:36:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-10:/java-jdbc-sql-1.html</id><summary type="html">&lt;p&gt;我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;JDBC&lt;/li&gt;
 &lt;li&gt;MyBatis&lt;/li&gt;
@@ -59,9 +59,9 @@ MariaDB [test]&amp;gt;
 
 &lt;h2&gt;环境设置&lt;/h2&gt;
 &lt;p&gt;下载MySQL的JDBC包
-&lt;img alt="" src="extra/images/jdbc1.png"&gt;&lt;/p&gt;
+&lt;img alt="下载" src="extra/images/jdbc1.png"&gt;&lt;/p&gt;
 &lt;p&gt;加入项目依赖
-&lt;img alt="" src="extra/images/jdbc2.png"&gt;&lt;/p&gt;
+&lt;img alt="依赖包" src="extra/images/jdbc2.png"&gt;&lt;/p&gt;
 &lt;h2&gt;连接&lt;/h2&gt;
 &lt;p&gt;数据库使用之前先需要先连接数据库，获得数据库连接的conn&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// 数据库连接URI&lt;/span&gt;
