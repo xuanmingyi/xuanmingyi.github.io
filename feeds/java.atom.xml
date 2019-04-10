@@ -1,2 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>- Java</title><link href="/" rel="alternate"></link><link href="/feeds/java.atom.xml" rel="self"></link><id>/</id><updated>2019-04-07T16:20:00+08:00</updated><entry><title>Spring JPA 使用方法</title><link href="/spring-jpa-1.html" rel="alternate"></link><published>2019-04-07T16:20:00+08:00</published><updated>2019-04-07T16:20:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-07:/spring-jpa-1.html</id><summary type="html">&lt;p&gt;Spring 提供了JPA，为数据保存提供了非常简单的方法。&lt;/p&gt;</summary><content type="html">&lt;p&gt;Spring 提供了JPA，为数据保存提供了非常简单的方法。&lt;/p&gt;</content><category term="java"></category><category term="spring"></category><category term="JPA"></category><category term="MySQL"></category></entry></feed>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>- Java</title><link href="/" rel="alternate"></link><link href="/feeds/java.atom.xml" rel="self"></link><id>/</id><updated>2019-04-11T00:22:00+08:00</updated><entry><title>Java与SQL打交道(2) - 连接池</title><link href="/java-connection-pool-2.html" rel="alternate"></link><published>2019-04-11T00:22:00+08:00</published><updated>2019-04-11T00:22:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-11:/java-connection-pool-2.html</id><summary type="html"></summary><content type="html"></content><category term="java"></category><category term="连接池"></category><category term="MySQL"></category></entry><entry><title>Java与SQL打交道(1) - JDBC</title><link href="/java-jdbc-sql-1.html" rel="alternate"></link><published>2019-04-10T07:36:00+08:00</published><updated>2019-04-10T07:36:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-10:/java-jdbc-sql-1.html</id><summary type="html">&lt;p&gt;我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;JDBC&lt;/li&gt;
+&lt;li&gt;MyBatis&lt;/li&gt;
+&lt;li&gt;JPA&lt;/li&gt;
+&lt;li&gt;Hibernate&lt;/li&gt;
+&lt;li&gt;Spring Data&lt;/li&gt;
+&lt;li&gt;...&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们将一一学习使用,理清楚他们之间的关系以及封装。&lt;/p&gt;
+&lt;p&gt;首先，我们选取一个数据库作为测试用例,这里先使用MySQL，如下。&lt;/p&gt;
+&lt;p&gt;创建一张测试user表&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ mysql -uroot -hlocalhost
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 20
+Server version: 10.2.22-MariaDB Homebrew
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;JDBC&lt;/li&gt;
+&lt;li&gt;MyBatis&lt;/li&gt;
+&lt;li&gt;JPA&lt;/li&gt;
+&lt;li&gt;Hibernate&lt;/li&gt;
+&lt;li&gt;Spring Data&lt;/li&gt;
+&lt;li&gt;...&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们将一一学习使用,理清楚他们之间的关系以及封装。&lt;/p&gt;
+&lt;p&gt;首先，我们选取一个数据库作为测试用例,这里先使用MySQL，如下。&lt;/p&gt;
+&lt;p&gt;创建一张测试user表&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ mysql -uroot -hlocalhost
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 20
+Server version: 10.2.22-MariaDB Homebrew
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type &amp;#39;help;&amp;#39; or &amp;#39;\h&amp;#39; for help. Type &amp;#39;\c&amp;#39; to clear the current input statement.
+
+MariaDB [(none)]&amp;gt; use test
+Database changed
+
+MariaDB [test]&amp;gt; create table user(username varchar(32), password varchar(32), sex tinyint(1));
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [test]&amp;gt; desc user;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| username | varchar(32) | YES  |     | NULL    |       |
+| password | varchar(32) | YES  |     | NULL    |       |
+| sex      | tinyint(1)  | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+MariaDB [test]&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;环境设置&lt;/h2&gt;
+&lt;p&gt;下载MySQL的JDBC包
+&lt;img alt="" src="extra/images/jdbc1.png"&gt;&lt;/p&gt;
+&lt;p&gt;加入项目依赖
+&lt;img alt="" src="extra/images/jdbc2.png"&gt;&lt;/p&gt;
+&lt;h2&gt;连接&lt;/h2&gt;
+&lt;p&gt;数据库使用之前先需要先连接数据库，获得数据库连接的conn&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// 数据库连接URI&lt;/span&gt;
+&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;driverName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;com.mysql.cj.jdbc.Driver&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;jdbc:mysql://localhost:3306/test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;root&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;Connection&lt;/span&gt; &lt;span class="n"&gt;conn&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// 加载驱动&lt;/span&gt;
+    &lt;span class="n"&gt;Class&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;forName&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;driverName&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// 获取连接&lt;/span&gt;
+    &lt;span class="n"&gt;conn&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;DriverManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getConnection&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+    &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;连接成功&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ClassNotFoundException&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;){&lt;/span&gt;
+    &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SQLException&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;操作&lt;/h2&gt;
+&lt;h3&gt;增&lt;/h3&gt;
+&lt;p&gt;插入一条数据&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;sql&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;insert into user (username, password, sex) values(?, ?, ?)&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;PreparedStatement&lt;/span&gt; &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;PreparedStatement&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;prepareStatement&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sql&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;xuanmingyi&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;iygnimnaux&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setInt&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;executeUpdate&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;close&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+    &lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;close&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SQLException&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// TODO Auto-generated catch block&lt;/span&gt;
+    &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;PreparedStatement&lt;/code&gt;实例包含了已经编译的SQL语句,setXxxx方法来设置参数，然后执行executeUpdate来执行插入方法。&lt;/p&gt;
+&lt;p&gt;让我们来看看结果&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MariaDB [test]&amp;gt; select * from user;
++------------+------------+------+
+| username   | password   | sex  |
++------------+------------+------+
+| xuanmingyi | iygnimnaux |    0 |
++------------+------------+------+
+1 row in set (0.00 sec)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;删&lt;/h3&gt;
+&lt;p&gt;删除一条记录&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;String sql = &amp;quot;delete from user where username=?&amp;quot;;
+PreparedStatement pstmt;
+try {
+    pstmt = (PreparedStatement) conn.prepareStatement(sql);
+
+    pstmt.setString(1, &amp;quot;xuanmingyi&amp;quot;);
+
+    pstmt.executeUpdate();
+
+    pstmt.close();
+    conn.close();
+} catch (SQLException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;删除数据&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MariaDB [test]&amp;gt; select * from user;
+Empty set (0.00 sec)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;改&lt;/h3&gt;
+&lt;p&gt;修改一条记录,先插入一条数据&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MariaDB [test]&amp;gt; select * from user;
++------------+------------+------+
+| username   | password   | sex  |
++------------+------------+------+
+| xuanmingyi | iygnimnaux |    0 |
++------------+------------+------+
+1 row in set (0.00 sec)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;使用如下代码修改password&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;sql&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;update user set password=? where username= ?&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;PreparedStatement&lt;/span&gt; &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;PreparedStatement&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;prepareStatement&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sql&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;123456&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;xuanmingyi&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;executeUpdate&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+    &lt;span class="n"&gt;pstmt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;close&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+    &lt;span class="n"&gt;conn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;close&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SQLException&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;使用update语句修改数据,就是这么简单&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MariaDB [test]&amp;gt; select * from user;
++------------+----------+------+
+| username   | password | sex  |
++------------+----------+------+
+| xuanmingyi | 123456   |    0 |
++------------+----------+------+
+1 row in set (0.00 sec)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;查&lt;/h3&gt;
+&lt;p&gt;查找记录&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;String sql = &amp;quot;select * from user&amp;quot;;
+PreparedStatement pstmt;
+try {
+    pstmt = (PreparedStatement)conn.prepareStatement(sql);
+    ResultSet rs = pstmt.executeQuery();
+    int col = rs.getMetaData().getColumnCount();
+    while (rs.next()) {
+        for (int i = 1; i &amp;lt;= col; i++) {
+            System.out.print(rs.getString(i) + &amp;quot;\t&amp;quot;);
+         }
+        System.out.println(&amp;quot;&amp;quot;);
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;返回值是&lt;code&gt;ResultSet&lt;/code&gt;的实例，rs是一个迭代器,通过next方法一行行获取数据，getString(x)方法来获取第x列的数据，和上面的setString对应起来。&lt;/p&gt;
+&lt;h2&gt;连接池问题&lt;/h2&gt;
+&lt;p&gt;上面的代码里,我们使用&lt;code&gt;DriverManager.getConnection&lt;/code&gt;方法 获取一个数据库连接，当不使用的时候，需要close。如果不close，会造成泄漏.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;DriverManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getConnection&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sleep&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10000&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;查看数据库的连接&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MariaDB [(none)]&amp;gt; show processlist;
++-----+-------------+-----------------+------+---------+------+--------------------------+------------------+----------+
+| Id  | User        | Host            | db   | Command | Time | State                    | Info             | Progress |
++-----+-------------+-----------------+------+---------+------+--------------------------+------------------+----------+
+|   1 | system user |                 | NULL | Daemon  | NULL | InnoDB purge coordinator | NULL             |    0.000 |
+|   2 | system user |                 | NULL | Daemon  | NULL | InnoDB purge worker      | NULL             |    0.000 |
+|   3 | system user |                 | NULL | Daemon  | NULL | InnoDB purge worker      | NULL             |    0.000 |
+|   4 | system user |                 | NULL | Daemon  | NULL | InnoDB purge worker      | NULL             |    0.000 |
+|   5 | system user |                 | NULL | Daemon  | NULL | InnoDB shutdown handler  | NULL             |    0.000 |
+|  37 | root        | localhost       | NULL | Query   |    0 | init                     | show processlist |    0.000 |
+| 443 | root        | localhost:54972 | test | Sleep   |    8 |                          | NULL             |    0.000 |
+| 444 | root        | localhost:54973 | test | Sleep   |    8 |                          | NULL             |    0.000 |
+| 445 | root        | localhost:54974 | test | Sleep   |    8 |                          | NULL             |    0.000 |
+| 446 | root        | localhost:54975 | test | Sleep   |    8 |                          | NULL             |    0.000 |
+| 447 | root        | localhost:54976 | test | Sleep   |    8 |                          | NULL             |    0.000 |
++-----+-------------+-----------------+------+---------+------+--------------------------+------------------+----------+
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如上造成了5个数据库连接的泄漏。&lt;/p&gt;
+&lt;p&gt;如果我们每次不使用了就关闭，使用就连接，则会造成连接次数过多，消耗过多资源。&lt;/p&gt;
+&lt;p&gt;解决上面的办法就是: 维护一个连接池，用的话从池里面获取一个。这样即快速，不需要每次都打开连接，又不至于连接过多。&lt;/p&gt;
+&lt;h2&gt;对象问题&lt;/h2&gt;
+&lt;p&gt;使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。&lt;/p&gt;</content><category term="java"></category><category term="jdbc"></category><category term="MySQL"></category></entry></feed>
