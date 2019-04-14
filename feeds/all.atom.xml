@@ -1,5 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2019-04-10T07:36:00+08:00</updated><entry><title>Java与SQL打交道(1) - JDBC</title><link href="/java-jdbc-sql-1.html" rel="alternate"></link><published>2019-04-10T07:36:00+08:00</published><updated>2019-04-10T07:36:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-10:/java-jdbc-sql-1.html</id><summary type="html">&lt;p&gt;我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2019-04-11T08:31:00+08:00</updated><entry><title>Java与SQL打交道(3) - JPA</title><link href="/java-jpa-3.html" rel="alternate"></link><published>2019-04-11T08:31:00+08:00</published><updated>2019-04-11T08:31:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-11:/java-jpa-3.html</id><summary type="html">&lt;p&gt;JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考&lt;a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API"&gt;维基百科&lt;/a&gt;、&lt;a href="www.javaguides.net/p/jpa-tutorial-java-persistence-api.html"&gt;JPA Tutorial - Java Persistence API&lt;/a&gt;我们来一探究竟。&lt;/p&gt;
+&lt;p&gt;从上面我们知道，比较重要的版本有 2.0、2.1以及2.2&lt;/p&gt;
+&lt;h4&gt;JPA 2.0&lt;/h4&gt;
+&lt;p&gt;&lt;a href="https://jcp.org/en/jsr/detail?id=317"&gt;JSR 317: JavaTM Persistence 2.0&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;JPA 2.1&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://docs.oracle.com/javaee/7/tutorial/overview007.htm"&gt;Java EE 7 APIs&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="jpa2_1" src="extra/images/jpa2_1.png"&gt;&lt;/p&gt;
+&lt;h4&gt;JPA 2.2 …&lt;/h4&gt;</summary><content type="html">&lt;p&gt;JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考&lt;a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API"&gt;维基百科&lt;/a&gt;、&lt;a href="www.javaguides.net/p/jpa-tutorial-java-persistence-api.html"&gt;JPA Tutorial - Java Persistence API&lt;/a&gt;我们来一探究竟。&lt;/p&gt;
+&lt;p&gt;从上面我们知道，比较重要的版本有 2.0、2.1以及2.2&lt;/p&gt;
+&lt;h4&gt;JPA 2.0&lt;/h4&gt;
+&lt;p&gt;&lt;a href="https://jcp.org/en/jsr/detail?id=317"&gt;JSR 317: JavaTM Persistence 2.0&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;JPA 2.1&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://docs.oracle.com/javaee/7/tutorial/overview007.htm"&gt;Java EE 7 APIs&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="jpa2_1" src="extra/images/jpa2_1.png"&gt;&lt;/p&gt;
+&lt;h4&gt;JPA 2.2&lt;/h4&gt;
+&lt;p&gt;这是最新的&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://jcp.org/en/jsr/detail?id=338"&gt;JSR 338: JavaTM Persistence 2.2&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;说明&lt;/h4&gt;
+&lt;p&gt;JPA的主要用途就是，来实现ORM的，盗张图。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="orm" src="https://2.bp.blogspot.com/-qNxMJPEHiBY/XJi0nsgC39I/AAAAAAAAFyo/-r7_JnV5Nak1sN_BWEMCFPU1JahkQbIAACLcBGAs/s1600/hibernate-orm-mpping-latest.png"&gt;&lt;/p&gt;
+&lt;p&gt;下面我们找个框架来练练手，研究一下JPA的使用。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Spring Data JPA&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Spring Data JPA&lt;/h3&gt;
+&lt;p&gt;我们要用一个例子来展现极简方式实现User的增删改查&lt;/p&gt;
+&lt;h4&gt;实现实体类Entity&lt;/h4&gt;
+&lt;p&gt;下面我们先展示一下要用到的User表&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MariaDB [test]&amp;gt; desc user;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| username | varchar(32) | YES  |     | NULL    |       |
+| password | varchar(32) | YES  |     | NULL    |       |
+| sex      | tinyint(1)  | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;定义一个实体类&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;javax.persistence.Entity&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;javax.persistence.Id&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="nd"&gt;@Entity&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;User&lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="nd"&gt;@Id&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;sex&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;getUsername&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;setUsername&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;username&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;getPassword&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;setPassword&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;password&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;getSex&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;sex&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;setSex&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;sex&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sex&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其中&lt;code&gt;username&lt;/code&gt;作为主键，当然，这并不是一个好主意,最好使用一个自增的ID或者uuid作为主键。&lt;/p&gt;
+&lt;h4&gt;实现接口&lt;/h4&gt;
+&lt;p&gt;这是一个CRUD的接口&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;org.springframework.data.repository.CrudRepository&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.List&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;interface&lt;/span&gt; &lt;span class="nc"&gt;UserRepository&lt;/span&gt; &lt;span class="kd"&gt;extends&lt;/span&gt; &lt;span class="n"&gt;CrudRepository&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;User&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;List&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;User&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;findBySex&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;sex&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;List&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;User&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;findAll&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;使用&lt;/h4&gt;
+&lt;p&gt;例子来源于&lt;a href="https://spring.io/guides/gs/accessing-data-jpa/"&gt;accessing-data-jpa&lt;/a&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;me&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;User&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="n"&gt;me&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setUsername&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;xuanmingyi&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;me&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setPassword&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;iygnimnaux&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;me&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setSex&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;repository&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;save&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;me&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;以上就可以用了，还算比较方便。大部分语言的ORM都能做到。&lt;/p&gt;
+&lt;p&gt;其中需要注意的几个点就是:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果不使用&lt;code&gt;@Table&lt;/code&gt;注解，则默认实例类名和数据库表名一样。比如 &lt;code&gt;User类&lt;/code&gt; 对应 &lt;code&gt;user表&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;Spring Data JPA 还能从函数签名中推导出要求的逻辑，当然 只能是简单逻辑。碰到函数签名，想到一个有意思的问题，为啥C语言不能重载。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;函数签名&lt;/h4&gt;
+&lt;p&gt;下面做一个实验来验证一下C和CPP的签名机制。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(){&lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
+&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;test2&lt;/span&gt;&lt;span class="p"&gt;(){&lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
+&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(){&lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;使用c编译器,函数签名就是函数的名字&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# 使用c编译器
+$ gcc -c main.c -o main.c.o
+$ objdump -t main.c.o
+
+main.c.o:   file format Mach-O 64-bit x86-64
+
+SYMBOL TABLE:
+0000000000000020 g     F __TEXT,__text  _main
+0000000000000000 g     F __TEXT,__text  _mm
+0000000000000010 g     F __TEXT,__text  _mm2
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;使用cpp编译器,函数签名根据函数的名字以及参数列表&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# 使用cpp编译器
+$ gcc -c main.cpp -o main.cpp.o
+$ objdump -t main.cpp.o
+
+main.cpp.o: file format Mach-O 64-bit x86-64
+
+SYMBOL TABLE:
+0000000000000000 g     F __TEXT,__text  __Z2mmv
+0000000000000010 g     F __TEXT,__text  __Z3mm2v
+0000000000000020 g     F __TEXT,__text  _main
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;SO: 名字一样，参数不同的函数，对C来说，就是一样的函数；对CPP而言，就是不一样的函数。&lt;/p&gt;
+&lt;p&gt;JAVA可以重载，所以，签名一定至少包含 名字以及参数列表&lt;/p&gt;
+&lt;h4&gt;优化&lt;/h4&gt;
+&lt;p&gt;有一位JAVA前辈，老徐，提示我，可以使用lombok减少代码量&lt;/p&gt;
+&lt;p&gt;上面的User类可以改写成如下&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;lombok.Data&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;javax.persistence.Entity&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;javax.persistence.Id&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="nd"&gt;@Entity&lt;/span&gt;
+&lt;span class="nd"&gt;@Data&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;User&lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="nd"&gt;@Id&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;sex&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;代码少了一大堆，但我是不会夸Java的，这不是应该的吗？既然可以推倒出来，为啥要写出来！以前的JAVA太咸了，需要适当加点糖 :)&lt;/p&gt;
+&lt;h4&gt;遗留问题 TODO&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;CrudRepository的规则&lt;/li&gt;
+&lt;li&gt;JPA的其他注解&lt;/li&gt;
+&lt;li&gt;JPA如何做类到表的映射的，如何解决大小写等逻辑？大小写！大小写！大小写！&lt;/li&gt;
+&lt;li&gt;Java的函数签名机制&lt;/li&gt;
+&lt;li&gt;lombok的具体用法以及实现原理&lt;/li&gt;
+&lt;/ul&gt;</content><category term="java"></category><category term="JPA"></category><category term="MySQL"></category></entry><entry><title>Java与SQL打交道(2) - 连接池</title><link href="/java-jdbc-connection-pool-2.html" rel="alternate"></link><published>2019-04-11T00:22:00+08:00</published><updated>2019-04-11T00:22:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-11:/java-jdbc-connection-pool-2.html</id><summary type="html">&lt;p&gt;Java的数据库连接池有很多例子，比如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.mchange.com/projects/c3p0/"&gt;c3p0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;TODO&lt;/h1&gt;
+&lt;p&gt;不难，没空写，回头补。&lt;/p&gt;
+&lt;h3&gt;资料&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.jianshu.com/p/e960497f967d"&gt;【简书】数据库连接池c3p0和dbcp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary><content type="html">&lt;p&gt;Java的数据库连接池有很多例子，比如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.mchange.com/projects/c3p0/"&gt;c3p0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;TODO&lt;/h1&gt;
+&lt;p&gt;不难，没空写，回头补。&lt;/p&gt;
+&lt;h3&gt;资料&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.jianshu.com/p/e960497f967d"&gt;【简书】数据库连接池c3p0和dbcp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="java"></category><category term="连接池"></category><category term="MySQL"></category></entry><entry><title>Java与SQL打交道(1) - JDBC</title><link href="/java-jdbc-sql-1.html" rel="alternate"></link><published>2019-04-10T07:36:00+08:00</published><updated>2019-04-10T07:36:00+08:00</updated><author><name>Xuan Mingyi</name></author><id>tag:None,2019-04-10:/java-jdbc-sql-1.html</id><summary type="html">&lt;p&gt;我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;JDBC&lt;/li&gt;
 &lt;li&gt;MyBatis&lt;/li&gt;
@@ -210,7 +404,7 @@ try {
 
 
 &lt;p&gt;返回值是&lt;code&gt;ResultSet&lt;/code&gt;的实例，rs是一个迭代器,通过next方法一行行获取数据，getString(x)方法来获取第x列的数据，和上面的setString对应起来。&lt;/p&gt;
-&lt;h2&gt;连接池问题&lt;/h2&gt;
+&lt;h2&gt;连接池问题 TODO&lt;/h2&gt;
 &lt;p&gt;上面的代码里,我们使用&lt;code&gt;DriverManager.getConnection&lt;/code&gt;方法 获取一个数据库连接，当不使用的时候，需要close。如果不close，会造成泄漏.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
     &lt;span class="n"&gt;DriverManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getConnection&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
@@ -242,5 +436,7 @@ try {
 &lt;p&gt;如上造成了5个数据库连接的泄漏。&lt;/p&gt;
 &lt;p&gt;如果我们每次不使用了就关闭，使用就连接，则会造成连接次数过多，消耗过多资源。&lt;/p&gt;
 &lt;p&gt;解决上面的办法就是: 维护一个连接池，用的话从池里面获取一个。这样即快速，不需要每次都打开连接，又不至于连接过多。&lt;/p&gt;
-&lt;h2&gt;对象问题&lt;/h2&gt;
-&lt;p&gt;使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。&lt;/p&gt;</content><category term="java"></category><category term="jdbc"></category><category term="MySQL"></category></entry></feed>
+&lt;p&gt;&lt;a href="/java-jdbc-connection-pool-2.html"&gt;Java与SQL打交道(2) - 连接池&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;对象问题 DONE&lt;/h2&gt;
+&lt;p&gt;使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。&lt;/p&gt;
+&lt;p&gt;&lt;a href="/java-jpa-3.html"&gt;Java与SQL打交道(3) - JPA&lt;/a&gt;&lt;/p&gt;</content><category term="java"></category><category term="jdbc"></category><category term="MySQL"></category></entry></feed>

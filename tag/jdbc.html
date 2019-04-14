@@ -330,7 +330,7 @@ try {
 
 
 <p>返回值是<code>ResultSet</code>的实例，rs是一个迭代器,通过next方法一行行获取数据，getString(x)方法来获取第x列的数据，和上面的setString对应起来。</p>
-<h2>连接池问题</h2>
+<h2>连接池问题 TODO</h2>
 <p>上面的代码里,我们使用<code>DriverManager.getConnection</code>方法 获取一个数据库连接，当不使用的时候，需要close。如果不close，会造成泄漏.</p>
 <div class="highlight"><pre><span></span><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
     <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
@@ -362,8 +362,10 @@ try {
 <p>如上造成了5个数据库连接的泄漏。</p>
 <p>如果我们每次不使用了就关闭，使用就连接，则会造成连接次数过多，消耗过多资源。</p>
 <p>解决上面的办法就是: 维护一个连接池，用的话从池里面获取一个。这样即快速，不需要每次都打开连接，又不至于连接过多。</p>
-<h2>对象问题</h2>
-<p>使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。</p> </div>
+<p><a href="/java-jdbc-connection-pool-2.html">Java与SQL打交道(2) - 连接池</a></p>
+<h2>对象问题 DONE</h2>
+<p>使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。</p>
+<p><a href="/java-jpa-3.html">Java与SQL打交道(3) - JPA</a></p> </div>
 	    </article>
 
 	    <!--
@@ -406,7 +408,7 @@ try {
 	<h3 class="widget-header">Category</h3>
 	<div class="widget-content">
 	    <ul class="widget-list">
-		<li class="widget-list-item"><a href="/category/java.html">Java.<span>1</span></a></li>
+		<li class="widget-list-item"><a href="/category/java.html">Java.<span>3</span></a></li>
 
 	    </ul>
 	</div>
