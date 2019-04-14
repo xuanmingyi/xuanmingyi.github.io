@@ -210,7 +210,7 @@ Authors: Xuan Mingyi
 返回值是`ResultSet`的实例，rs是一个迭代器,通过next方法一行行获取数据，getString(x)方法来获取第x列的数据，和上面的setString对应起来。
 
 
-## 连接池问题
+## 连接池问题 TODO
 
 上面的代码里,我们使用`DriverManager.getConnection`方法 获取一个数据库连接，当不使用的时候，需要close。如果不close，会造成泄漏.
 
@@ -245,6 +245,10 @@ Authors: Xuan Mingyi
 
 解决上面的办法就是: 维护一个连接池，用的话从池里面获取一个。这样即快速，不需要每次都打开连接，又不至于连接过多。
 
-## 对象问题
+[Java与SQL打交道(2) - 连接池](java-jdbc-connection-pool-2.html)
+
+## 对象问题 DONE
 
 使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。
+
+[Java与SQL打交道(3) - JPA](java-jpa-3.html)
