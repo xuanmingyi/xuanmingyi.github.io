@@ -245,10 +245,10 @@ Authors: Xuan Mingyi
 
 解决上面的办法就是: 维护一个连接池，用的话从池里面获取一个。这样即快速，不需要每次都打开连接，又不至于连接过多。
 
-[Java与SQL打交道(2) - 连接池](java-jdbc-connection-pool-2.html)
+[Java与SQL打交道(2) - 连接池](/java-jdbc-connection-pool-2.html)
 
 ## 对象问题 DONE
 
 使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。
 
-[Java与SQL打交道(3) - JPA](java-jpa-3.html)
+[Java与SQL打交道(3) - JPA](/java-jpa-3.html)
