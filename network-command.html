@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="Xuan Mingyi" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="linux, network, command line, Linux, " />
+
+<meta property="og:title" content="网络命令 "/>
+<meta property="og:url" content="/network-command.html" />
+<meta property="og:description" content="ip命令 ip route 查看路由 ip rotue add default via [192.168.65.2] dev [ens33] 添加默认路由 ip route add [192.168.65.0/24] via [192.168.65.2] ip addr 查看网络接口 ip addr show [ens33] 显示特定网卡 ip addr add [192.168.1.100/24] dev [eth0] 设置ip地址 ip addr …" />
+<meta property="og:site_name" content="" />
+<meta property="og:article:author" content="Xuan Mingyi" />
+<meta property="og:article:published_time" content="2020-05-02T02:30:00+08:00" />
+<meta name="twitter:title" content="网络命令 ">
+<meta name="twitter:description" content="ip命令 ip route 查看路由 ip rotue add default via [192.168.65.2] dev [ens33] 添加默认路由 ip route add [192.168.65.0/24] via [192.168.65.2] ip addr 查看网络接口 ip addr show [ens33] 显示特定网卡 ip addr add [192.168.1.100/24] dev [eth0] 设置ip地址 ip addr …">
+
+        <title>网络命令  · 
+</title>
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" - Full Atom Feed" />
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name></span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/network-command.html">
+                网络命令
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h3>ip命令</h3>
+<ul>
+<li>ip route 查看路由</li>
+<li>ip rotue add default via [192.168.65.2] dev [ens33] 添加默认路由</li>
+<li>ip route add [192.168.65.0/24] via  [192.168.65.2]</li>
+<li>ip addr  查看网络接口</li>
+<li>ip addr show [ens33] 显示特定网卡</li>
+<li>ip addr add [192.168.1.100/24] dev [eth0] 设置ip地址</li>
+<li>ip addr del [192.168.1.100/24] dev [eth0] 删除ip地址</li>
+<li>ip link set [eth0] [up] 启动网卡eth0</li>
+<li>ip link set [eth0] [down] 关闭网卡eth0</li>
+</ul>
+<h3>brctl命令(linux bridge)</h3>
+<ul>
+<li>brctl show 显示所有网桥</li>
+<li>brctl addbr [br0] 添加一个网桥</li>
+<li>brctl addif [br0] [ens33] 添加接口</li>
+</ul>
+<h3>ovs-vsctl 命令(Open vSwitch)</h3>
+<ul>
+<li>ovs-vsctl show 查看所有ovs网桥</li>
+<li>ovs-vsctl add-br [br0] 添加一个ovs网桥</li>
+<li>ovs-vsctl del-br [br0] 删除一个ovs网桥</li>
+</ul>
+<h3>Tap/Tun设备命令</h3>
+<ul>
+<li>ip tuntap add tap0 mode tap 创建一个tap0设备</li>
+<li>ip tuntap del tap0 mode tap 删除一个tap0设备</li>
+</ul>
+<h3>网络命名空间</h3>
+<ul>
+<li>ip netns 列出所有命名空间</li>
+<li>ip netns exec [ns1] [ip addr]   在网络命名空间ns1中执行命令</li>
+<li>ip netns add [ns1] 新建一个namespace</li>
+<li>ip netns del [ns1] 删除一个namespace</li>
+<li>ip link set [eth0] netns [ns1] 把网卡从主空间移动到ns1</li>
+<li>ip netns exec [ns1] ip link set [eth0] netns [1]  把网卡eth0从ns1中移动到root里</li>
+</ul>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2020-05-02T02:30:00+08:00">Sat 02 May 2020</time>
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#linux-ref">Linux</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#command-line-ref">command line
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#linux-ref">linux
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#network-ref">network
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
