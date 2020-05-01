@@ -1,703 +1,133 @@
 <!DOCTYPE html>
-<html lang="zh_cn" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+<html lang="zh_cn">
     <head>
-	<meta charset="utf-8">
-	
-	<meta name="description" content="">
-    <meta name="author" content="sin">
-	<meta name="robots" content="index,follow">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="sin" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta property="og:title" content=""/>
+<meta name="twitter:title" content="">
+<meta property="og:url" content="" />
+<meta property="og:site_name" content="" />
+<meta property="og:article:author" content="sin" />
+<meta name="keywords" content=" java,  jdbc,  JPA,  连接池,  MySQL,  Java, " />
+        <title> - MySQL tag</title>
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" - Full Atom Feed" />
 
 
-	<!-- OpenGraph -->
-	<meta property="og:property" content="zh_cn">
-	<meta property="og:image" content="/assets/images/favicons/apple-touch-icon-180x180.png">
-
-	<meta property="og:title" content=": You are now browsing: MySQL tag">
-	<meta property="og:type" content="website">
-	<meta property="og:description" content="">	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>: You are now browsing through `MySQL` tag</title>
-	<script type="text/javascript" src="/theme/js/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="/theme/js/bootstrap.js"></script>
-
-	<!-- Bootstrap CSS  -->
-	<link rel="stylesheet" href="/theme/css/bootstrap.css"/>
-	<link rel="stylesheet" href="/theme/css/responsive.css"/>
-	
-	<!-- Generated favicons markup -->
-	<link rel="apple-touch-icon" sizes="57x57" href="/assets/images/favicons/apple-touch-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="/assets/images/favicons/apple-touch-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="/assets/images/favicons/apple-touch-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/favicons/apple-touch-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="/assets/images/favicons/apple-touch-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="/assets/images/favicons/apple-touch-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="/assets/images/favicons/apple-touch-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon-180x180.png">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/android-chrome-192x192.png" sizes="192x192">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-96x96.png" sizes="96x96">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="/assets/images/favicons/manifest.json">
-	<link rel="shortcut icon" href="/assets/images/favicons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#2b5797">
-	<meta name="msapplication-TileImage" content="/assets/images/favicons/mstile-144x144.png">
-	<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml">
-	<meta name="theme-color" content="#ffffff">
-	<!-- LESS generated css for Nuja theme -->
-	<link rel="stylesheet" href="/theme/css/NujaStructure.css"/>
-	<!-- Highlight -->
-	<link rel="stylesheet" href="/theme/css/pygment.css"/>
-
-	<link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
-	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
-	<!--[if IE]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-
-
-
-	<!-- setup feeds and third-party services -->
-	<link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Atom Feed" />
-	<!-- to clean up later for the new theme -->
-	<script>
-	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-968141-17', 'auto');
-ga('send', 'pageview');
-
-	</script>
-	<meta name="google-site-verification" content="4TETrzpAoVPu2-VrTpOxQJFmmynS9VzPq_boE45VKa8" />
-	<meta name="msvalidate.01" content="E2790C576E7623BE2F59AC965B48361D" />
     </head>
     <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name></span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
 
-	<div class="container">
-	    <div class="header-container">
-		<header>
-		    <a href="/">
-			<h4> 		    </a>
 
-		    <nav>
-			<ul>
-			    <li><a href="/">Home</a></li>
+<div class="row-fluid">
 
+    <div class="row-fluid">
 
-			</ul>
-		    </nav>
-		</header>
+    </div>
 
-
-	    </div>
-	    <div class="clearfix"></div>
-<div class="row">
-    <div class="span12 alpha">
-	<h3>You are now browsing through `MySQL` tagged articles</h3>
+    <div class="row-fluid">
+        <div class="span8 offset2">
+            <header>
+            <h1 id="recent-posts">Recent Posts <a id="allposts" href="/archives.html">all posts</a></h1>
+            </header>
+        <div class="recent-posts">
+            <div itemscope class="recent-posts-article">
+                <a href="/java-jpa-3.html">
+                    Java与SQL打交道(3) - JPA
+                </a>
+                <div class="recent-posts-posted">
+                    posted in
+                    <a href="/categories.html#java-ref">Java</a>
+                    <time itemprop="dateCreated" datetime="2019-04-11T08:31:00+08:00">Thu 11 April 2019</time>
+                </div>
+            </div>
+            <div itemscope class="recent-posts-article">
+                <a href="/java-jdbc-connection-pool-2.html">
+                    Java与SQL打交道(2) - 连接池
+                </a>
+                <div class="recent-posts-posted">
+                    posted in
+                    <a href="/categories.html#java-ref">Java</a>
+                    <time itemprop="dateCreated" datetime="2019-04-11T00:22:00+08:00">Thu 11 April 2019</time>
+                </div>
+            </div>
+            <div itemscope class="recent-posts-article">
+                <a href="/java-jdbc-sql-1.html">
+                    Java与SQL打交道(1) - JDBC
+                </a>
+                <div class="recent-posts-posted">
+                    posted in
+                    <a href="/categories.html#java-ref">Java</a>
+                    <time itemprop="dateCreated" datetime="2019-04-10T07:36:00+08:00">Wed 10 April 2019</time>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 </div>
-<div class="clearfix"></div>
-	    <div class="row">
-		<div class="span9">
+                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
 
-		    <div class="span10">
 
 
-<div class="row">
-    <div class="span1 metadata alpha">
-	<aside>
-	    <div class="entry-date">
-		<div class="month-day">
-		    <time pubdate datetime="2019-04-11T08:31:00+08:00" title=" 4 11, 19">
-			 4.<span class="day">11</span>
-			<div class="year">19</div>
-		    </time>
-		</div>
 
-	    </div>
-
-	</aside> 
-
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
     </div>
-    <div class="span7">
-	<div class="entry-container ">
-
-	    <article  class="entry hentry" >
-		<header>
-		    <a href="/java-jpa-3.html" rel="bookmark" title="permalink for Java与SQL打交道(3) - JPA" ><h2 class="entry-title">Java与SQL打交道(3) - JPA</h2></a>
-		    <div class="author-details vcard">
-
-			by <a  class="url fn" href="/author/xuan-mingyi.html">Xuan Mingyi</a>  file under <a href="/category/java.html">Java</a> with tags 			<a href="/tag/java.html" title="Browse tag: java" rel="tag">java</a>, 			<a href="/tag/jpa.html" title="Browse tag: JPA" rel="tag">JPA</a>, 			<a href="/tag/mysql.html" title="Browse tag: MySQL" rel="tag">MySQL</a>		    </div>
-		</header>
-		<div class="entry-content">
-		<p>JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考<a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API">维基百科</a>、<a href="www.javaguides.net/p/jpa-tutorial-java-persistence-api.html">JPA Tutorial - Java Persistence API</a>我们来一探究竟。</p>
-<p>从上面我们知道，比较重要的版本有 2.0、2.1以及2.2</p>
-<h4>JPA 2.0</h4>
-<p><a href="https://jcp.org/en/jsr/detail?id=317">JSR 317: JavaTM Persistence 2.0</a></p>
-<h4>JPA 2.1</h4>
-<p><em>2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。</em></p>
-<p><a href="https://docs.oracle.com/javaee/7/tutorial/overview007.htm">Java EE 7 APIs</a></p>
-<p><img alt="jpa2_1" src="extra/images/jpa2_1.png"></p>
-<h4>JPA 2.2</h4>
-<p>这是最新的</p>
-<p><a href="https://jcp.org/en/jsr/detail?id=338">JSR 338: JavaTM Persistence 2.2</a></p>
-<h4>说明</h4>
-<p>JPA的主要用途就是，来实现ORM的，盗张图。</p>
-<p><img alt="orm" src="https://2.bp.blogspot.com/-qNxMJPEHiBY/XJi0nsgC39I/AAAAAAAAFyo/-r7_JnV5Nak1sN_BWEMCFPU1JahkQbIAACLcBGAs/s1600/hibernate-orm-mpping-latest.png"></p>
-<p>下面我们找个框架来练练手，研究一下JPA的使用。</p>
-<ul>
-<li>Spring Data JPA</li>
-</ul>
-<h3>Spring Data JPA</h3>
-<p>我们要用一个例子来展现极简方式实现User的增删改查</p>
-<h4>实现实体类Entity</h4>
-<p>下面我们先展示一下要用到的User表</p>
-<div class="highlight"><pre><span></span>MariaDB [test]&gt; desc user;
-+----------+-------------+------+-----+---------+-------+
-| Field    | Type        | Null | Key | Default | Extra |
-+----------+-------------+------+-----+---------+-------+
-| username | varchar(32) | YES  |     | NULL    |       |
-| password | varchar(32) | YES  |     | NULL    |       |
-| sex      | tinyint(1)  | YES  |     | NULL    |       |
-+----------+-------------+------+-----+---------+-------+
-3 rows in set (0.02 sec)
-</pre></div>
-
-
-<p>定义一个实体类</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="o">;</span>
-
-<span class="nd">@Entity</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">sex</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">username</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getSex</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">sex</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSex</span><span class="o">(</span><span class="kt">int</span> <span class="n">sex</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">sex</span> <span class="o">=</span> <span class="n">sex</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-
-
-<p>其中<code>username</code>作为主键，当然，这并不是一个好主意,最好使用一个自增的ID或者uuid作为主键。</p>
-<h4>实现接口</h4>
-<p>这是一个CRUD的接口</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.springframework.data.repository.CrudRepository</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findBySex</span><span class="o">(</span><span class="kt">int</span> <span class="n">sex</span><span class="o">);</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
-
-
-<h4>使用</h4>
-<p>例子来源于<a href="https://spring.io/guides/gs/accessing-data-jpa/">accessing-data-jpa</a></p>
-<div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">me</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
-<span class="n">me</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="s">&quot;xuanmingyi&quot;</span><span class="o">);</span>
-<span class="n">me</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">&quot;iygnimnaux&quot;</span><span class="o">);</span>
-<span class="n">me</span><span class="o">.</span><span class="na">setSex</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-<span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">me</span><span class="o">);</span>
-</pre></div>
-
-
-<p>以上就可以用了，还算比较方便。大部分语言的ORM都能做到。</p>
-<p>其中需要注意的几个点就是:</p>
-<ul>
-<li>如果不使用<code>@Table</code>注解，则默认实例类名和数据库表名一样。比如 <code>User类</code> 对应 <code>user表</code>。</li>
-<li>Spring Data JPA 还能从函数签名中推导出要求的逻辑，当然 只能是简单逻辑。碰到函数签名，想到一个有意思的问题，为啥C语言不能重载。</li>
-</ul>
-<h4>函数签名</h4>
-<p>下面做一个实验来验证一下C和CPP的签名机制。</p>
-<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">test</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
-<span class="kt">int</span> <span class="nf">test2</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
-</pre></div>
-
-
-<p>使用c编译器,函数签名就是函数的名字</p>
-<div class="highlight"><pre><span></span># 使用c编译器
-$ gcc -c main.c -o main.c.o
-$ objdump -t main.c.o
-
-main.c.o:   file format Mach-O 64-bit x86-64
-
-SYMBOL TABLE:
-0000000000000020 g     F __TEXT,__text  _main
-0000000000000000 g     F __TEXT,__text  _mm
-0000000000000010 g     F __TEXT,__text  _mm2
-</pre></div>
-
-
-<p>使用cpp编译器,函数签名根据函数的名字以及参数列表</p>
-<div class="highlight"><pre><span></span># 使用cpp编译器
-$ gcc -c main.cpp -o main.cpp.o
-$ objdump -t main.cpp.o
-
-main.cpp.o: file format Mach-O 64-bit x86-64
-
-SYMBOL TABLE:
-0000000000000000 g     F __TEXT,__text  __Z2mmv
-0000000000000010 g     F __TEXT,__text  __Z3mm2v
-0000000000000020 g     F __TEXT,__text  _main
-</pre></div>
-
-
-<p>SO: 名字一样，参数不同的函数，对C来说，就是一样的函数；对CPP而言，就是不一样的函数。</p>
-<p>JAVA可以重载，所以，签名一定至少包含 名字以及参数列表</p>
-<h4>优化</h4>
-<p>有一位JAVA前辈，老徐，提示我，可以使用lombok减少代码量</p>
-<p>上面的User类可以改写成如下</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="o">;</span>
-
-<span class="nd">@Entity</span>
-<span class="nd">@Data</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">sex</span><span class="o">;</span>
-
-<span class="o">}</span>
-</pre></div>
-
-
-<p>代码少了一大堆，但我是不会夸Java的，这不是应该的吗？既然可以推倒出来，为啥要写出来！以前的JAVA太咸了，需要适当加点糖 :)</p>
-<h4>遗留问题 TODO</h4>
-<ul>
-<li>CrudRepository的规则</li>
-<li>JPA的其他注解</li>
-<li>JPA如何做类到表的映射的，如何解决大小写等逻辑？大小写！大小写！大小写！</li>
-<li>Java的函数签名机制</li>
-<li>lombok的具体用法以及实现原理</li>
-</ul> </div>
-	    </article>
-
-	    <!--
-	    in case any image breaks the theme
-	    i was going to use :after but it didn't quite work for me, maybe next time-->
-	    <div class="clearfix"></div>
-
-
-
-	</div>
-    </div>
-</div>
-<div class="row">
-    <div class="span1 metadata alpha">
-	<aside>
-	    <div class="entry-date">
-		<div class="month-day">
-		    <time pubdate datetime="2019-04-11T00:22:00+08:00" title=" 4 11, 19">
-			 4.<span class="day">11</span>
-			<div class="year">19</div>
-		    </time>
-		</div>
-
-	    </div>
-
-	</aside> 
-
-    </div>
-    <div class="span7">
-	<div class="entry-container ">
-
-	    <article  class="entry hentry" >
-		<header>
-		    <a href="/java-jdbc-connection-pool-2.html" rel="bookmark" title="permalink for Java与SQL打交道(2) - 连接池" ><h2 class="entry-title">Java与SQL打交道(2) - 连接池</h2></a>
-		    <div class="author-details vcard">
-
-			by <a  class="url fn" href="/author/xuan-mingyi.html">Xuan Mingyi</a>  file under <a href="/category/java.html">Java</a> with tags 			<a href="/tag/java.html" title="Browse tag: java" rel="tag">java</a>, 			<a href="/tag/lian-jie-chi.html" title="Browse tag: 连接池" rel="tag">连接池</a>, 			<a href="/tag/mysql.html" title="Browse tag: MySQL" rel="tag">MySQL</a>		    </div>
-		</header>
-		<div class="entry-content">
-		<p>Java的数据库连接池有很多例子，比如</p>
-<ul>
-<li><a href="https://www.mchange.com/projects/c3p0/">c3p0</a></li>
-</ul>
-<h1>TODO</h1>
-<p>不难，没空写，回头补。</p>
-<h3>资料</h3>
-<ul>
-<li><a href="https://www.jianshu.com/p/e960497f967d">【简书】数据库连接池c3p0和dbcp</a></li>
-</ul> </div>
-	    </article>
-
-	    <!--
-	    in case any image breaks the theme
-	    i was going to use :after but it didn't quite work for me, maybe next time-->
-	    <div class="clearfix"></div>
-
-
-
-	</div>
-    </div>
-</div>
-<div class="row">
-    <div class="span1 metadata alpha">
-	<aside>
-	    <div class="entry-date">
-		<div class="month-day">
-		    <time pubdate datetime="2019-04-10T07:36:00+08:00" title=" 4 10, 19">
-			 4.<span class="day">10</span>
-			<div class="year">19</div>
-		    </time>
-		</div>
-
-	    </div>
-
-	</aside> 
-
-    </div>
-    <div class="span7">
-	<div class="entry-container ">
-
-	    <article  class="entry hentry" >
-		<header>
-		    <a href="/java-jdbc-sql-1.html" rel="bookmark" title="permalink for Java与SQL打交道(1) - JDBC" ><h2 class="entry-title">Java与SQL打交道(1) - JDBC</h2></a>
-		    <div class="author-details vcard">
-
-			by <a  class="url fn" href="/author/xuan-mingyi.html">Xuan Mingyi</a>  file under <a href="/category/java.html">Java</a> with tags 			<a href="/tag/java.html" title="Browse tag: java" rel="tag">java</a>, 			<a href="/tag/jdbc.html" title="Browse tag: jdbc" rel="tag">jdbc</a>, 			<a href="/tag/mysql.html" title="Browse tag: MySQL" rel="tag">MySQL</a>		    </div>
-		</header>
-		<div class="entry-content">
-		<p>我们经常需要使用Java与SQL打交道,Java与SQL交互有很多类库,很多名词比如</p>
-<ul>
-<li>JDBC</li>
-<li>MyBatis</li>
-<li>JPA</li>
-<li>Hibernate</li>
-<li>Spring Data</li>
-<li>...</li>
-</ul>
-<p>我们将一一学习使用,理清楚他们之间的关系以及封装。</p>
-<p>首先，我们选取一个数据库作为测试用例,这里先使用MySQL，如下。</p>
-<p>创建一张测试user表</p>
-<div class="highlight"><pre><span></span>$ mysql -uroot -hlocalhost
-Welcome to the MariaDB monitor.  Commands end with ; or \g.
-Your MariaDB connection id is 20
-Server version: 10.2.22-MariaDB Homebrew
-
-Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
-
-Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.
-
-MariaDB [(none)]&gt; use test
-Database changed
-
-MariaDB [test]&gt; create table user(username varchar(32), password varchar(32), sex tinyint(1));
-Query OK, 0 rows affected (0.01 sec)
-
-MariaDB [test]&gt; desc user;
-+----------+-------------+------+-----+---------+-------+
-| Field    | Type        | Null | Key | Default | Extra |
-+----------+-------------+------+-----+---------+-------+
-| username | varchar(32) | YES  |     | NULL    |       |
-| password | varchar(32) | YES  |     | NULL    |       |
-| sex      | tinyint(1)  | YES  |     | NULL    |       |
-+----------+-------------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
-
-MariaDB [test]&gt;
-</pre></div>
-
-
-<h2>环境设置</h2>
-<p>下载MySQL的JDBC包
-<img alt="下载" src="extra/images/jdbc1.png"></p>
-<p>加入项目依赖
-<img alt="依赖包" src="extra/images/jdbc2.png"></p>
-<h2>连接</h2>
-<p>数据库使用之前先需要先连接数据库，获得数据库连接的conn</p>
-<div class="highlight"><pre><span></span><span class="c1">// 数据库连接URI</span>
-<span class="n">String</span> <span class="n">driverName</span> <span class="o">=</span> <span class="s">&quot;com.mysql.cj.jdbc.Driver&quot;</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;jdbc:mysql://localhost:3306/test&quot;</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">user</span> <span class="o">=</span> <span class="s">&quot;root&quot;</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">password</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
-<span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-
-<span class="k">try</span> <span class="o">{</span>
-    <span class="c1">// 加载驱动</span>
-    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">driverName</span><span class="o">);</span>
-
-    <span class="c1">// 获取连接</span>
-    <span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
-
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;连接成功&quot;</span><span class="o">);</span>
-
-<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">){</span>
-    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
-
-
-<h2>操作</h2>
-<h3>增</h3>
-<p>插入一条数据</p>
-<div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;insert into user (username, password, sex) values(?, ?, ?)&quot;</span><span class="o">;</span>
-<span class="n">PreparedStatement</span> <span class="n">pstmt</span><span class="o">;</span>
-<span class="k">try</span> <span class="o">{</span>
-    <span class="n">pstmt</span> <span class="o">=</span> <span class="o">(</span><span class="n">PreparedStatement</span><span class="o">)</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
-
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">&quot;xuanmingyi&quot;</span><span class="o">);</span>
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">&quot;iygnimnaux&quot;</span><span class="o">);</span>
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
-
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span>
-
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// TODO Auto-generated catch block</span>
-    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
-
-
-<p><code>PreparedStatement</code>实例包含了已经编译的SQL语句,setXxxx方法来设置参数，然后执行executeUpdate来执行插入方法。</p>
-<p>让我们来看看结果</p>
-<div class="highlight"><pre><span></span>MariaDB [test]&gt; select * from user;
-+------------+------------+------+
-| username   | password   | sex  |
-+------------+------------+------+
-| xuanmingyi | iygnimnaux |    0 |
-+------------+------------+------+
-1 row in set (0.00 sec)
-</pre></div>
-
-
-<h3>删</h3>
-<p>删除一条记录</p>
-<div class="highlight"><pre><span></span>String sql = &quot;delete from user where username=?&quot;;
-PreparedStatement pstmt;
-try {
-    pstmt = (PreparedStatement) conn.prepareStatement(sql);
-
-    pstmt.setString(1, &quot;xuanmingyi&quot;);
-
-    pstmt.executeUpdate();
-
-    pstmt.close();
-    conn.close();
-} catch (SQLException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-}
-</pre></div>
-
-
-<p>删除数据</p>
-<div class="highlight"><pre><span></span>MariaDB [test]&gt; select * from user;
-Empty set (0.00 sec)
-</pre></div>
-
-
-<h3>改</h3>
-<p>修改一条记录,先插入一条数据</p>
-<div class="highlight"><pre><span></span>MariaDB [test]&gt; select * from user;
-+------------+------------+------+
-| username   | password   | sex  |
-+------------+------------+------+
-| xuanmingyi | iygnimnaux |    0 |
-+------------+------------+------+
-1 row in set (0.00 sec)
-</pre></div>
-
-
-<p>使用如下代码修改password</p>
-<div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;update user set password=? where username= ?&quot;</span><span class="o">;</span>
-<span class="n">PreparedStatement</span> <span class="n">pstmt</span><span class="o">;</span>
-<span class="k">try</span> <span class="o">{</span>
-    <span class="n">pstmt</span> <span class="o">=</span> <span class="o">(</span><span class="n">PreparedStatement</span><span class="o">)</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">&quot;123456&quot;</span><span class="o">);</span>
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">&quot;xuanmingyi&quot;</span><span class="o">);</span>
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span>
-
-    <span class="n">pstmt</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
-
-
-<p>使用update语句修改数据,就是这么简单</p>
-<div class="highlight"><pre><span></span>MariaDB [test]&gt; select * from user;
-+------------+----------+------+
-| username   | password | sex  |
-+------------+----------+------+
-| xuanmingyi | 123456   |    0 |
-+------------+----------+------+
-1 row in set (0.00 sec)
-</pre></div>
-
-
-<h3>查</h3>
-<p>查找记录</p>
-<div class="highlight"><pre><span></span>String sql = &quot;select * from user&quot;;
-PreparedStatement pstmt;
-try {
-    pstmt = (PreparedStatement)conn.prepareStatement(sql);
-    ResultSet rs = pstmt.executeQuery();
-    int col = rs.getMetaData().getColumnCount();
-    while (rs.next()) {
-        for (int i = 1; i &lt;= col; i++) {
-            System.out.print(rs.getString(i) + &quot;\t&quot;);
-         }
-        System.out.println(&quot;&quot;);
-    }
-} catch (SQLException e) {
-    e.printStackTrace();
-}
-</pre></div>
-
-
-<p>返回值是<code>ResultSet</code>的实例，rs是一个迭代器,通过next方法一行行获取数据，getString(x)方法来获取第x列的数据，和上面的setString对应起来。</p>
-<h2>连接池问题 TODO</h2>
-<p>上面的代码里,我们使用<code>DriverManager.getConnection</code>方法 获取一个数据库连接，当不使用的时候，需要close。如果不close，会造成泄漏.</p>
-<div class="highlight"><pre><span></span><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-    <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10000</span><span class="o">);</span>
-</pre></div>
-
-
-<p>查看数据库的连接</p>
-<div class="highlight"><pre><span></span>MariaDB [(none)]&gt; show processlist;
-+-----+-------------+-----------------+------+---------+------+--------------------------+------------------+----------+
-| Id  | User        | Host            | db   | Command | Time | State                    | Info             | Progress |
-+-----+-------------+-----------------+------+---------+------+--------------------------+------------------+----------+
-|   1 | system user |                 | NULL | Daemon  | NULL | InnoDB purge coordinator | NULL             |    0.000 |
-|   2 | system user |                 | NULL | Daemon  | NULL | InnoDB purge worker      | NULL             |    0.000 |
-|   3 | system user |                 | NULL | Daemon  | NULL | InnoDB purge worker      | NULL             |    0.000 |
-|   4 | system user |                 | NULL | Daemon  | NULL | InnoDB purge worker      | NULL             |    0.000 |
-|   5 | system user |                 | NULL | Daemon  | NULL | InnoDB shutdown handler  | NULL             |    0.000 |
-|  37 | root        | localhost       | NULL | Query   |    0 | init                     | show processlist |    0.000 |
-| 443 | root        | localhost:54972 | test | Sleep   |    8 |                          | NULL             |    0.000 |
-| 444 | root        | localhost:54973 | test | Sleep   |    8 |                          | NULL             |    0.000 |
-| 445 | root        | localhost:54974 | test | Sleep   |    8 |                          | NULL             |    0.000 |
-| 446 | root        | localhost:54975 | test | Sleep   |    8 |                          | NULL             |    0.000 |
-| 447 | root        | localhost:54976 | test | Sleep   |    8 |                          | NULL             |    0.000 |
-+-----+-------------+-----------------+------+---------+------+--------------------------+------------------+----------+
-</pre></div>
-
-
-<p>如上造成了5个数据库连接的泄漏。</p>
-<p>如果我们每次不使用了就关闭，使用就连接，则会造成连接次数过多，消耗过多资源。</p>
-<p>解决上面的办法就是: 维护一个连接池，用的话从池里面获取一个。这样即快速，不需要每次都打开连接，又不至于连接过多。</p>
-<p><a href="/java-jdbc-connection-pool-2.html">Java与SQL打交道(2) - 连接池</a></p>
-<h2>对象问题 DONE</h2>
-<p>使用JDBC的接口，可以从MySQL中获取到数据，但是在Java中，我们不是直接使用String数据，而是使用一个个对象，这个时候，光JDBC就不够用了，需要使用ORM的框架。</p>
-<p><a href="/java-jpa-3.html">Java与SQL打交道(3) - JPA</a></p> </div>
-	    </article>
-
-	    <!--
-	    in case any image breaks the theme
-	    i was going to use :after but it didn't quite work for me, maybe next time-->
-	    <div class="clearfix"></div>
-
-
-
-	</div>
-    </div>
-</div>
-
-
-
-		    </div>
-		</div>
-<!-- Sidebar -->
-<aside class="span3 remove-bs-margin hidden-phone hidden-tablet">
-
-    <div class="widget-external-links widget">
-	<h3 class="widget-header">Wechat</h3>
-	<div class="widget-content">
-        <img src="/extra/images/wechat.jpeg">
-    </div>
-	<h3 class="widget-header">External Links</h3>
-	<div class="widget-content">
-	    <ul class="widget-list">
-	    </ul>
-	</div>
-    </div>
-    <div class="widget-external-links widget">
-        <h3 class="widget-header">Recent Articles</h3>
-	<div class="widget-content">
-	    <ul class="widget-list">
-		<li class="widget-list-item"><a href="/java-jpa-3.html" title="Read: Java与SQL打交道(3) - JPA">Java与SQL打交道(3) - JPA</a></li>
-		<li class="widget-list-item"><a href="/java-jdbc-connection-pool-2.html" title="Read: Java与SQL打交道(2) - 连接池">Java与SQL打交道(2) - 连接池</a></li>
-		<li class="widget-list-item"><a href="/java-jdbc-sql-1.html" title="Read: Java与SQL打交道(1) - JDBC">Java与SQL打交道(1) - JDBC</a></li>
-	    </ul>
-	</div>
-    </div>
-    <div class="widget-archive-category widget">
-	<h3 class="widget-header">Category</h3>
-	<div class="widget-content">
-	    <ul class="widget-list">
-		<li class="widget-list-item"><a href="/category/java.html">Java.<span>3</span></a></li>
-
-	    </ul>
-	</div>
-    </div>
-    <div class="widget">
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<!-- dgzen he -->
-	<ins class="adsbygoogle"
-	    style="display:inline-block;width:300px;height:600px"
-	    data-ad-client="ca-pub-4442880234515975"
-	    data-ad-slot="1240455063"></ins>
-	<script>
-	    (adsbygoogle = window.adsbygoogle || []).push({});
-	</script>
-    </script>
-</div>
-		</aside>
-	    </div>
-	    <!--footer-->
-	    <div class="row">
-		<div class="span12">
-		    <footer>
-			<p>Powered by <a href="http://getpelican.org">Pelican</a>.</p>
-			<p><a href="">Nuja theme</a> designed by <a rel="bookmark" href="http://dgzen.pw">DGZen</a>.</p>
-		    </footer>
-		</div>
-	    </div>
-	</div>
-
-
+</footer>        <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
     </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
 </html>

@@ -1,126 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh_cn" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+<html lang="zh_cn">
     <head>
-	<meta charset="utf-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
 
-<meta name="description" content="JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考维基百科、JPA Tutorial - Java Persistence API我们来一探究竟。 从上面我们知道，比较重要的版本有 2.0、2.1以及2.2 JPA 2.0 JSR 317: JavaTM Persistence 2.0 JPA 2.1 2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。 Java EE 7 APIs JPA 2.2 …">
-<meta name="keywords" content="java,JPA,MySQL">
-<meta name="author" content="Xuan Mingyi">
-<meta name="robots" content="index,follow">
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
 
+        <meta name="author" content="Xuan Mingyi" />
 
-<!-- OpenGraph -->
-<meta property="og:property" content="zh_cn">
-<meta property="og:title" content="Java与SQL打交道(3) - JPA">
-<meta property="og:type" content="article">
-<meta property="og:description" content="JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考维基百科、JPA Tutorial - Java Persistence API我们来一探究竟。 从上面我们知道，比较重要的版本有 2.0、2.1以及2.2 JPA 2.0 JSR 317: JavaTM Persistence 2.0 JPA 2.1 2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。 Java EE 7 APIs JPA 2.2 …">
-<meta property="article:published_time" content="2019-04-11">
-<meta property="article:tag" content="java">
-<meta property="article:tag" content="JPA">
-<meta property="article:tag" content="MySQL">
-<meta property="article:section" content="Java">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Java与SQL打交道(3) - JPA</title>
-	<script type="text/javascript" src="/theme/js/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="/theme/js/bootstrap.js"></script>
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
 
-	<!-- Bootstrap CSS  -->
-	<link rel="stylesheet" href="/theme/css/bootstrap.css"/>
-	<link rel="stylesheet" href="/theme/css/responsive.css"/>
-	
-	<!-- Generated favicons markup -->
-	<link rel="apple-touch-icon" sizes="57x57" href="/assets/images/favicons/apple-touch-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="/assets/images/favicons/apple-touch-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="/assets/images/favicons/apple-touch-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/favicons/apple-touch-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="/assets/images/favicons/apple-touch-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="/assets/images/favicons/apple-touch-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="/assets/images/favicons/apple-touch-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon-180x180.png">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/android-chrome-192x192.png" sizes="192x192">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-96x96.png" sizes="96x96">
-	<link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="/assets/images/favicons/manifest.json">
-	<link rel="shortcut icon" href="/assets/images/favicons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#2b5797">
-	<meta name="msapplication-TileImage" content="/assets/images/favicons/mstile-144x144.png">
-	<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml">
-	<meta name="theme-color" content="#ffffff">
-	<!-- LESS generated css for Nuja theme -->
-	<link rel="stylesheet" href="/theme/css/NujaStructure.css"/>
-	<!-- Highlight -->
-	<link rel="stylesheet" href="/theme/css/pygment.css"/>
+<meta name="keywords" content="java, JPA, MySQL, Java, " />
 
-	<link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
-	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
-	<!--[if IE]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+<meta property="og:title" content="Java与SQL打交道(3) - JPA "/>
+<meta property="og:url" content="/java-jpa-3.html" />
+<meta property="og:description" content="JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考维基百科、JPA Tutorial - Java Persistence API我们来一探究竟。 从上面我们知道，比较重要的版本有 2.0、2.1以及2.2 JPA 2.0 JSR 317: JavaTM Persistence 2.0 JPA 2.1 2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。 Java EE 7 APIs JPA 2.2 …" />
+<meta property="og:site_name" content="" />
+<meta property="og:article:author" content="Xuan Mingyi" />
+<meta property="og:article:published_time" content="2019-04-11T08:31:00+08:00" />
+<meta name="twitter:title" content="Java与SQL打交道(3) - JPA ">
+<meta name="twitter:description" content="JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考维基百科、JPA Tutorial - Java Persistence API我们来一探究竟。 从上面我们知道，比较重要的版本有 2.0、2.1以及2.2 JPA 2.0 JSR 317: JavaTM Persistence 2.0 JPA 2.1 2011年7月，JPA 2.1 在JCP的JSR 338请求中作为新版本开发。2013年5月22日，JPA 2.1被批准为最终正式标准。 Java EE 7 APIs JPA 2.2 …">
 
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+        <title>Java与SQL打交道(3) - JPA  · 
+</title>
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" - Full Atom Feed" />
 
 
-
-	<!-- setup feeds and third-party services -->
-	<link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Atom Feed" />
-	<!-- to clean up later for the new theme -->
-	<script>
-	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-968141-17', 'auto');
-ga('send', 'pageview');
-
-	</script>
-	<meta name="google-site-verification" content="4TETrzpAoVPu2-VrTpOxQJFmmynS9VzPq_boE45VKa8" />
-	<meta name="msvalidate.01" content="E2790C576E7623BE2F59AC965B48361D" />
     </head>
     <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name></span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/java-jpa-3.html">
+                Java与SQL打交道(3) - JPA
+            </a>
+        </h1>
+    </header>
+</div>
 
-	<div class="container">
-	    <div class="header-container">
-		<header>
-		    <a href="/">
-			<h4> 		    </a>
-
-		    <nav>
-			<ul>
-			    <li><a href="/">Home</a></li>
-
-
-			</ul>
-		    </nav>
-		</header>
-
-
-	    </div>
-	    <div class="clearfix"></div>
-	    <div class="row">
-		<div class="span9">
-
-		    <div class="span10">
-
-
-<div class="row">
-    <div class="span9 alpha">
-	<div class="entry-container ">
-
-	    <article  class="entry hentry" >
-		<header>
-		    <a href="/java-jpa-3.html" rel="bookmark" title="permalink for Java与SQL打交道(3) - JPA" ><h2 class="entry-title">Java与SQL打交道(3) - JPA</h2></a>
-		    <div class="author-details vcard">
-
-			by <a  class="url fn" href="/author/xuan-mingyi.html">Xuan Mingyi</a>  file under <a href="/category/java.html">Java</a> with tags 			<a href="/tag/java.html" title="Browse tag: java" rel="tag">java</a>, 			<a href="/tag/jpa.html" title="Browse tag: JPA" rel="tag">JPA</a>, 			<a href="/tag/mysql.html" title="Browse tag: MySQL" rel="tag">MySQL</a>		    </div>
-		</header>
-		<div class="entry-content">
-		<p>JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考<a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API">维基百科</a>、<a href="www.javaguides.net/p/jpa-tutorial-java-persistence-api.html">JPA Tutorial - Java Persistence API</a>我们来一探究竟。</p>
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>JPA是一种Java规范，不同框架对JPA有不同程度的支持。既然是规范，那就有制订者、版本、以及规范文件，参考<a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API">维基百科</a>、<a href="www.javaguides.net/p/jpa-tutorial-java-persistence-api.html">JPA Tutorial - Java Persistence API</a>我们来一探究竟。</p>
 <p>从上面我们知道，比较重要的版本有 2.0、2.1以及2.2</p>
 <h4>JPA 2.0</h4>
 <p><a href="https://jcp.org/en/jsr/detail?id=317">JSR 317: JavaTM Persistence 2.0</a></p>
@@ -132,8 +89,8 @@ ga('send', 'pageview');
 <p>这是最新的</p>
 <p><a href="https://jcp.org/en/jsr/detail?id=338">JSR 338: JavaTM Persistence 2.2</a></p>
 <h4>说明</h4>
-<p>JPA的主要用途就是，来实现ORM的，盗张图。</p>
-<p><img alt="orm" src="https://2.bp.blogspot.com/-qNxMJPEHiBY/XJi0nsgC39I/AAAAAAAAFyo/-r7_JnV5Nak1sN_BWEMCFPU1JahkQbIAACLcBGAs/s1600/hibernate-orm-mpping-latest.png"></p>
+<p>JPA的主要用途就是，来实现ORM的，<a href="https://2.bp.blogspot.com/-qNxMJPEHiBY/XJi0nsgC39I/AAAAAAAAFyo/-r7_JnV5Nak1sN_BWEMCFPU1JahkQbIAACLcBGAs/s1600/hibernate-orm-mpping-latest.png">盗张图</a>。</p>
+<p><img alt="orm" src="extra/images/hibernate-orm-mpping-latest.png"></p>
 <p>下面我们找个框架来练练手，研究一下JPA的使用。</p>
 <ul>
 <li>Spring Data JPA</li>
@@ -142,78 +99,78 @@ ga('send', 'pageview');
 <p>我们要用一个例子来展现极简方式实现User的增删改查</p>
 <h4>实现实体类Entity</h4>
 <p>下面我们先展示一下要用到的User表</p>
-<div class="highlight"><pre><span></span>MariaDB [test]&gt; desc user;
-+----------+-------------+------+-----+---------+-------+
-| Field    | Type        | Null | Key | Default | Extra |
-+----------+-------------+------+-----+---------+-------+
-| username | varchar(32) | YES  |     | NULL    |       |
-| password | varchar(32) | YES  |     | NULL    |       |
-| sex      | tinyint(1)  | YES  |     | NULL    |       |
-+----------+-------------+------+-----+---------+-------+
-3 rows in set (0.02 sec)
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">MariaDB</span><span class="w"> </span><span class="o">[</span><span class="n">test</span><span class="o">]&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="k">user</span><span class="p">;</span><span class="w"></span>
+<span class="o">+</span><span class="c1">----------+-------------+------+-----+---------+-------+</span>
+<span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Type</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="o">+</span><span class="c1">----------+-------------+------+-----+---------+-------+</span>
+<span class="o">|</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w"></span>
+<span class="o">|</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w"></span>
+<span class="o">|</span><span class="w"> </span><span class="n">sex</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nc">tinyint</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w"></span>
+<span class="o">+</span><span class="c1">----------+-------------+------+-----+---------+-------+</span>
+<span class="mi">3</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mf">0.02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
 
 
 <p>定义一个实体类</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="o">;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="p">;</span>
 
 <span class="nd">@Entity</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="p">{</span>
     <span class="nd">@Id</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="p">;</span>
 
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">sex</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">sex</span><span class="p">;</span>
 
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">username</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">username</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="p">(</span><span class="n">String</span> <span class="n">username</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">password</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="p">(</span><span class="n">String</span> <span class="n">password</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getSex</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">sex</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getSex</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sex</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSex</span><span class="o">(</span><span class="kt">int</span> <span class="n">sex</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">sex</span> <span class="o">=</span> <span class="n">sex</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSex</span><span class="p">(</span><span class="kt">int</span> <span class="n">sex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="na">sex</span> <span class="o">=</span> <span class="n">sex</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
 <p>其中<code>username</code>作为主键，当然，这并不是一个好主意,最好使用一个自增的ID或者uuid作为主键。</p>
 <h4>实现接口</h4>
 <p>这是一个CRUD的接口</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.springframework.data.repository.CrudRepository</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">org.springframework.data.repository.CrudRepository</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="p">;</span>
 
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findBySex</span><span class="o">(</span><span class="kt">int</span> <span class="n">sex</span><span class="o">);</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findBySex</span><span class="p">(</span><span class="kt">int</span> <span class="n">sex</span><span class="p">);</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
 <h4>使用</h4>
 <p>例子来源于<a href="https://spring.io/guides/gs/accessing-data-jpa/">accessing-data-jpa</a></p>
-<div class="highlight"><pre><span></span><span class="n">User</span> <span class="n">me</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
-<span class="n">me</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="s">&quot;xuanmingyi&quot;</span><span class="o">);</span>
-<span class="n">me</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">&quot;iygnimnaux&quot;</span><span class="o">);</span>
-<span class="n">me</span><span class="o">.</span><span class="na">setSex</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-<span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">me</span><span class="o">);</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">User</span> <span class="n">me</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="p">();</span>
+<span class="n">me</span><span class="p">.</span><span class="na">setUsername</span><span class="p">(</span><span class="s">&quot;xuanmingyi&quot;</span><span class="p">);</span>
+<span class="n">me</span><span class="p">.</span><span class="na">setPassword</span><span class="p">(</span><span class="s">&quot;iygnimnaux&quot;</span><span class="p">);</span>
+<span class="n">me</span><span class="p">.</span><span class="na">setSex</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">repository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">me</span><span class="p">);</span>
+</code></pre></div>
 
 
 <p>以上就可以用了，还算比较方便。大部分语言的ORM都能做到。</p>
@@ -224,38 +181,38 @@ ga('send', 'pageview');
 </ul>
 <h4>函数签名</h4>
 <p>下面做一个实验来验证一下C和CPP的签名机制。</p>
-<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">test</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">test</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
 <span class="kt">int</span> <span class="nf">test2</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span><span class="k">return</span> <span class="mi">0</span><span class="p">;}</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>使用c编译器,函数签名就是函数的名字</p>
-<div class="highlight"><pre><span></span># 使用c编译器
-$ gcc -c main.c -o main.c.o
-$ objdump -t main.c.o
+<div class="highlight"><pre><span></span><code><span class="o">#</span> <span class="err">使用</span><span class="n">c编译器</span>
+<span class="err">$</span> <span class="n">gcc</span> <span class="o">-</span><span class="k">c</span> <span class="n">main</span><span class="p">.</span><span class="k">c</span> <span class="o">-</span><span class="n">o</span> <span class="n">main</span><span class="p">.</span><span class="k">c</span><span class="p">.</span><span class="n">o</span>
+<span class="err">$</span> <span class="n">objdump</span> <span class="o">-</span><span class="n">t</span> <span class="n">main</span><span class="p">.</span><span class="k">c</span><span class="p">.</span><span class="n">o</span>
 
-main.c.o:   file format Mach-O 64-bit x86-64
+<span class="n">main</span><span class="p">.</span><span class="k">c</span><span class="p">.</span><span class="n">o</span><span class="p">:</span>   <span class="n">file</span> <span class="n">format</span> <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="nb">bit</span> <span class="n">x86</span><span class="o">-</span><span class="mi">64</span>
 
-SYMBOL TABLE:
-0000000000000020 g     F __TEXT,__text  _main
-0000000000000000 g     F __TEXT,__text  _mm
-0000000000000010 g     F __TEXT,__text  _mm2
-</pre></div>
+<span class="n">SYMBOL</span> <span class="k">TABLE</span><span class="p">:</span>
+<span class="mi">0000000000000020</span> <span class="k">g</span>     <span class="n">F</span> <span class="n">__TEXT</span><span class="p">,</span><span class="n">__text</span>  <span class="n">_main</span>
+<span class="mi">0000000000000000</span> <span class="k">g</span>     <span class="n">F</span> <span class="n">__TEXT</span><span class="p">,</span><span class="n">__text</span>  <span class="n">_mm</span>
+<span class="mi">0000000000000010</span> <span class="k">g</span>     <span class="n">F</span> <span class="n">__TEXT</span><span class="p">,</span><span class="n">__text</span>  <span class="n">_mm2</span>
+</code></pre></div>
 
 
 <p>使用cpp编译器,函数签名根据函数的名字以及参数列表</p>
-<div class="highlight"><pre><span></span># 使用cpp编译器
-$ gcc -c main.cpp -o main.cpp.o
-$ objdump -t main.cpp.o
+<div class="highlight"><pre><span></span><code><span class="o">#</span> <span class="err">使用</span><span class="n">cpp编译器</span>
+<span class="err">$</span> <span class="n">gcc</span> <span class="o">-</span><span class="k">c</span> <span class="n">main</span><span class="p">.</span><span class="n">cpp</span> <span class="o">-</span><span class="n">o</span> <span class="n">main</span><span class="p">.</span><span class="n">cpp</span><span class="p">.</span><span class="n">o</span>
+<span class="err">$</span> <span class="n">objdump</span> <span class="o">-</span><span class="n">t</span> <span class="n">main</span><span class="p">.</span><span class="n">cpp</span><span class="p">.</span><span class="n">o</span>
 
-main.cpp.o: file format Mach-O 64-bit x86-64
+<span class="n">main</span><span class="p">.</span><span class="n">cpp</span><span class="p">.</span><span class="n">o</span><span class="p">:</span> <span class="n">file</span> <span class="n">format</span> <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="nb">bit</span> <span class="n">x86</span><span class="o">-</span><span class="mi">64</span>
 
-SYMBOL TABLE:
-0000000000000000 g     F __TEXT,__text  __Z2mmv
-0000000000000010 g     F __TEXT,__text  __Z3mm2v
-0000000000000020 g     F __TEXT,__text  _main
-</pre></div>
+<span class="n">SYMBOL</span> <span class="k">TABLE</span><span class="p">:</span>
+<span class="mi">0000000000000000</span> <span class="k">g</span>     <span class="n">F</span> <span class="n">__TEXT</span><span class="p">,</span><span class="n">__text</span>  <span class="n">__Z2mmv</span>
+<span class="mi">0000000000000010</span> <span class="k">g</span>     <span class="n">F</span> <span class="n">__TEXT</span><span class="p">,</span><span class="n">__text</span>  <span class="n">__Z3mm2v</span>
+<span class="mi">0000000000000020</span> <span class="k">g</span>     <span class="n">F</span> <span class="n">__TEXT</span><span class="p">,</span><span class="n">__text</span>  <span class="n">_main</span>
+</code></pre></div>
 
 
 <p>SO: 名字一样，参数不同的函数，对C来说，就是一样的函数；对CPP而言，就是不一样的函数。</p>
@@ -263,21 +220,21 @@ SYMBOL TABLE:
 <h4>优化</h4>
 <p>有一位JAVA前辈，老徐，提示我，可以使用lombok减少代码量</p>
 <p>上面的User类可以改写成如下</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">lombok.Data</span><span class="p">;</span>
 
-<span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.persistence.Entity</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">javax.persistence.Id</span><span class="p">;</span>
 
 <span class="nd">@Entity</span>
 <span class="nd">@Data</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="p">{</span>
     <span class="nd">@Id</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">sex</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">sex</span><span class="p">;</span>
 
-<span class="o">}</span>
-</pre></div>
+<span class="p">}</span>
+</code></pre></div>
 
 
 <p>代码少了一大堆，但我是不会夸Java的，这不是应该的吗？既然可以推倒出来，为啥要写出来！以前的JAVA太咸了，需要适当加点糖 :)</p>
@@ -288,82 +245,169 @@ SYMBOL TABLE:
 <li>JPA如何做类到表的映射的，如何解决大小写等逻辑？大小写！大小写！大小写！</li>
 <li>Java的函数签名机制</li>
 <li>lombok的具体用法以及实现原理</li>
-</ul> </div>
-	    </article>
-
-	    <!--
-	    in case any image breaks the theme
-	    i was going to use :after but it didn't quite work for me, maybe next time-->
-	    <div class="clearfix"></div>
+</ul>
 
 
+             
+ 
+            
+            
+            
 
-	</div>
-    </div>
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2019-04-11T08:31:00+08:00">Thu 11 April 2019</time>
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#java-ref">Java</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#java-ref">java
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="/tags.html#jpa-ref">JPA
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#mysql-ref">MySQL
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
 </div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
 
-	    
-		    </div>
-		</div>
-<!-- Sidebar -->
-<aside class="span3  hidden-phone hidden-tablet">
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
 
-    <div class="widget-external-links widget">
-	<h3 class="widget-header">Wechat</h3>
-	<div class="widget-content">
-        <img src="/extra/images/wechat.jpeg">
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
     </div>
-	<h3 class="widget-header">External Links</h3>
-	<div class="widget-content">
-	    <ul class="widget-list">
-	    </ul>
-	</div>
-    </div>
-    <div class="widget-external-links widget">
-        <h3 class="widget-header">Recent Articles</h3>
-	<div class="widget-content">
-	    <ul class="widget-list">
-		<li class="widget-list-item"><a href="/java-jpa-3.html" title="Read: Java与SQL打交道(3) - JPA">Java与SQL打交道(3) - JPA</a></li>
-		<li class="widget-list-item"><a href="/java-jdbc-connection-pool-2.html" title="Read: Java与SQL打交道(2) - 连接池">Java与SQL打交道(2) - 连接池</a></li>
-		<li class="widget-list-item"><a href="/java-jdbc-sql-1.html" title="Read: Java与SQL打交道(1) - JDBC">Java与SQL打交道(1) - JDBC</a></li>
-	    </ul>
-	</div>
-    </div>
-    <div class="widget-archive-category widget">
-	<h3 class="widget-header">Category</h3>
-	<div class="widget-content">
-	    <ul class="widget-list">
-		<li class="widget-list-item"><a href="/category/java.html">Java.<span>3</span></a></li>
 
-	    </ul>
-	</div>
-    </div>
-    <div class="widget">
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<!-- dgzen he -->
-	<ins class="adsbygoogle"
-	    style="display:inline-block;width:300px;height:600px"
-	    data-ad-client="ca-pub-4442880234515975"
-	    data-ad-slot="1240455063"></ins>
-	<script>
-	    (adsbygoogle = window.adsbygoogle || []).push({});
-	</script>
-    </script>
-</div>
-		</aside>
-	    </div>
-	    <!--footer-->
-	    <div class="row">
-		<div class="span12">
-		    <footer>
-			<p>Powered by <a href="http://getpelican.org">Pelican</a>.</p>
-			<p><a href="">Nuja theme</a> designed by <a rel="bookmark" href="http://dgzen.pw">DGZen</a>.</p>
-		    </footer>
-		</div>
-	    </div>
-	</div>
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
 
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
 
     </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
 </html>
