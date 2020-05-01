@@ -64,3 +64,12 @@ with grpc.insecure_channel('localhost:50051') as channel:
     stub = helloworld_pb2_grpc.GreeterStub(channel)
     response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
 ```
+
+直接获取通道，调用方法
+
+
+### 例子
+
+[helloworld](https://github.com/grpc/grpc/tree/master/examples/python/helloworld) 这个例子
+
+<script id="asciicast-9BqO3p52jeh3oi6rc4MyLocc9" src="https://asciinema.org/a/9BqO3p52jeh3oi6rc4MyLocc9.js" async></script>
