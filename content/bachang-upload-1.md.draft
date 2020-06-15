@@ -1,0 +1,19 @@
+Title: 靶场-上传漏洞-1-to-5
+Date: 2020-05-18 15:13
+Category: Security
+Tags: security, web, upload
+Slug: bachang-upload-1
+Authors: Xuan Mingyi
+
+
+#### Pass-01
+
+方法1：
+
+使用JS做过滤，简单方法是删除JS的校验，可以通过浏览器直接操作
+
+
+方法2:
+
+直接构造请求
+

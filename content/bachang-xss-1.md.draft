@@ -1,0 +1,120 @@
+Title: 靶场-xss-学习
+Date: 2020-05-18 15:12
+Category: Security
+Tags: security, web, xss
+Slug: bachang-xss-1
+Authors: Xuan Mingyi
+
+
+#### 初始化
+
+首先打开靶场的XSS学习页面，默认的服务器地址为`http://192.168.65.149:8888/xss-xx/`。
+
+里面介绍了四种类型的XSS漏洞例子
+
+* 反射XSS
+* 存储XSS
+* DOM XSS
+* local_hash
+
+#### 目标是什么？
+
+所谓XSS漏洞，不管是哪种类型的，我们的最终目标就是要执行一段我们自己定义的JS代码，例子当中我们以alert为例。
+
+我们知道，浏览器的JS有同源政策，那执行自定义的JS有啥危害呢？
+
+如果可以让其他人执行一段JS:
+
+* 可以通过JS获取到敏感数据Cookie，再利用Ajax把相关数据发送给其他人
+* 构造一些需要越权的请求，用JS直接访问，因为有本地的Cookie，所以很容易达到一些非法目的
+...
+
+
+#### 反射XSS
+
+存在bug的代码如下所示:
+
+```php
+<?php 
+    // 一定要设置这个头来禁用浏览器检查xss
+    header("X-XSS-Protection: 0");
+    echo isset($_GET['payload']) ? $_GET['payload'] : 'get参数payload触发';
+?>
+```
+
+我们构造下面的链接，就可以进行攻击了.
+
+```shell
+http://192.168.65.149:8888/xss-xx/xss/reflex_xss.php?payload=%3Cscript%3Ealert(1)%3C/script%3E
+```
+
+根本性原因就是对用户提供的参数、数据，没有经过验证过滤，或者经过不严格的过滤，然后输出到网页上。
+
+
+#### 存储XSS
+
+存在bug的代码如下所示:
+```php
+<?php 
+    // 模拟从持久化存储里取数据
+    function get_data_from_storage() {
+        return '<script> alert(1); </script>';
+    }
+?>
+
+<?php 
+    // 一定要设置这个头来禁用浏览器检查xss
+    header("X-XSS-Protection: 0");
+    $payload = get_data_from_storage();
+    echo $payload;
+?>
+```
+
+持久化的数据注入方法各种各样。根本问题还是对用户提供的数据的不严格过滤。
+
+
+#### DOM XSS
+
+存在bug的代码如下所示:
+```php
+<script>
+    function test() {
+        var str = document.getElementById("text").value;
+        document.getElementById("t").innerHTML = "<a href='" + str + "' > test link </a>";
+    }
+</script>
+
+<?php header("X-XSS-Protection: 0"); ?>
+<div id="t"></div>
+<input type="text" id="text" value="" />
+<input type="button" id="s" value="write" onclick="test()" />
+```
+
+```shell
+payload1: ' onclick=alert(1) //
+payload2: '<?php echo htmlspecialchars('><img src=# onerror=alert(1) /><') ?>' 
+```
+
+这也是以前常见的bug,产生的原因是我们直接在JS里使用用户提供的数据来拼接html代码。现在使用MVVM等原理，比较少见到这种玩意儿了。
+
+
+#### local_hash
+
+存在bug的代码如下所示:
+```php
+<?php 
+    // 一定要设置这个头来禁用浏览器检查xss
+    header("X-XSS-Protection: 0");
+?>
+<input type="text" value="" onclick="eval(location.hash.substr(1))"/>
+```
+
+构造如下URL地址来实现XSS
+```shell
+http://192.168.65.149:8888/xss-xx/xss/local_hash.php#alert(1)
+```
+
+我觉得这和反射XSS没啥大区别
+
+
+下面我们来做挑战

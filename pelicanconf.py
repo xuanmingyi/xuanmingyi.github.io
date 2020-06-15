@@ -38,7 +38,7 @@ DEFAULT_PAGINATION = 10
 
 THEME = 'elegant'
 
-STATIC_PATHS = ['extra/favicon.ico', 'extra/CNAME', 'extra/images']
+STATIC_PATHS = ['extra/favicon.ico', 'extra/CNAME', 'extra/images', 'extra/code']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}, 'extra/favicon.ico': {'path': 'favicon.ico'}, }
 
 WECHAT = "/extra/images/wechat.jpeg"

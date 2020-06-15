@@ -1,0 +1,89 @@
+Title: etcd使用(1) - 部署
+Date: 2020-05-02 15:54
+Category: etcd
+Tags: linux, etcd
+Slug: etcd-1
+Authors: Xuan Mingyi
+
+
+### 版本介绍
+我们使用v3版本的etcd，可以使用v2和v3的API。作为测试，只运行单机版。
+
+```bash
+root@debian:~# etcd --version
+etcd Version: 3.2.26
+Git SHA: Not provided (use ./build instead of go build)
+Go Version: go1.11.6
+Go OS/Arch: linux/amd64
+```
+
+### 启动
+默认监听localhost,我们使用0.0.0.0
+```bash
+etcd --name default --listen-client-urls http://0.0.0.0:2379 --advertise-client-urls http://0.0.0.0:2379 --listen-peer-urls http://0.0.0.0:2380 --initial-advertise-peer-urls http://0.0.0.0:2380 --initial-cluster default=http://0.0.0.0:2380
+```
+
+### 命令解释
+先做一个简单的alias
+```shell
+export ETCDCTL_API=3
+alias etcdctl="etcdctl --endpoints 192.168.65.148:2379"
+```
+
+### 认证
+一个系统肯定是需要认证的，特别是对0.0.0.0监听的服务，不然就是裸奔。
+
+创建root用户，创建root角色(role)，并启动认证
+```shell
+etcdctl user add root    # 输入密码
+etcdctl role add root
+etcdctl user grant-role root root
+etcdctl auth enable
+```
+
+关闭认证
+```shell
+etcdctl --user root:password auth disable
+```
+
+其他用户和角色管理命令
+```shell
+etcdctl user add # 添加用户
+etcdctl user delete # 删除用户
+etcdctl user get # 获取用户
+etcdctl user grant-role # 赋予角色
+etcdctl user list # 列出用户
+etcdctl user password # 用户改密码
+etcdctl user revoke-role # 取消角色
+```
+```shell
+etcdctl role add # 添加角色
+etcdctl role delete # 删除角色
+etcdctl role get # 获取角色
+etcdctl role grant-permission  # 添加权限
+etcdctl role list # 列出角色
+etcdctl role revoke-permission # 取消权限
+```
+
+### 权限
+当用户被赋予权限, 给ustack角色/ustack目录添加写权限
+```shell
+etcdctl role grant-permission ustack [write|read|readwrite] /ustack
+```
+
+取消ustack角色的/ustack下的权限
+```shell
+etcdctl role revoke-permission ustack /ustack
+```
+
+举例，我们要给ustack角色赋予/ustack下的所有的内容的读写权限
+```shell
+etcdctl --user root:123456 role grant-permission ustack readwrite /ustack --prefix
+```
+
+### 租约
+
+```shell
+etcdctl lease grant 1000 # 创建1000秒的租期
+etcdctl put /ustack/abc def --lease="018f70d2dca15a4c"
+```

