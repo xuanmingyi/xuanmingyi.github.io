@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>使用minikube 构建k8s集群(1)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>使用minikube 构建k8s集群(1)</h1>
+<div class=date>Wed 16 June 2021</div>
+
+<h3>操作系统准备</h3>
+<p>在开始构建k8s集群之前，我们选取centos7作为操作系统，最小化安装。</p>
+<div class="highlight"><pre><span></span><code>yum update -y
+yum upgrade -y
+yum install net-tools bridge-utils vim
+sed -i <span class="s2">&quot;s/enforing/disabled/g&quot;</span> /etc/selinux/config
+setenforce <span class="m">0</span>
+getenforce
+swapoff -a
+sed -i <span class="s2">&quot;s/^\/dev\/mapper\/centos-swap/#\/dev\/mapper\/centos-swap/g&quot;</span> /etc/fstab
+</code></pre></div>
+
+<h3>设置静态网络</h3>
+<p>修改配置文件/etc/sysconfig/network-scripts/ifcfg-ens33</p>
+<div class="highlight"><pre><span></span><code><span class="c1">#BOOTPROTO=&quot;dhcp&quot;</span>
+<span class="c1">#IPV6_ADDR_GEN_MODE=&quot;stable-privacy&quot;</span>
+<span class="c1">#ONBOOT=&quot;no&quot;</span>
+
+<span class="nv">BOOTPROTO</span><span class="o">=</span>static
+<span class="nv">ONBOOT</span><span class="o">=</span>yes
+<span class="nv">IPADDR</span><span class="o">=</span><span class="m">192</span>.168.65.179
+<span class="nv">NETMASK</span><span class="o">=</span><span class="m">255</span>.255.255.0
+<span class="nv">GATEWAY</span><span class="o">=</span><span class="m">192</span>.168.65.2
+<span class="nv">DNS1</span><span class="o">=</span><span class="m">114</span>.114.114.114
+
+systemctl restart network
+</code></pre></div>
+
+<h3>安装docker</h3>
+<div class="highlight"><pre><span></span><code>yum install -y yum-utils
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce docker-ce-cli containerd.io
+systemctl restart docker
+</code></pre></div>
+
+<h3>安装Golang</h3>
+<p>由于我们需要使用golang，所以安装一下比较新的版本1.16.5，并且设置国内proxy</p>
+<div class="highlight"><pre><span></span><code>yum install wget
+wget https://studygolang.com/dl/golang/go1.16.5.linux-amd64.tar.gz
+tar vzxf go1.16.5.linux-amd64.tar.gz
+// .bashrc
+<span class="nb">export</span> <span class="nv">GOROOT</span><span class="o">=</span>/root/go
+<span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span>/root/gopath
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$GOROOT</span>/bin:<span class="nv">$GOPATH</span>/bin:<span class="nv">$PATH</span>
+
+go env -w <span class="nv">GOPROXY</span><span class="o">=</span>https://goproxy.cn
+</code></pre></div>
+
+<h3>安装git</h3>
+<div class="highlight"><pre><span></span><code>yum install git
+</code></pre></div>
+
+<h3>安装Minikube</h3>
+<div class="highlight"><pre><span></span><code>// 根据gopath安装
+git clone --branch v1.21.0  https://github.com/kubernetes/minikube.git
+git clone https://github.com/go-bindata/go-bindata.git
+yum install gcc
+make -j4 linux
+cp out/minikube-linux-amd64 /usr/local/bin/minikube
+</code></pre></div>
+
+<h3>准备镜像</h3>
+<div class="highlight"><pre><span></span><code>docker pull registry.aliyuncs.com/google_containers/kube-apiserver:v1.20.7
+docker pull registry.aliyuncs.com/google_containers/kube-controller-manager:v1.20.7
+docker pull registry.aliyuncs.com/google_containers/kube-scheduler:v1.20.7
+docker pull registry.aliyuncs.com/google_containers/kube-proxy:v1.20.7
+docker pull registry.aliyuncs.com/google_containers/pause:3.2
+docker pull registry.aliyuncs.com/google_containers/etcd:3.4.13-0
+docker pull registry.aliyuncs.com/google_containers/coredns:1.7.0
+docker tag registry.aliyuncs.com/google_containers/kube-apiserver:v1.20.7 k8s.gcr.io/kube-apiserver:v1.20.7
+docker tag registry.aliyuncs.com/google_containers/kube-controller-manager:v1.20.7 k8s.gcr.io/kube-controller-manager:v1.20.7
+docker tag registry.aliyuncs.com/google_containers/kube-scheduler:v1.20.7 k8s.gcr.io/kube-scheduler:v1.20.7
+docker tag registry.aliyuncs.com/google_containers/kube-proxy:v1.20.7 k8s.gcr.io/kube-proxy:v1.20.7
+docker tag registry.aliyuncs.com/google_containers/pause:3.2 k8s.gcr.io/pause:3.2
+docker tag registry.aliyuncs.com/google_containers/etcd:3.4.13-0 k8s.gcr.io/etcd:3.4.13-0
+docker tag registry.aliyuncs.com/google_containers/coredns:1.7.0 k8s.gcr.io/coredns:1.7.0
+
+docker pull zengjie19/gcr.io-k8s-minikube-storage-provisioner:v5
+docker tag zengjie19/gcr.io-k8s-minikube-storage-provisioner:v5 gcr.io/k8s-minikube/storage-provisioner:v5
+</code></pre></div>
+
+<h3>kubelet安装</h3>
+<p>下载<strong>对应版本</strong>的<a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#client-binaries">kubelet</a>，然后copy到对应目录下</p>
+<div class="highlight"><pre><span></span><code>tar vzxf kubernetes-client-linux-amd64.tar.gz
+cp kubernetes/client/bin/kubectl /usr/local/bin/
+</code></pre></div>
+
+<h3>启动！Start</h3>
+<div class="highlight"><pre><span></span><code>minikube start --driver<span class="o">=</span>none
+</code></pre></div>
+
+<h3>启动nginx</h3>
+<p>编写配置文件<strong>deployment.yaml</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp</span><span class="w"></span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"> </span><span class="c1"># tells deployment to run 2 pods matching the template</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp</span><span class="w"></span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:latest</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span><span class="w"></span>
+</code></pre></div>
+
+<p>然后执行如下命令</p>
+<div class="highlight"><pre><span></span><code>docker pull nginx
+kubectl create -f deployment.yaml
+kubectl expose deployment myapp --type<span class="o">=</span>NodePort
+
+kubectl get service 
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+kubernetes   ClusterIP   <span class="m">10</span>.96.0.1              <span class="m">443</span>/TCP        98m
+myapp        NodePort    <span class="m">10</span>.108.66.77           <span class="m">80</span>:30079/TCP   70m
+
+curl http://192.168.65.179:30079
+</code></pre></div>
+
+<p><img alt="minikube-1-1.png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/minikube-1-1.png"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/kubernetes.html"> Kubernetes</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

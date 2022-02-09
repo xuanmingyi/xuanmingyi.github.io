@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Java-JSON(Fastjson)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Java-JSON(Fastjson)</h1>
+<div class=date>Tue 07 December 2021</div>
+
+<p><a href="https://mvnrepository.com/artifact/com.alibaba/fastjson">Fastjson</a> 是常用的JSON库之一</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.alibaba<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>fastjson<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.2.78<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h4>JAVA对象转换为JSON字符串</h4>
+<div class="highlight"><pre><span></span><code><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="p">.</span><span class="na">toJSONString</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+</code></pre></div>
+
+<p>更具体的示例</p>
+<div class="highlight"><pre><span></span><code><span class="n">JSONObject</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="p">();</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">h1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">h1</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;hello31&quot;</span><span class="p">);</span>
+<span class="n">h1</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;hello32&quot;</span><span class="p">);</span>
+
+<span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">h2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">h2</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;a41&quot;</span><span class="p">,</span> <span class="s">&quot;hello411&quot;</span><span class="p">);</span>
+<span class="n">h2</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;a42&quot;</span><span class="p">,</span> <span class="s">&quot;hello421&quot;</span><span class="p">);</span>
+
+<span class="n">obj</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;a1&quot;</span><span class="p">,</span> <span class="s">&quot;hello1&quot;</span><span class="p">);</span>
+<span class="n">obj</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;a2&quot;</span><span class="p">,</span> <span class="s">&quot;hello2&quot;</span><span class="p">);</span>
+<span class="n">obj</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;a3&quot;</span><span class="p">,</span> <span class="n">h1</span><span class="p">);</span>
+<span class="n">obj</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;a4&quot;</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="c1">// {&quot;a1&quot;:&quot;hello1&quot;,&quot;a2&quot;:&quot;hello2&quot;,&quot;a3&quot;:[&quot;hello31&quot;,&quot;hello32&quot;],&quot;a4&quot;:{&quot;a42&quot;:&quot;hello421&quot;,&quot;a41&quot;:&quot;hello411&quot;}}</span>
+</code></pre></div>
+
+<h4>JSON字符串转换为JAVA对象</h4>
+<div class="highlight"><pre><span></span><code><span class="n">VO</span> <span class="n">vo</span> <span class="o">=</span> <span class="n">JSON</span><span class="p">.</span><span class="na">parseObject</span><span class="p">(</span><span class="s">&quot;{...}&quot;</span><span class="p">,</span> <span class="n">VO</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+</code></pre></div>
+
+<p>更具体的示例</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Data</span>
+<span class="kd">class</span> <span class="nc">VO</span> <span class="p">{</span>
+    <span class="n">String</span> <span class="n">a1</span><span class="p">;</span>
+    <span class="n">String</span> <span class="n">a2</span><span class="p">;</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">a3</span><span class="p">;</span>
+    <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">a4</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="n">VO</span> <span class="n">vo</span> <span class="o">=</span> <span class="n">JSON</span><span class="p">.</span><span class="na">parseObject</span><span class="p">(</span><span class="s">&quot;{\&quot;a1\&quot;:\&quot;hello1\&quot;,\&quot;a2\&quot;:\&quot;hello2\&quot;,\&quot;a3\&quot;:[\&quot;hello31\&quot;,\&quot;hello32\&quot;],\&quot;a4\&quot;:{\&quot;a42\&quot;:\&quot;hello421\&quot;,\&quot;a41\&quot;:\&quot;hello411\&quot;}}&quot;</span><span class="p">,</span> <span class="n">VO</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vo</span><span class="p">);</span>
+<span class="c1">// VO(a1=hello1, a2=hello2, a3=[hello31, hello32], a4={a42=hello421, a41=hello411})</span>
+</code></pre></div>
+
+<h4>@JSONField</h4>
+<p>设置JSON序列化和反序列化的Field名字</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Data</span>
+<span class="kd">class</span> <span class="nc">VO</span> <span class="p">{</span>
+    <span class="nd">@JSONField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
+    <span class="n">String</span> <span class="n">a1</span><span class="p">;</span>
+
+    <span class="nd">@JSONField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;age&quot;</span><span class="p">)</span>
+    <span class="kt">int</span> <span class="n">a2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">VO</span> <span class="n">vo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VO</span><span class="p">();</span>
+<span class="n">vo</span><span class="p">.</span><span class="na">setA1</span><span class="p">(</span><span class="s">&quot;sin&quot;</span><span class="p">);</span>
+<span class="n">vo</span><span class="p">.</span><span class="na">setA2</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">JSON</span><span class="p">.</span><span class="na">toJSONString</span><span class="p">(</span><span class="n">vo</span><span class="p">));</span>
+<span class="c1">// {&quot;age&quot;:30,&quot;name&quot;:&quot;sin&quot;}</span>
+</code></pre></div>
+
+<h4>参考</h4>
+<ul>
+<li><a href="https://www.runoob.com/w3cnote/fastjson-intro.html">Fastjson 简明教程</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/java.html"> Java</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Wingo 窗体的创建(2)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Wingo 窗体的创建(2)</h1>
+<div class=date>Tue 21 September 2021</div>
+
+<h3>窗体的创建</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgb/xproto&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/ewmh&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xevent&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xwindow&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 建立X连接</span><span class="w"></span>
+<span class="w">    </span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgbutil</span><span class="p">.</span><span class="nx">NewConn</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 获取一个window id</span><span class="w"></span>
+<span class="w">    </span><span class="nx">win</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xwindow</span><span class="p">.</span><span class="nx">Generate</span><span class="p">(</span><span class="nx">X</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 创建窗口</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// func (*xwindow.Window).Create(parent xproto.Window, x int, y int, width int, height int, valueMask int, valueList ...uint32)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// parent: 父窗口</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// x, y, width, height</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// valueMask, valueList : 窗口属性以及属性值</span><span class="w"></span>
+<span class="w">    </span><span class="nx">win</span><span class="p">.</span><span class="nx">Create</span><span class="p">(</span><span class="nx">X</span><span class="p">.</span><span class="nx">RootWin</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="nx">xproto</span><span class="p">.</span><span class="nx">CwBackPixel</span><span class="p">,</span><span class="w"> </span><span class="mh">0x3366ff</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 优雅关闭</span><span class="w"></span>
+<span class="w">    </span><span class="nx">win</span><span class="p">.</span><span class="nx">WMGracefulClose</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="o">*</span><span class="nx">xwindow</span><span class="p">.</span><span class="nx">Window</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">xevent</span><span class="p">.</span><span class="nx">Detach</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="p">.</span><span class="nx">Id</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Destroy</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="nx">xevent</span><span class="p">.</span><span class="nx">Quit</span><span class="p">(</span><span class="nx">X</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 设置标题</span><span class="w"></span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">ewmh</span><span class="p">.</span><span class="nx">WmNameSet</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">win</span><span class="p">.</span><span class="nx">Id</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;中文标题&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;error name\n&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 显示窗口</span><span class="w"></span>
+<span class="w">    </span><span class="nx">win</span><span class="p">.</span><span class="nx">Map</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">xevent</span><span class="p">.</span><span class="nx">Main</span><span class="p">(</span><span class="nx">X</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p><img alt="20210921151949.png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20210921151949.png"></p>
+<p>大部分内容都比较好理解，我们这里有个<a href="https://www.x.org/releases/X11R7.6/doc/libxcb/tutorial/index.html#winmap">window operation</a>，叫map。下面是文档对map的解释。文档来自于XCB。XGB就是XCB的go语言版本。</p>
+<p><img alt="20210921152426.png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20210921152426.png"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/wingo.html"> Wingo</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

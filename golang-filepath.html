@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Golang 路径操作(6)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Golang 路径操作(6)</h1>
+<div class=date>Tue 08 June 2021</div>
+
+<h3>代码片段</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;os&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;path&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;path/filepath&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//Path操作</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Path操作-----------------&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Base</span><span class="p">(</span><span class="s">&quot;http://www.baidu.com/file/aa.jpg&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">//aa.jpg</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Clean</span><span class="p">(</span><span class="s">&quot;c:\\file//abc///aa.jpg&quot;</span><span class="p">))</span><span class="w">          </span><span class="c1">//c:\file/abc/aa.jpg</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getwd</span><span class="p">())</span><span class="w">                                    </span><span class="c1">//D:\Projects\GoPath\source\demo\syntax\path </span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Dir</span><span class="p">(</span><span class="s">&quot;http://www.baidu.com/aa/aaa.jpg&quot;</span><span class="p">))</span><span class="w">   </span><span class="c1">//http:/www.baidu.com/aa</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Dir</span><span class="p">(</span><span class="s">&quot;c:/a/b/c/d.txt&quot;</span><span class="p">))</span><span class="w">                    </span><span class="c1">//c:/a/b/c</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Dir</span><span class="p">(</span><span class="s">&quot;c:\\a/b.txt&quot;</span><span class="p">))</span><span class="w">                       </span><span class="c1">//c:\a</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Ext</span><span class="p">(</span><span class="s">&quot;c:\\a/b.txt&quot;</span><span class="p">))</span><span class="w">                       </span><span class="c1">//.txt</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">IsAbs</span><span class="p">(</span><span class="s">&quot;c:/wind/aa/bb/b.txt&quot;</span><span class="p">))</span><span class="w">             </span><span class="c1">//false</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Join</span><span class="p">(</span><span class="s">&quot;c:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;aa&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bb&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cc.txt&quot;</span><span class="p">))</span><span class="w">         </span><span class="c1">//c:/aa/bb/cc.txt</span><span class="w"></span>
+<span class="w">    </span><span class="nx">isMatch</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">path</span><span class="p">.</span><span class="nx">Match</span><span class="p">(</span><span class="s">&quot;c:/windows/*/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c:/windows/system/&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">isMatch</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w">                            </span><span class="c1">//true </span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">Split</span><span class="p">(</span><span class="s">&quot;c:/windows/system/aaa.jpg&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">//c:/windows/system/ aaa.jpg</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//FilePath操作</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;FilePath操作-----------------&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">IsAbs</span><span class="p">(</span><span class="s">&quot;c:\\wind\\aa\\bb\\b.txt&quot;</span><span class="p">))</span><span class="w">                 </span><span class="c1">//true</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Abs</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">))</span><span class="w">                                         </span><span class="c1">//D:\Projects\GoPath\source\demo\syntax\path </span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Base</span><span class="p">(</span><span class="s">&quot;c:\\aa\\baa.exe&quot;</span><span class="p">))</span><span class="w">                          </span><span class="c1">//baa.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Clean</span><span class="p">(</span><span class="s">&quot;c:\\\\aa/c\\baa.exe&quot;</span><span class="p">))</span><span class="w">                     </span><span class="c1">//c:\aa\c\baa.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Clean</span><span class="p">(</span><span class="s">&quot;aa/c\\baa.exe&quot;</span><span class="p">))</span><span class="w">                           </span><span class="c1">//aa\c\baa.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Dir</span><span class="p">(</span><span class="s">&quot;aa/c\\baa.exe&quot;</span><span class="p">))</span><span class="w">                             </span><span class="c1">//aa\c</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">EvalSymlinks</span><span class="p">(</span><span class="s">&quot;./path.exe&quot;</span><span class="p">))</span><span class="w">                       </span><span class="c1">//可以用来判断文件或文件夹是否存在。 //path.exe </span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Ext</span><span class="p">(</span><span class="s">&quot;./path.exe&quot;</span><span class="p">))</span><span class="w">                                </span><span class="c1">//.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">FromSlash</span><span class="p">(</span><span class="s">&quot;c:\\windows\\aa//bb/cc//path.exe&quot;</span><span class="p">))</span><span class="w">    </span><span class="c1">//将路径中的\\更换为/  //c:\windows\aa\\bb\cc\\path.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">ToSlash</span><span class="p">(</span><span class="s">&quot;c:\\windows\\aa/bb/cc/path.exe&quot;</span><span class="p">))</span><span class="w">        </span><span class="c1">//将路径中的/替换为\\   //c:/windows/aa/bb/cc/path.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">VolumeName</span><span class="p">(</span><span class="s">&quot;c:\\windows\\&quot;</span><span class="p">))</span><span class="w">                      </span><span class="c1">//获取卷标   //c:</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Glob</span><span class="p">(</span><span class="s">&quot;c:\\windows\\*.exe&quot;</span><span class="p">))</span><span class="w">                       </span><span class="c1">//获取所有c:\\windows\\目录下exe文件。</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">HasPrefix</span><span class="p">(</span><span class="s">&quot;c:\\aa\\bb&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c:\\&quot;</span><span class="p">))</span><span class="w">                  </span><span class="c1">//true</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">IsAbs</span><span class="p">(</span><span class="s">&quot;http://www.baidu.com/aa.jpg&quot;</span><span class="p">))</span><span class="w">             </span><span class="c1">//false</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Join</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\\bb\\&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/d&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;e\\&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ff.txt&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">//a\bb\cc\d\e\ff.txt</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Match</span><span class="p">(</span><span class="s">&quot;c:/windows/*/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c:/windows/system/&quot;</span><span class="p">))</span><span class="w">     </span><span class="c1">//true </span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Rel</span><span class="p">(</span><span class="s">&quot;c:/windows&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c:/windows/system/&quot;</span><span class="p">))</span><span class="w">          </span><span class="c1">//取得第二参的路径中，相对于前面的路径的相对路径。  //system </span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Separator</span><span class="p">))</span><span class="w">                                </span><span class="c1">// windows下返回\\</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Split</span><span class="p">(</span><span class="s">&quot;c:/windows/system/abc.exe&quot;</span><span class="p">))</span><span class="w">               </span><span class="c1">//c:/windows/system/ abc.exe</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nx">SplitList</span><span class="p">(</span><span class="s">&quot;c:/windows/system/abc.exe&quot;</span><span class="p">))</span><span class="w">           </span><span class="c1">//[c:/windows/system/abc.exe]</span><span class="w"></span>
+<span class="w">    </span><span class="nx">filepath</span><span class="p">.</span><span class="nx">Walk</span><span class="p">(</span><span class="s">&quot;../../syntax&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">WalkFunc</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">       File: ../../syntax IsDir: true size: 0</span>
+<span class="cm">       File: ..\..\syntax\painc IsDir: true size: 0</span>
+<span class="cm">       File: ..\..\syntax\painc\main.go IsDir: false size: 813</span>
+<span class="cm">       File: ..\..\syntax\painc\painc.exe IsDir: false size: 2498048</span>
+<span class="cm">       File: ..\..\syntax\path IsDir: true size: 0</span>
+<span class="cm">       File: ..\..\syntax\path\path.exe IsDir: false size: 2851328</span>
+<span class="cm">       File: ..\..\syntax\path\path.go IsDir: false size: 3419</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">WalkFunc</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;File:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;IsDir:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">info</span><span class="p">.</span><span class="nx">IsDir</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;size:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">info</span><span class="p">.</span><span class="nx">Size</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h3>参考</h3>
+<ul>
+<li><a href="https://studygolang.com/articles/6611">Go语言中Path包用法</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/golang.html"> Golang</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

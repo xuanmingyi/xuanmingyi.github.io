@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Golang 格式化输出(1)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Golang 格式化输出(1)</h1>
+<div class=date>Tue 08 June 2021</div>
+
+<h3>代码片段</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// 整数</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%b\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">             </span><span class="c1">// 二进制: 1000</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%08b\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">           </span><span class="c1">// 二进制: 00001000</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%c\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;宣&#39;</span><span class="p">)</span><span class="w">          </span><span class="c1">// Unicode字符: 宣</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%d\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mh">0x80</span><span class="p">)</span><span class="w">          </span><span class="c1">// 十进制: 128</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%04d\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">           </span><span class="c1">// 十进制: 0008</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%o\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">             </span><span class="c1">// 八进制: 10</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%04o\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">           </span><span class="c1">// 八进制: 0010</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%x\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">)</span><span class="w">            </span><span class="c1">// 十六进制: f</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%X\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">)</span><span class="w">            </span><span class="c1">// 十六进制: F</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%08X\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">)</span><span class="w">          </span><span class="c1">// 十六进制: 0000000F</span><span class="w"></span>
+
+<span class="c1">// 浮点数</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.233333333</span><span class="p">)</span><span class="w">   </span><span class="c1">// 浮点数: 1.233333</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%.8f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.233333333</span><span class="p">)</span><span class="w"> </span><span class="c1">// 浮点数: 1.23333333</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%g\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.233333333</span><span class="p">)</span><span class="w">   </span><span class="c1">// 浮点数: 1.233333333</span><span class="w"></span>
+
+<span class="c1">// 指针</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">num</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">123</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%p\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">num</span><span class="p">)</span><span class="w">          </span><span class="c1">// 地址: 0xc0000a6018</span><span class="w"></span>
+
+<span class="c1">// 默认格式</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">num</span><span class="p">)</span><span class="w">          </span><span class="c1">// 地址: 0xc0000a6018</span><span class="w"></span>
+
+<span class="c1">// 默认%v</span><span class="w"></span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">A</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="nx">A</span><span class="p">)</span><span class="w"> </span><span class="nx">String</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">     </span><span class="c1">// 注意函数签名</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;sssss&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">A</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="p">)</span><span class="w">             </span><span class="c1">// sssss</span><span class="w"></span>
+</code></pre></div>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/golang.html"> Golang</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

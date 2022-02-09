@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Golang 配置文件解析库 - viper</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Golang 配置文件解析库 - viper</h1>
+<div class=date>Mon 26 July 2021</div>
+
+<h3>简介</h3>
+<p><a href="https://github.com/spf13/viper">viper</a>配置库支持如下特性</p>
+<ul>
+<li>设置默认值</li>
+<li>支持JSON，TOML，YAML，HCL，envfile，Java配置文件</li>
+<li>实时监控配置文件，当改变时重新读取</li>
+<li>从环境变量读取</li>
+<li>从远程读取配置文件，包括etcd和consul，同时监控修改</li>
+<li>从命令行读取</li>
+<li>从buffer中读取</li>
+<li>setting explicit values</li>
+</ul>
+<h3>配置文件</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">Address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Wuxi&quot;</span><span class="w"></span>
+<span class="nt">Postcode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">214000</span><span class="w"></span>
+</code></pre></div>
+
+<h3>解析代码</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="s">&quot;github.com/spf13/viper&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">viper</span><span class="p">.</span><span class="nx">New</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//v.SetConfigName(&quot;config&quot;)  // 默认就是config</span><span class="w"></span>
+<span class="w">    </span><span class="nx">v</span><span class="p">.</span><span class="nx">SetConfigType</span><span class="p">(</span><span class="s">&quot;yaml&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">v</span><span class="p">.</span><span class="nx">AddConfigPath</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">v</span><span class="p">.</span><span class="nx">ReadInConfig</span><span class="p">();</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;err:%s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;Postcode&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h3>其他资料</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/jiujuan/p/13799976.html">golang常用库：配置文件解析库/管理工具-viper使用</a></li>
+<li><a href="https://github.com/spf13/viper">Github viper库</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/golang.html"> Golang</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

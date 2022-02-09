@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Xlib创建图片(3)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Xlib创建图片(3)</h1>
+<div class=date>Tue 21 September 2021</div>
+
+<h3>创建一张纯色图片</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;image&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xevent&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xgraphics&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 建立X连接</span><span class="w"></span>
+<span class="w">    </span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgbutil</span><span class="p">.</span><span class="nx">NewConn</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 创建一张图片并且设置每个像素的颜色 RGB 0x3366ff</span><span class="w"></span>
+<span class="w">    </span><span class="nx">color</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">BGRA</span><span class="p">{</span><span class="nx">R</span><span class="p">:</span><span class="w"> </span><span class="mh">0x33</span><span class="p">,</span><span class="w"> </span><span class="nx">G</span><span class="p">:</span><span class="w"> </span><span class="mh">0x66</span><span class="p">,</span><span class="w"> </span><span class="nx">B</span><span class="p">:</span><span class="w"> </span><span class="mh">0xff</span><span class="p">,</span><span class="w"> </span><span class="nx">A</span><span class="p">:</span><span class="w"> </span><span class="mh">0xff</span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 创建一个图片，大小是300x300</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 对每一个像素点做设置</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="p">.</span><span class="nx">For</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">BGRA</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">color</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 创建一个窗体并显示</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="p">.</span><span class="nx">XShowExtra</span><span class="p">(</span><span class="s">&quot;纯色&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">xevent</span><span class="p">.</span><span class="nx">Main</span><span class="p">(</span><span class="nx">X</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p><img alt="img1" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20210920170216.png"></p>
+<p>这里存在一个问题，那就是我们使用<strong>xgraphics.New</strong>创建了一个 <strong>xgraphics.Image</strong>对象，这个对象包含一个 <strong>X pixmap</strong>,我们在不使用的时候需要调用<strong>ximg.Destroy()</strong>方法显示得销毁这个<strong>X pixmap</strong>对象</p>
+<h3>创建一张美丽图片</h3>
+<p>我们需要显示一张美丽的图片</p>
+<p><img alt="img2" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/wld.jpg"></p>
+<p>图片我们命名为wld.jpg</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;bytes&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;image&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;image/color&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">_</span><span class="w"> </span><span class="s">&quot;image/jpeg&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;io/ioutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xevent&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xgraphics&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="c1">// 返回王珞丹图片</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">wld</span><span class="p">()</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">Image</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">&quot;wld.jpg&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">Decode</span><span class="p">(</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">NewReader</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">image</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 建立X连接</span><span class="w"></span>
+<span class="w">    </span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgbutil</span><span class="p">.</span><span class="nx">NewConn</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 创建一个图片，大小是556x720</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">556</span><span class="p">,</span><span class="w"> </span><span class="mi">720</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">wld_pic</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">wld</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 对每一个像素点做设置</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="p">.</span><span class="nx">For</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">BGRA</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// 获取对应左边的像素点</span><span class="w"></span>
+<span class="w">        </span><span class="nx">r</span><span class="p">,</span><span class="w"> </span><span class="nx">g</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">color</span><span class="p">.</span><span class="nx">RGBAModel</span><span class="p">.</span><span class="nx">Convert</span><span class="p">(</span><span class="nx">wld_pic</span><span class="p">.</span><span class="nx">At</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="p">)).</span><span class="nx">RGBA</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// 把RGBA数据装载成xgraphics.BGRA对象</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">BGRA</span><span class="p">{</span><span class="nx">R</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">r</span><span class="p">),</span><span class="w"> </span><span class="nx">G</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">g</span><span class="p">),</span><span class="w"> </span><span class="nx">B</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span><span class="w"> </span><span class="nx">A</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">a</span><span class="p">)}</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 创建一个窗体并显示</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="p">.</span><span class="nx">XShowExtra</span><span class="p">(</span><span class="s">&quot;王珞丹&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">xevent</span><span class="p">.</span><span class="nx">Main</span><span class="p">(</span><span class="nx">X</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>执行结果</p>
+<p><img alt="img3" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20210921214545.png"></p>
+<p>这里需要注意的是golang的标准库<strong>image</strong>库中的<strong>Color</strong>对象和 xgb中的<strong>BGRA</strong>对象不一致，甚至连数据取值范围都不是我们以为的 <strong>0-255</strong>,而是<strong>0-65535</strong>。关于<strong>image</strong>库，我们后续其他博客给出更仔细研究。</p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/wingo.html"> Wingo</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Golang使用TLS证书</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Golang使用TLS证书</h1>
+<div class=date>Fri 25 June 2021</div>
+
+<h3>服务端代码</h3>
+<p>go语言使用TLS的测试代码</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;flag&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/gorilla/mux&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">cert_file</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">flag</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&quot;cert-file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ca.pem&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">cert_key_file</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">flag</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&quot;cert-key-file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ca-key.pem&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">flag</span><span class="p">.</span><span class="nx">Parse</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">rotuer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">mux</span><span class="p">.</span><span class="nx">NewRouter</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">router</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https index&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">srv</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Server</span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">Handler</span><span class="p">:</span><span class="w"> </span><span class="nx">router</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">Addr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">srv</span><span class="p">.</span><span class="nx">ListenAndServeTLS</span><span class="p">(</span><span class="o">*</span><span class="nx">cert_file</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="nx">cert_key_file</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;ListenAndServeTLS: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h3>生产证书</h3>
+<div class="highlight"><pre><span></span><code>$ cat &gt;ca-csr.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;CN&quot;: &quot;Self Signed CA&quot;,</span>
+<span class="s">    &quot;key&quot;: {</span>
+<span class="s">        &quot;algo&quot;: &quot;rsa&quot;,</span>
+<span class="s">        &quot;size&quot;: 2048</span>
+<span class="s">    },</span>
+<span class="s">    &quot;names&quot;: [{</span>
+<span class="s">        &quot;C&quot;: &quot;CN&quot;,</span>
+<span class="s">        &quot;ST&quot;: &quot;JiangSu&quot;,</span>
+<span class="s">        &quot;L&quot;: &quot;Nanjing&quot;,</span>
+<span class="s">        &quot;O&quot;: &quot;OG1&quot;,</span>
+<span class="s">        &quot;OU&quot;: &quot;OGU1&quot;</span>
+<span class="s">    }]</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+</code></pre></div>
+
+<p>自签名CA， O为Orginazation, OU为Orginazation Unit</p>
+<p>使用下面命令生成ca证书</p>
+<div class="highlight"><pre><span></span><code>cfssl gencert -initca ca-csr.json <span class="p">|</span> cfssljson -bare ca
+</code></pre></div>
+
+<p>多出三个文件</p>
+<ul>
+<li>ca.pem</li>
+<li>ca-key.pem</li>
+<li>ca.csr</li>
+</ul>
+<p>执行命令</p>
+<div class="highlight"><pre><span></span><code>go run main.go --cert-file<span class="o">=</span>ca.pem --cert-key-file<span class="o">=</span>ca-key.pem
+</code></pre></div>
+
+<p>编译运行后访问 https://127.0.0.1:8000/ ，查看证书发现</p>
+<p><img alt="tls.png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/%E8%AF%81%E4%B9%A61.png"></p>
+<p>从上面我们可以看出，初始化的自签名证书。</p>
+<h3>签名证书</h3>
+<div class="highlight"><pre><span></span><code>$ cat &gt;server-csr.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;CN&quot;: &quot;server&quot;,</span>
+<span class="s">    &quot;key&quot;: {</span>
+<span class="s">        &quot;algo&quot;: &quot;rsa&quot;,</span>
+<span class="s">        &quot;size&quot;: 2048</span>
+<span class="s">    },</span>
+<span class="s">    &quot;names&quot;: [{</span>
+<span class="s">        &quot;C&quot;: &quot;CN&quot;,</span>
+<span class="s">        &quot;ST&quot;: &quot;JiangSu&quot;,</span>
+<span class="s">        &quot;L&quot;: &quot;WuXi&quot;,</span>
+<span class="s">        &quot;O&quot;: &quot;OG2&quot;,</span>
+<span class="s">        &quot;OU&quot;: &quot;OGU2&quot;</span>
+<span class="s">    }]</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+$ cat &gt;config.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;signing&quot;: {</span>
+<span class="s">        &quot;default&quot;: {</span>
+<span class="s">            &quot;expiry&quot;: &quot;87600h&quot;</span>
+<span class="s">        },</span>
+<span class="s">        &quot;profiles&quot;: {</span>
+<span class="s">            &quot;www&quot;: {</span>
+<span class="s">                &quot;usages&quot;: [&quot;signing&quot;, &quot;key encipherment&quot;, &quot;server auth&quot;, &quot;client auth&quot;],</span>
+<span class="s">                &quot;expiry&quot;: &quot;87600h&quot;</span>
+<span class="s">            }</span>
+<span class="s">        }</span>
+<span class="s">    }</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+$ cfssl gencert -ca<span class="o">=</span>ca.pem -ca-key<span class="o">=</span>ca-key.pem -config<span class="o">=</span>config.json -profile<span class="o">=</span>www server-csr.json <span class="p">|</span> cfssljson -bare server
+</code></pre></div>
+
+<p>使用ca来签名证书</p>
+<table>
+<thead>
+<tr>
+<th>-ca</th>
+<th>ca证书</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-ca-key</td>
+<td>ca的私钥</td>
+</tr>
+<tr>
+<td>-config</td>
+<td>配置文件，包括签名的一些参数</td>
+</tr>
+<tr>
+<td>-profile</td>
+<td>profiles中一个，可以在config中定义多个profile，这里选择一个。</td>
+</tr>
+<tr>
+<td>server-csr.json</td>
+<td>证书请求文件</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="证书" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/%E8%AF%81%E4%B9%A62.png"></p>
+<h3>客户端代码</h3>
+<h4>使用HTTPS访问百度</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;io/ioutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.baidu.com&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;error: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>验证通过</p>
+<h4>错误验证</h4>
+<div class="highlight"><pre><span></span><code>// resp, err :<span class="o">=</span> http.Get<span class="o">(</span><span class="s2">&quot;https://www.baidu.com&quot;</span><span class="o">)</span> 
+resp, err :<span class="o">=</span> http.Get<span class="o">(</span><span class="s2">&quot;https://127.0.0.1&quot;</span><span class="o">)</span>
+</code></pre></div>
+
+<p>错误验证，输出为</p>
+<div class="highlight"><pre><span></span><code>error:  Get https://127.0.0.1:8000: x509: certificate signed by unknown authority
+</code></pre></div>
+
+<p>表示签名为未知的结构发布。</p>
+<h4>跳过验证</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;crypto/tls&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;io/ioutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">tr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">TLSClientConfig</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">tls</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span><span class="nx">InsecureSkipVerify</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">client</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span><span class="nx">Transport</span><span class="p">:</span><span class="w"> </span><span class="nx">tr</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://127.0.0.1:8000&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;error: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>我们使用 <strong>InsecureSkipVerify: true</strong> 参数 来跳过客户端验证。不去管证书是否权威有效，都算他有效。</p>
+<h4>认证</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;crypto/tls&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;crypto/x509&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;io/ioutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">pool</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">x509</span><span class="p">.</span><span class="nx">NewCertPool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">caCertPath</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;ca.pem&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">caCrt</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">caCertPath</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;ReadFile err: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">pool</span><span class="p">.</span><span class="nx">AppendCertsFromPEM</span><span class="p">(</span><span class="nx">caCrt</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">tr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">TLSClientConfig</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">tls</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span><span class="nx">RootCAs</span><span class="p">:</span><span class="w"> </span><span class="nx">pool</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">client</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span><span class="nx">Transport</span><span class="p">:</span><span class="w"> </span><span class="nx">tr</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://127.0.0.1:8000&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;error: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>执行上述客户端代码</p>
+<div class="highlight"><pre><span></span><code>error:  Get https://127.0.0.1:8000: x509: cannot validate certificate <span class="k">for</span> <span class="m">127</span>.0.0.1 because it doesn<span class="err">&#39;</span>t contain any IP SANs
+</code></pre></div>
+
+<p><strong>报错</strong> 原因就是上面我们签名的证书是有问题的，没有包含hosts数据！</p>
+<div class="highlight"><pre><span></span><code>$ cat &gt;server-csr.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;CN&quot;: &quot;server&quot;,</span>
+<span class="s">    &quot;hosts&quot;: [</span>
+<span class="s">        &quot;127.0.0.1&quot;,</span>
+<span class="s">        &quot;localhost&quot;</span>
+<span class="s">    ],</span>
+<span class="s">    &quot;key&quot;: {</span>
+<span class="s">        &quot;algo&quot;: &quot;rsa&quot;,</span>
+<span class="s">        &quot;size&quot;: 2048</span>
+<span class="s">    },</span>
+<span class="s">    &quot;names&quot;: [{</span>
+<span class="s">        &quot;C&quot;: &quot;CN&quot;,</span>
+<span class="s">        &quot;ST&quot;: &quot;JiangSu&quot;,</span>
+<span class="s">        &quot;L&quot;: &quot;WuXi&quot;,</span>
+<span class="s">        &quot;O&quot;: &quot;OG2&quot;,</span>
+<span class="s">        &quot;OU&quot;: &quot;OGU2&quot;</span>
+<span class="s">    }]</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+</code></pre></div>
+
+<p>给csr文件添加hosts数据，用上面的命令重新签名生成。并且重启服务端测试代码，重新使用证书。</p>
+<p>重新运行上面客户端代码,成功！</p>
+<div class="highlight"><pre><span></span><code>https index
+</code></pre></div>
+
+<p>我们再把url替换成 https://172.16.0.106:8000, 这里是同一台机器。</p>
+<div class="highlight"><pre><span></span><code>error:  Get https://172.16.0.106:8000: x509: certificate is valid <span class="k">for</span> <span class="m">127</span>.0.0.1, not <span class="m">172</span>.16.0.106
+</code></pre></div>
+
+<p>要修改的话直接修改server-csr.json中的hosts字段</p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/golang.html"> Golang</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

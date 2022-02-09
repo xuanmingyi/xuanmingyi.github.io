@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Events后续 MotionNotify(5)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Events后续 MotionNotify(5)</h1>
+<div class=date>Fri 22 October 2021</div>
+
+<p>这是<a href="http://www.lithum.tech/index.php/archives/29/">上一篇文章Events(3)</a>的补充说明</p>
+<table>
+<thead>
+<tr>
+<th><strong>Event Mask</strong></th>
+<th><strong>Event Type</strong></th>
+<th><strong>Structure</strong></th>
+<th><strong>Generic Structure</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PointerMotionMask</td>
+<td>MotionNotify</td>
+<td>XPointerMovedEvent</td>
+<td>XMotionEvent</td>
+</tr>
+<tr>
+<td>ButtonMotionMask</td>
+<td>MotionNotify</td>
+<td>XPointerMovedEvent</td>
+<td>XMotionEvent</td>
+</tr>
+</tbody>
+</table>
+<h5>XMotionEvent代码结构</h5>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">type</span><span class="p">;</span><span class="w">       </span><span class="cm">/* of event */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">serial</span><span class="p">;</span><span class="w">   </span><span class="cm">/* # of last request processed by server */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Bool</span><span class="w"> </span><span class="n">send_event</span><span class="p">;</span><span class="w">    </span><span class="cm">/* true if this came from a SendEvent request */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Display</span><span class="w"> </span><span class="o">*</span><span class="n">display</span><span class="p">;</span><span class="w">   </span><span class="cm">/* Display the event was read from */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Window</span><span class="w"> </span><span class="n">window</span><span class="p">;</span><span class="w">          </span><span class="cm">/* &quot;event&quot; window reported relative to */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Window</span><span class="w"> </span><span class="n">root</span><span class="p">;</span><span class="w">            </span><span class="cm">/* root window that the event occurred on */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Window</span><span class="w"> </span><span class="n">subwindow</span><span class="p">;</span><span class="w">   </span><span class="cm">/* child window */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Time</span><span class="w"> </span><span class="n">time</span><span class="p">;</span><span class="w">      </span><span class="cm">/* milliseconds */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w">       </span><span class="cm">/* pointer x, y coordinates in event window */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x_root</span><span class="p">,</span><span class="w"> </span><span class="n">y_root</span><span class="p">;</span><span class="w"> </span><span class="cm">/* coordinates relative to root */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">state</span><span class="p">;</span><span class="w"> </span><span class="cm">/* key or button mask */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">is_hint</span><span class="p">;</span><span class="w">       </span><span class="cm">/* detail */</span><span class="w"></span>
+<span class="w">    </span><span class="n">Bool</span><span class="w"> </span><span class="n">same_screen</span><span class="p">;</span><span class="w">   </span><span class="cm">/* same screen flag */</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">XMotionEvent</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">XMotionEvent</span><span class="w"> </span><span class="n">XPointerMovedEvent</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<h5>样例代码</h5>
+<div class="highlight"><pre><span></span><code><span class="c1">// ======代码1=============</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">motionnotify</span><span class="p">(</span><span class="n">XEvent</span><span class="w"> </span><span class="o">*</span><span class="n">e</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">XMotionEvent</span><span class="w"> </span><span class="o">*</span><span class="n">ev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">e</span><span class="o">-&gt;</span><span class="n">xmotion</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ev</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Button2Mask</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;button 2 motion</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;motion notify event: state=%d , x y = %d %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ev</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">ev</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">ev</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">// =======================</span>
+
+<span class="c1">// ======代码2=============</span>
+<span class="n">wa</span><span class="p">.</span><span class="n">event_mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PointerMotionMask</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ButtonMotionMask</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// =======================</span>
+
+<span class="c1">// ======代码3=============</span>
+<span class="n">handlers</span><span class="p">[</span><span class="n">MotionNotify</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">motionnotify</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// =======================</span>
+</code></pre></div>
+
+<p>运行后，我按动滚轮移动来验证代码</p>
+<p><img alt="gif" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/motion.gif"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/xlib.html"> Xlib</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

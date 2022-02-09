@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>基础概念--建木(2)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>基础概念--建木(2)</h1>
+<div class=date>Tue 11 January 2022</div>
+
+<h4>名词术语对照表</h4>
+<table>
+<thead>
+<tr>
+<th>中文名</th>
+<th>英文名</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点</td>
+<td>node</td>
+<td></td>
+</tr>
+<tr>
+<td>项目</td>
+<td>project</td>
+<td>项目必须包含一个pipeline或者workflow。 或者包含一个trigger。</td>
+</tr>
+<tr>
+<td>流程</td>
+<td>workflow</td>
+<td>开始于Start节点，结束于End节点的一个流程</td>
+</tr>
+<tr>
+<td>管道</td>
+<td>pipeline</td>
+<td>从第一个节点到最后一个节点顺序执行</td>
+</tr>
+<tr>
+<td>触发器</td>
+<td>trigger</td>
+<td>触发pipeline或者workflow</td>
+</tr>
+<tr>
+<td>开始节点</td>
+<td>start</td>
+<td></td>
+</tr>
+<tr>
+<td>结束节点</td>
+<td>end</td>
+<td></td>
+</tr>
+<tr>
+<td>DSL</td>
+<td>DSL</td>
+<td>一个yaml文件，定义project、node、workflow或者pipeline等</td>
+</tr>
+<tr>
+<td>密钥</td>
+<td>secret</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>管道 与 流程</h4>
+<p><strong>pipeline</strong>和<strong>workflow</strong>其实是同一个东西，他们都存储在数据库表<strong>workflow</strong>中，只不过<strong>type</strong>不一样。从本质上说 <strong>pipeline</strong>就是一种<strong>workflow</strong></p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220110170127.png"></p>
+<h4>密钥</h4>
+<p>密钥一般用来保存密码等敏感数据。密钥必须属于一个命名空间。</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220111164656.png"></p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220111164854.png"></p>
+<p>密钥就是一组键值对。</p>
+<p>在参数部分，我们可以使用如下方式来引用密钥</p>
+<div class="highlight"><pre><span></span><code><span class="nt">git_clone</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git_clone:1.2.0&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">param</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">remote_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://git.lithum.tech/xxxxx/xxx-xxx.git&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">git_lithum_tech.git_username</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">git_lithum_tech.git_password</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span><span class="w"></span>
+</code></pre></div>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/jian-mu.html"> 建木</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

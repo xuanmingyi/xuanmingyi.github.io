@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Wingo 壁纸 (5)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Wingo 壁纸 (5)</h1>
+<div class=date>Mon 27 September 2021</div>
+
+<h3>使用feh</h3>
+<div class="highlight"><pre><span></span><code>feh --bg-center desktop.jpeg
+</code></pre></div>
+
+<p>我们使用<strong>feh</strong>命令行可以直接把图片渲染到桌面上。</p>
+<p>我猜测原理应该是创建一个图片，直接设置为<strong>RootWindow</strong>的背景,我们来瞄一眼feh的代码。<a href="https://github.com/derf/feh">feh代码</a>在github上。</p>
+<p><a href="https://github.com/derf/feh/blob/master/src/wallpaper.c">wallpaper.c</a>,<em>feh_wm_set_bg</em>函数</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/* create new display, copy pixmap to new display */</span><span class="w"></span>
+<span class="n">disp2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XOpenDisplay</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">disp2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">eprintf</span><span class="p">(</span><span class="s">&quot;Can&#39;t reopen X display.&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="n">root2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RootWindow</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">DefaultScreen</span><span class="p">(</span><span class="n">disp2</span><span class="p">));</span><span class="w"></span>
+<span class="n">depth2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DefaultDepth</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">DefaultScreen</span><span class="p">(</span><span class="n">disp2</span><span class="p">));</span><span class="w"></span>
+<span class="n">XSync</span><span class="p">(</span><span class="n">disp</span><span class="p">,</span><span class="w"> </span><span class="n">False</span><span class="p">);</span><span class="w"></span>
+<span class="n">pmap_d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreatePixmap</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">,</span><span class="w"> </span><span class="n">scr</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">scr</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">depth2</span><span class="p">);</span><span class="w"></span>
+<span class="n">gcvalues</span><span class="p">.</span><span class="n">fill_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FillTiled</span><span class="p">;</span><span class="w"></span>
+<span class="n">gcvalues</span><span class="p">.</span><span class="n">tile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pmap_d1</span><span class="p">;</span><span class="w"></span>
+<span class="n">gc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreateGC</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">pmap_d2</span><span class="p">,</span><span class="w"> </span><span class="n">GCFillStyle</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">GCTile</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gcvalues</span><span class="p">);</span><span class="w"></span>
+<span class="n">XFillRectangle</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">pmap_d2</span><span class="p">,</span><span class="w"> </span><span class="n">gc</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">scr</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">scr</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="n">XFreeGC</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">gc</span><span class="p">);</span><span class="w"></span>
+<span class="n">XSync</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">False</span><span class="p">);</span><span class="w"></span>
+<span class="n">XSync</span><span class="p">(</span><span class="n">disp</span><span class="p">,</span><span class="w"> </span><span class="n">False</span><span class="p">);</span><span class="w"></span>
+<span class="n">XFreePixmap</span><span class="p">(</span><span class="n">disp</span><span class="p">,</span><span class="w"> </span><span class="n">pmap_d1</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">prop_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XInternAtom</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;_XROOTPMAP_ID&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">True</span><span class="p">);</span><span class="w"></span>
+<span class="n">prop_esetroot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XInternAtom</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ESETROOT_PMAP_ID&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">True</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prop_root</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">None</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prop_esetroot</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">None</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">XGetWindowProperty</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">,</span><span class="w"> </span><span class="n">prop_root</span><span class="p">,</span><span class="w"> </span><span class="mf">0L</span><span class="p">,</span><span class="w"> </span><span class="mf">1L</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="n">False</span><span class="p">,</span><span class="w"> </span><span class="n">AnyPropertyType</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">after</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data_root</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XA_PIXMAP</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">XGetWindowProperty</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">,</span><span class="w"></span>
+<span class="w">                   </span><span class="n">prop_esetroot</span><span class="p">,</span><span class="w"> </span><span class="mf">0L</span><span class="p">,</span><span class="w"> </span><span class="mf">1L</span><span class="p">,</span><span class="w"></span>
+<span class="w">                   </span><span class="n">False</span><span class="p">,</span><span class="w"> </span><span class="n">AnyPropertyType</span><span class="p">,</span><span class="w"></span>
+<span class="w">                   </span><span class="o">&amp;</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">after</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data_esetroot</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">data_root</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">data_esetroot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XA_PIXMAP</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">*</span><span class="p">((</span><span class="n">Pixmap</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">data_root</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">*</span><span class="p">((</span><span class="n">Pixmap</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">data_esetroot</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">XKillClient</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">((</span><span class="n">Pixmap</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="n">data_root</span><span class="p">));</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">data_root</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">XFree</span><span class="p">(</span><span class="n">data_root</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">data_esetroot</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">XFree</span><span class="p">(</span><span class="n">data_esetroot</span><span class="p">);</span><span class="w"></span>
+
+<span class="cm">/* This will locate the property, creating it if it doesn&#39;t exist */</span><span class="w"></span>
+<span class="n">prop_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XInternAtom</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;_XROOTPMAP_ID&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">False</span><span class="p">);</span><span class="w"></span>
+<span class="n">prop_esetroot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XInternAtom</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ESETROOT_PMAP_ID&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">False</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prop_root</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">None</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">prop_esetroot</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">None</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">eprintf</span><span class="p">(</span><span class="s">&quot;creation of pixmap property failed.&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">XChangeProperty</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">,</span><span class="w"> </span><span class="n">prop_root</span><span class="p">,</span><span class="w"> </span><span class="n">XA_PIXMAP</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="n">PropModeReplace</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pmap_d2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="n">XChangeProperty</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">,</span><span class="w"> </span><span class="n">prop_esetroot</span><span class="p">,</span><span class="w"> </span><span class="n">XA_PIXMAP</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">PropModeReplace</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pmap_d2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">XSetWindowBackgroundPixmap</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">,</span><span class="w"> </span><span class="n">pmap_d2</span><span class="p">);</span><span class="w"></span>
+<span class="n">XClearWindow</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">root2</span><span class="p">);</span><span class="w"></span>
+<span class="n">XFlush</span><span class="p">(</span><span class="n">disp2</span><span class="p">);</span><span class="w"></span>
+<span class="n">XSetCloseDownMode</span><span class="p">(</span><span class="n">disp2</span><span class="p">,</span><span class="w"> </span><span class="n">RetainPermanent</span><span class="p">);</span><span class="w"></span>
+<span class="n">XCloseDisplay</span><span class="p">(</span><span class="n">disp2</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+
+<p>代码里最最重要的应该就是<a href="https://tronche.com/gui/x/xlib/window/XSetWindowBackgroundPixmap.html"><strong>XSetWindowBackgroundPixmap</strong></a></p>
+<ul>
+<li>root2 就是RootWindow</li>
+<li>pmap_d2就是一个pixmap</li>
+</ul>
+<h3>给wingo加上背景</h3>
+<p>首先需要用到上一篇博客<a href="/wingo-ipc-4.html">wingo-ipc</a>中的内容。</p>
+<p>我们首先设计，传递给<strong>unix socket</strong>命令为<strong>SetColorWallpaper #ff8c00</strong>，wingo会把桌面背景设置为#ff8c00。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">SetColorWallpaper</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">Color</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`param:&quot;1&quot;`</span><span class="w"></span>
+<span class="w">    </span><span class="nx">Help</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`</span>
+<span class="s">Set Wallpaper color.</span>
+<span class="s">`</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">cmd</span><span class="w"> </span><span class="nx">SetColorWallpaper</span><span class="p">)</span><span class="w"> </span><span class="nx">Run</span><span class="p">()</span><span class="w"> </span><span class="nx">gribble</span><span class="p">.</span><span class="nx">Value</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">syncRun</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="nx">gribble</span><span class="p">.</span><span class="nx">Value</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">wallpaper</span><span class="p">.</span><span class="nx">SetColorWallpaper</span><span class="p">(</span><span class="nx">wm</span><span class="p">.</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">cmd</span><span class="p">.</span><span class="nx">Color</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">cmd</span><span class="p">.</span><span class="nx">Color</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>新建一个包，叫wallpaper</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">wallpaper</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;image&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="s">&quot;strconv&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/BurntSushi/xgbutil/xgraphics&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">SetWallpaper</span><span class="p">(</span><span class="nx">X</span><span class="w"> </span><span class="o">*</span><span class="nx">xgbutil</span><span class="p">.</span><span class="nx">XUtil</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">*</span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">Image</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image</span><span class="p">.</span><span class="nx">XSurfaceSet</span><span class="p">(</span><span class="nx">X</span><span class="p">.</span><span class="nx">RootWin</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image</span><span class="p">.</span><span class="nx">XDraw</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image</span><span class="p">.</span><span class="nx">XPaint</span><span class="p">(</span><span class="nx">X</span><span class="p">.</span><span class="nx">RootWin</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewColorImage</span><span class="p">(</span><span class="nx">X</span><span class="w"> </span><span class="o">*</span><span class="nx">xgbutil</span><span class="p">.</span><span class="nx">XUtil</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">Image</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ximg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1280</span><span class="p">,</span><span class="w"> </span><span class="mi">768</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">r</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nx">ParseUint</span><span class="p">(</span><span class="nx">color</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">g</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nx">ParseUint</span><span class="p">(</span><span class="nx">color</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nx">ParseUint</span><span class="p">(</span><span class="nx">color</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">ximg</span><span class="p">.</span><span class="nx">For</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">BGRA</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">xgraphics</span><span class="p">.</span><span class="nx">BGRA</span><span class="p">{</span><span class="nx">R</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">r</span><span class="p">),</span><span class="w"> </span><span class="nx">G</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">g</span><span class="p">),</span><span class="w"> </span><span class="nx">B</span><span class="p">:</span><span class="w"> </span><span class="nb">uint8</span><span class="p">(</span><span class="nx">b</span><span class="p">)}</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">ximg</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">SetColorWallpaper</span><span class="p">(</span><span class="nx">X</span><span class="w"> </span><span class="o">*</span><span class="nx">xgbutil</span><span class="p">.</span><span class="nx">XUtil</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;wallpaper:  %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewColorImage</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">SetWallpaper</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">image</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>QT 代码</p>
+<div class="highlight"><pre><span></span><code><span class="n">WinGO</span><span class="o">::</span><span class="n">WinGO</span><span class="p">(</span><span class="n">QObject</span><span class="w"> </span><span class="o">*</span><span class="n">parent</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">QObject</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">QString</span><span class="w"> </span><span class="n">xdg_runtime_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QProcessEnvironment</span><span class="o">::</span><span class="n">systemEnvironment</span><span class="p">().</span><span class="n">value</span><span class="p">(</span><span class="s">&quot;XDG_RUNTIME_DIR&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">QString</span><span class="w"> </span><span class="n">display</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QProcessEnvironment</span><span class="o">::</span><span class="n">systemEnvironment</span><span class="p">().</span><span class="n">value</span><span class="p">(</span><span class="s">&quot;DISPLAY&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">conn</span><span class="p">.</span><span class="n">connectToServer</span><span class="p">(</span><span class="n">xdg_runtime_dir</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;/wingo/&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">display</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">WinGO</span><span class="o">::</span><span class="n">setColorWallpaper</span><span class="p">(</span><span class="n">QString</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">sprintf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SetColorWallpaper </span><span class="se">\&quot;</span><span class="s">%s</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">.</span><span class="n">toStdString</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">conn</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">qDebug</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;设置背景颜色: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>QML 代码</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">setColorWallpaper</span><span class="p">(</span><span class="nx">color_value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$wingo</span><span class="p">.</span><span class="nx">setColorWallpaper</span><span class="p">(</span><span class="nx">color_value</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>代码里还有一些硬编码，但是意思到了。效果还可以。</p>
+<p><img alt="desktop.gif" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/desktop.gif"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/wingo.html"> Wingo</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

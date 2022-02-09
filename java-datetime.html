@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Java-DateTime(时间)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Java-DateTime(时间)</h1>
+<div class=date>Tue 07 December 2021</div>
+
+<p>常用时间库<a href="https://www.joda.org/joda-time/">joda-time</a></p>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!-- https://mvnrepository.com/artifact/joda-time/joda-time --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>joda-time<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>joda-time<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.10.13<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h4>时间操作</h4>
+<p>首先我们搞情况有哪些时间相关的<strong>Java</strong>类型</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">java.util.Date</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Calendar</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.joda.time.DateTime</span><span class="p">;</span>
+</code></pre></div>
+
+<h6>获取当前时间戳</h6>
+<p>当前时间戳返回的是毫秒数</p>
+<div class="highlight"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span>
+<span class="k">new</span> <span class="n">Date</span><span class="p">().</span><span class="na">getTime</span><span class="p">();</span>
+<span class="n">Calendar</span><span class="p">.</span><span class="na">getInstance</span><span class="p">().</span><span class="na">getTimeInMillis</span><span class="p">();</span>
+<span class="n">DateTime</span><span class="p">.</span><span class="na">now</span><span class="p">().</span><span class="na">getMillis</span><span class="p">()</span>
+</code></pre></div>
+
+<h6>从时间戳初始化DateTime</h6>
+<div class="highlight"><pre><span></span><code><span class="n">DateTime</span> <span class="n">dateTime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="p">(</span><span class="mi">222222</span><span class="p">);</span>
+<span class="n">dateTime</span><span class="p">.</span><span class="na">toString</span><span class="p">(</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="p">);</span>
+<span class="c1">// 1970-01-01 08:03:42</span>
+</code></pre></div>
+
+<h6>格式化时间</h6>
+<div class="highlight"><pre><span></span><code><span class="k">new</span> <span class="n">DateTime</span><span class="p">().</span><span class="na">toString</span><span class="p">(</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="p">);</span>
+<span class="c1">// 2021-12-07 06:49:15</span>
+
+<span class="n">DateTime</span> <span class="n">dateTime</span> <span class="o">=</span> <span class="n">DateTimeFormat</span><span class="p">.</span><span class="na">forPattern</span><span class="p">(</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="p">).</span><span class="na">parseDateTime</span><span class="p">(</span><span class="s">&quot;2020-01-01 22:22:22&quot;</span><span class="p">);</span>
+<span class="n">dateTime</span><span class="p">.</span><span class="na">getYear</span><span class="p">();</span>
+<span class="c1">// 2020</span>
+</code></pre></div>
+
+<h4>参考</h4>
+<ul>
+<li><a href="https://www.cnblogs.com/williamjie/p/9259591.html">java获取当前时间戳的方法</a></li>
+<li><a href="https://blog.csdn.net/fz13768884254/article/details/82422752">JAVA中Calendar与Date类型互转</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/java.html"> Java</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>本地环境搭建--建木(1)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>本地环境搭建--建木(1)</h1>
+<div class=date>Tue 11 January 2022</div>
+
+<h4>前言</h4>
+<p>建木系统脱胎于前东家的项目，当时参与了讨论，觉得是一个运维、业务实现的方向。</p>
+<p>建木相关的文章我打算持续更新，给现同事一些参考，帮助他们使用建木来实现业务；如果有机会，我打算把建木整合进公司产品，作为一个运维工具来使用。</p>
+<h4>系统搭建</h4>
+<p>从源代码开始搭建建木系统。 可以参考官方文档 <a href="https://docs.jianmu.dev/guide/custom-installation.html">自定义安装</a></p>
+<h5>基础环境</h5>
+<p>docker 可以开启tcp连接</p>
+<p>在docker对应的service文件中，比如: <code>/lib/systemd/system/docker.service</code>,  在启动中加入2375端口的监听。</p>
+<div class="highlight"><pre><span></span><code><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H fd:// --containerd=/run/containerd/containerd.sock</span><span class="w"></span>
+</code></pre></div>
+
+<p>然后重启docker</p>
+<div class="highlight"><pre><span></span><code>sudo systemctl daemon-reload
+sudo systemctl restart docker
+</code></pre></div>
+
+<p>启动数据库MySQL8</p>
+<div class="highlight"><pre><span></span><code>docker run  -p <span class="m">3306</span>:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">12345678</span> -d  mysql:8
+</code></pre></div>
+
+<p>创建数据库</p>
+<div class="highlight"><pre><span></span><code><span class="k">create</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">jianmu</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="n">charset</span><span class="w"> </span><span class="n">utf8</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<h5>后端搭建</h5>
+<p>通过IDEA直接导入，maven同步</p>
+<p>找到 <code>jianmu-ci-server/api/src/main/resources/application.yml</code>这个文件复制为 <code>application-dev.yml</code></p>
+<p>修改为对应数据</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">datasource</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:mysql://127.0.0.1:6033/jianmu?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span><span class="w"></span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123456</span><span class="w"></span>
+</code></pre></div>
+
+<p>然后设置</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220110161315.png"></p>
+<p>直接启动 <strong>dev.jianmu.api.SpringbootApp</strong> 即可</p>
+<h5>前端搭建</h5>
+<p>前端使用的vue，node要求16以上,所以几乎所有发行版的仓库版本的node都太老，手动安装，或者找一个node的版本管理工具，不赘述。这里假设你的node安装已经完成。</p>
+<div class="highlight"><pre><span></span><code>git clone https://gitee.com/jianmu-dev/jianmu-ci-server.git
+<span class="nb">cd</span> jianmu-ci-server/ui
+npm install --registry<span class="o">=</span>https://registry.npm.taobao.org
+npm run serve
+</code></pre></div>
+
+<p>直接访问3000端口就ok了</p>
+<p>默认用户名密码是 admin/123456</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220110161621.png"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/jian-mu.html"> 建木</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

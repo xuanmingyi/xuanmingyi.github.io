@@ -1,0 +1,336 @@
+body {
+    font-family: 'Junction',sans-serif;
+    font-size: 16px
+}
+
+#wrapper {
+    max-width: 900px;
+    margin: 20px auto 0
+}
+
+#blogtitle {
+    float: left;
+    font-size: 3.5em;
+    font-family: 'League Spartan',sans-serif
+}
+
+#blogtitle a,#blogtitle a:hover,#blogtitle a:visited {
+    color: #000;
+    text-decoration: none
+}
+
+#mainnav {
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    float: right
+}
+
+#mainnav li {
+    list-style-type: none;
+    text-align: center;
+    display: inline-block
+}
+
+#mainnav li:before {
+    content: '{\00A0'
+}
+
+#mainnav li:after {
+    content: '\00A0}'
+}
+
+#content {
+    margin-top: 60px
+}
+
+#content p {
+    text-align: left;
+    margin-top: 0;
+    line-height: 1.4em
+}
+
+#content .article-content p,#content .article-content li {
+    line-height: 1.7em
+}
+
+#content .article-content img {
+    margin-bottom: 22px!important;
+    max-width: 100%
+}
+
+div.highlight pre,pre.literal-block {
+    margin: 5px;
+    font-family: fira_monoregular,'Fira Mono',monospace;
+    font-size: 14px;
+    line-height: 20px;
+    overflow-x: auto;
+}
+
+div.highlight,pre.literal-block {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    margin-left: 0;
+    margin-right: 0
+}
+
+pre.literal-block {
+    padding: 8px
+}
+
+tt.literal,code {
+    font-family: fira_monoregular,'Fira Mono',monospace;
+    background-color: #f4f4f4;
+    padding: 0 .25em;
+    font-size: .8em
+}
+
+cite {
+    font-family: fira_monoregular,'Fira Mono',monospace;
+    font-size: 13px;
+    font-style: normal
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 15px 0
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle
+}
+
+tr {
+    display: table-row
+}
+
+th,td {
+    display: table-cell;
+    border: 1px solid #ccc;
+    padding: 4px 8px
+}
+
+th {
+    font-weight: bold
+}
+
+.figure .caption {
+    font-style: italic
+}
+
+h1 {
+    font-family: 'League Spartan',sans-serif;
+    font-size: 2em
+}
+
+h1 cite {
+    font-size: 26px;
+    margin: 0 2px
+}
+
+h2 {
+    margin: 0;
+    padding: 15px 0 20px;
+    font-family: 'League Spartan',sans-serif;
+    font-size: 1.6em
+}
+
+.archives h2 {
+    margin-bottom: 15px
+}
+
+h3 {
+    margin: 0;
+    padding: 5px 0 10px;
+    font-family: 'League Spartan',sans-serif;
+    font-size: 1em
+}
+
+div.date {
+    color: #777;
+    display: inline-block
+}
+
+div.date p {
+    margin: 0 0 15px
+}
+
+div.tags p {
+    float: right;
+    clear: both
+}
+
+.field-list {
+    margin-left: 16px
+}
+
+.field-list .field-name {
+    text-align: left;
+    padding-right: 15px
+}
+
+.field-list th,.field-list td {
+    border: 0
+}
+
+a {
+    text-decoration: none
+}
+
+a:hover {
+    text-decoration: underline
+}
+
+a,a:visited {
+    color: #2669AD
+}
+
+.entry-overview {
+    margin-bottom: 35px
+}
+
+.entry-overview h1 {
+    font-size: 1.5em;
+    margin: 0
+}
+
+.entry-overview h2 {
+    padding: 0;
+    margin-bottom: 4px
+}
+
+.entry-overview .summary {
+    margin-bottom: 4px
+}
+
+.entry-overview .summary p {
+    margin: 0
+}
+
+.tags {
+    margin-top: 20px
+}
+
+.tags:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+
+.clearboth {
+    clear: both
+}
+
+.align-center {
+    display: block;
+    margin: 0 auto
+}
+
+.align-right {
+    float: right;
+    margin-left: 28px
+}
+
+.align-left {
+    float: left;
+    margin-right: 10px
+}
+
+.hidden {
+    display: none
+}
+
+@media screen and (max-width:850px) {
+    #blogtitle {
+        float: none
+    }
+
+    #mainnav {
+        float: none
+    }
+
+    #mainnav li:before {
+        content: ''
+    }
+
+    #mainnav li:after {
+        content: '\00A0\00B7'
+    }
+
+    #mainnav li.last:after {
+        content: ''
+    }
+}
+
+@media screen and (max-width:600px) {
+    img.flattrbutton {
+        float: none
+    }
+
+    div.tags p {
+        float: none
+    }
+
+    #content .article-content pre {
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word
+    }
+}
+
+iframe {
+    border: none
+}
+
+span.red {
+    color: #b71c1c
+}
+
+span.green {
+    color: #33691e
+}
+
+blockquote {
+    font-style: italic
+}
+
+.isso-comment {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    border-top: 0!important
+}
+
+.isso-comment div.avatar,.isso-comment div.avatar svg {
+    float: none!important;
+    width: 48px!important;
+    height: 48px!important;
+    margin-top: 0!important
+}
+
+.isso-comment .text-wrapper {
+    width: 100%
+}
+
+.isso-comment .text p {
+    margin-bottom: .4em
+}
+
+.isso-comment .isso-comment-header {
+    margin-bottom: .4em
+}
+
+.isso-comment .isso-follow-up {
+    padding-left: 0!important
+}
+
+img{
+    width: 100%;
+}

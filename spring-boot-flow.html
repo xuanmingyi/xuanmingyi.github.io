@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>SpringBoot流程(上)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>SpringBoot流程(上)</h1>
+<div class=date>Fri 26 November 2021</div>
+
+<h4>SpringBoot启动流程</h4>
+<p>Spring启动流程，最重要的就是这个函数。我们也是从这里开始入手。</p>
+<div class="highlight"><pre><span></span><code><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">DemoApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+</code></pre></div>
+
+<p>在网上，我找到一个比较不错的<a href="https://www.processon.com/view/link/59812124e4b0de2518b32b6e">分析图</a></p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126141850.png"></p>
+<p>启动代码主要分成2部分。</p>
+<ul>
+<li><strong>构造SpringApplication</strong></li>
+<li><strong>执行run方法</strong></li>
+</ul>
+<h4>构造SpringApplication</h4>
+<p>构造函数包括一系列重载函数，最后调用下面这个函数</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@SuppressWarnings</span><span class="p">({</span> <span class="s">&quot;unchecked&quot;</span><span class="p">,</span> <span class="s">&quot;rawtypes&quot;</span> <span class="p">})</span>
+<span class="kd">public</span> <span class="nf">SpringApplication</span><span class="p">(</span><span class="n">ResourceLoader</span> <span class="n">resourceLoader</span><span class="p">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">primarySources</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">resourceLoader</span> <span class="o">=</span> <span class="n">resourceLoader</span><span class="p">;</span>
+    <span class="n">Assert</span><span class="p">.</span><span class="na">notNull</span><span class="p">(</span><span class="n">primarySources</span><span class="p">,</span> <span class="s">&quot;PrimarySources must not be null&quot;</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">primarySources</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span><span class="n">primarySources</span><span class="p">));</span>
+    <span class="c1">// #1 侦测web application type</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">webApplicationType</span> <span class="o">=</span> <span class="n">WebApplicationType</span><span class="p">.</span><span class="na">deduceFromClasspath</span><span class="p">();</span>
+    <span class="c1">// #2 获取bootstrap registry initializers</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">bootstrapRegistryInitializers</span> <span class="o">=</span> <span class="n">getBootstrapRegistryInitializersFromSpringFactories</span><span class="p">();</span>
+    <span class="c1">// #3</span>
+    <span class="c1">// 获取 ApplicationContextInitializer 设置initializers</span>
+    <span class="c1">// 获取 ApplicationListener 设置listeners</span>
+    <span class="n">setInitializers</span><span class="p">((</span><span class="n">Collection</span><span class="p">)</span> <span class="n">getSpringFactoriesInstances</span><span class="p">(</span><span class="n">ApplicationContextInitializer</span><span class="p">.</span><span class="na">class</span><span class="p">));</span>
+    <span class="n">setListeners</span><span class="p">((</span><span class="n">Collection</span><span class="p">)</span> <span class="n">getSpringFactoriesInstances</span><span class="p">(</span><span class="n">ApplicationListener</span><span class="p">.</span><span class="na">class</span><span class="p">));</span>
+
+    <span class="c1">// #4 获取main函数所在类</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">mainApplicationClass</span> <span class="o">=</span> <span class="n">deduceMainApplicationClass</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h6>#1 侦测web application type</h6>
+<p>有三种类型的web application type</p>
+<ul>
+<li>NONE</li>
+<li>SERVLET  </li>
+<li>REACTIVE</li>
+</ul>
+<h6>#2 获取bootstrap registry initializers</h6>
+<p>Bootstrapper 同时调用初始化</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126161935.png"></p>
+<h6>#3 设置initializers和listener</h6>
+<p>修改一下代码，方便调试的时候可以直接查看变量</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126151012.png"></p>
+<p><em>setInitializers</em>只是简单的设置，不赘述</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">setInitializers</span><span class="p">(</span><span class="n">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">ApplicationContextInitializer</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">initializers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">initializers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">initializers</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><em>listeners</em>同理</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126155500.png"></p>
+<p>获取实例的方法如下，我们跟进去看下代码易得</p>
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">getSpringFactoriesInstances</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">type</span><span class="p">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">parameterTypes</span><span class="p">,</span> <span class="n">Object</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ClassLoader</span> <span class="n">classLoader</span> <span class="o">=</span> <span class="n">getClassLoader</span><span class="p">();</span>
+    <span class="c1">// Use names and ensure unique to protect against duplicates</span>
+    <span class="c1">// 从每个包的META-INF/spring.factories处获取实现了对应接口的class</span>
+    <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">SpringFactoriesLoader</span><span class="p">.</span><span class="na">loadFactoryNames</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="n">classLoader</span><span class="p">));</span>
+
+    <span class="c1">// 利用反射实例化！</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">instances</span> <span class="o">=</span> <span class="n">createSpringFactoriesInstances</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="n">parameterTypes</span><span class="p">,</span> <span class="n">classLoader</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">names</span><span class="p">);</span>
+
+    <span class="c1">// 根据order权重排序，初始化是有顺序的，数字越小越靠前</span>
+    <span class="n">AnnotationAwareOrderComparator</span><span class="p">.</span><span class="na">sort</span><span class="p">(</span><span class="n">instances</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">instances</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126160205.png"></p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126160352.png"></p>
+<h6>#4 获取main函数所在类</h6>
+<div class="highlight"><pre><span></span><code><span class="k">this</span><span class="p">.</span><span class="na">mainApplicationClass</span> <span class="o">=</span> <span class="n">deduceMainApplicationClass</span><span class="p">();</span>
+</code></pre></div>
+
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211126143913.png"></p>
+<p>这一步，我们把定义的<em>DemoApplication</em>侦测到</p>
+<h4>参考</h4>
+<ul>
+<li><a href="https://juejin.cn/post/6947316816079224862">SpringBoot启动原理</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/spring.html"> Spring</a>
+    <a href="/tag/java.html">, Java</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

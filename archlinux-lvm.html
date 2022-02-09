@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>ArchLinux(LVM)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>ArchLinux(LVM)</h1>
+<div class=date>Sat 30 October 2021</div>
+
+<h4>下载镜像</h4>
+<p><a href="https://archlinux.org/">ArchLinux官网</a>上可以直接下载ISO。</p>
+<h4>启动</h4>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211027064416.png"></p>
+<p>选择启动。</p>
+<h4>分区</h4>
+<p>我们选择MBR，不选择UEFI来启动。</p>
+<p>首先设计一下分区表</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>类型</th>
+<th>挂载点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/dev/sda1</td>
+<td>vfat</td>
+<td>/boot</td>
+</tr>
+<tr>
+<td>/dev/sda2</td>
+<td>lvm</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>格式化分区</p>
+<div class="highlight"><pre><span></span><code>mkfs.vfat /dev/sda1
+
+pvcreate /dev/sda2
+vgcreate arch-vg /dev/sda2
+lvcreate -l <span class="m">100</span>%Free -n root arch-vg
+mkfs.ext4 /dev/arch-vg/root
+</code></pre></div>
+
+<h4>挂载分区</h4>
+<div class="highlight"><pre><span></span><code>mount /dev/arch-vg/root /mnt
+mkdir -p /mnt/boot
+mount /dev/sda1 /mnt/boot
+</code></pre></div>
+
+<h4>选择镜像地址</h4>
+<p>编辑 /etc/pacman.d/mirrorlist， 在文件的最顶端添加</p>
+<div class="highlight"><pre><span></span><code><span class="nv">Server</span> <span class="o">=</span> https://mirrors.tuna.tsinghua.edu.cn/archlinux/<span class="nv">$repo</span>/os/<span class="nv">$arch</span>
+</code></pre></div>
+
+<h4>安装基本系统</h4>
+<div class="highlight"><pre><span></span><code>pacstrap -i /mnt base base-devel linux linux-firmware
+</code></pre></div>
+
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211027071128.png"></p>
+<h4>配置系统</h4>
+<div class="highlight"><pre><span></span><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+</code></pre></div>
+
+<h4>切换新系统并配置</h4>
+<div class="highlight"><pre><span></span><code>arch-chroot /mnt
+
+sed -i s/#zh_CN.UTF-8/zh_CN.UTF-8/g  /etc/locale.gen
+sed -i s/#en_US.UTF-8/en_US.UTF-8/g  /etc/locale.gen
+locale-gen
+
+<span class="nb">echo</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 &gt; /etc/locale.conf
+
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+hwclock --systohc --utc
+
+hostnamectl set-hostname arch
+</code></pre></div>
+
+<h4>安装必要软件</h4>
+<div class="highlight"><pre><span></span><code>pacman -Syu 
+pacman -S vim dhclient
+</code></pre></div>
+
+<h4>LVM2支持</h4>
+<div class="highlight"><pre><span></span><code>pacman -S lvm2
+
+<span class="c1"># 修改/etc/mkinitcpio.conf 在block和filesystems中添加 lvm2</span>
+<span class="nv">HOOKS</span><span class="o">=</span><span class="s2">&quot;base udev ... block lvm2 filesystems&quot;</span>
+
+mkinitcpio -p linux
+</code></pre></div>
+
+<h4>安装bootloader</h4>
+<div class="highlight"><pre><span></span><code>pacman -S grub
+grub-install --target<span class="o">=</span>i386-pc /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre></div>
+
+<h4>修改root密码</h4>
+<div class="highlight"><pre><span></span><code>passwd
+</code></pre></div>
+
+<h4>创建用户</h4>
+<div class="highlight"><pre><span></span><code>useradd sin
+passwd sin
+mkdir /home/sin
+chown sin:sin /home/sin
+</code></pre></div>
+
+<h4>安装sudo</h4>
+<div class="highlight"><pre><span></span><code>pacman -S sudo
+
+visudo <span class="c1"># 或者 vim /etc/sudoers</span>
+
+<span class="c1"># 添加一行</span>
+sin <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> NOPASSWD:ALL
+</code></pre></div>
+
+<h4>安装openssh</h4>
+<div class="highlight"><pre><span></span><code>pacman -S openssh
+systemctl <span class="nb">enable</span> sshd
+</code></pre></div>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/linux.html"> Linux</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

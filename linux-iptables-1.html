@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>网络基础(1)-IPTABLES 的简单使用</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>网络基础(1)-IPTABLES 的简单使用</h1>
+<div class=date>Thu 24 June 2021</div>
+
+<h3>参考</h3>
+<ul>
+<li><a href="https://www.zsythink.net/archives/1199">iptables详解（1）：iptables概念</a></li>
+<li><a href="https://www.zsythink.net/archives/1493">iptables详解（2）：iptables实际操作之规则查询</a></li>
+<li><a href="https://www.zsythink.net/archives/1517">iptables详解（3）：iptables规则管理</a></li>
+<li><a href="https://www.zsythink.net/archives/1544">iptables详解（4）：iptables匹配条件总结之一</a></li>
+<li><a href="https://www.zsythink.net/archives/1564">iptables详解（5）：iptables匹配条件总结之二（常用扩展模块）</a></li>
+<li><a href="https://www.zsythink.net/archives/1578">iptables详解（6）：iptables扩展匹配条件之’–tcp-flags’</a></li>
+<li><a href="https://www.zsythink.net/archives/1588">iptables详解（7）：iptables扩展之udp扩展与icmp扩展</a></li>
+<li><a href="https://www.zsythink.net/archives/1597">iptables详解（8）：iptables扩展模块之state扩展</a></li>
+<li><a href="https://www.zsythink.net/archives/1604">iptables详解（9）：iptables的黑白名单机制</a></li>
+<li><a href="https://www.zsythink.net/archives/1625">iptables详解（10）：iptables自定义链</a></li>
+<li><a href="https://www.zsythink.net/archives/1663">iptables详解（11）：iptables之网络防火墙</a></li>
+<li><a href="https://www.zsythink.net/archives/1684">iptables详解（12）：iptables动作总结之一</a></li>
+<li><a href="https://www.zsythink.net/archives/1764">iptables详解（13）：iptables动作总结之二</a></li>
+<li><a href="https://www.zsythink.net/archives/1869">iptables详解（14）：iptables小结之常用套路</a></li>
+</ul>
+<h3>准备工作</h3>
+<p>重新安装一个新的<strong>Centos7</strong>系统，关闭firewalld，因为firewalld也是使用iptables规则。打开firewalld会自动生成很多iptables规则。</p>
+<div class="highlight"><pre><span></span><code>$ systemctl stop firewalld
+$ iptables -t nat -nvL
+Chain PREROUTING <span class="o">(</span>policy ACCEPT <span class="m">8</span> packets, <span class="m">1194</span> bytes<span class="o">)</span>
+ pkts bytes target     prot opt <span class="k">in</span>     out     <span class="nb">source</span>               destination
+
+Chain INPUT <span class="o">(</span>policy ACCEPT <span class="m">8</span> packets, <span class="m">1194</span> bytes<span class="o">)</span>
+ pkts bytes target     prot opt <span class="k">in</span>     out     <span class="nb">source</span>               destination
+
+Chain OUTPUT <span class="o">(</span>policy ACCEPT <span class="m">13</span> packets, <span class="m">1729</span> bytes<span class="o">)</span>
+ pkts bytes target     prot opt <span class="k">in</span>     out     <span class="nb">source</span>               destination
+
+Chain POSTROUTING <span class="o">(</span>policy ACCEPT <span class="m">13</span> packets, <span class="m">1729</span> bytes<span class="o">)</span>
+ pkts bytes target     prot opt <span class="k">in</span>     out     <span class="nb">source</span>               destination
+</code></pre></div>
+
+<h3>Example.01 docker</h3>
+<p>首先看一下docker中iptables的使用，分别是nat表和filter表。raw和mangle表没有被docker使用。</p>
+<div class="highlight"><pre><span></span><code>$ yum install docker
+$ systemctl start docker
+</code></pre></div>
+
+<p><img alt="iptables-1.jpg (3812×758) (gitee.com)" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/iptables-1.jpg"></p>
+<h3>SNAT</h3>
+<p>我们用docker启动一个镜像，然后安装ping和tcpdump，结构如下。</p>
+<p><img alt="iptables-2" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/iptables-2.jpg"></p>
+<p>docker0 和 ens33 之间数据转发需要打开ipforward</p>
+<p><img alt="iptables-3.jpg" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/iptables-3.jpg"></p>
+<h3>DNAT</h3>
+<p>重新启动一个镜像，映射一个<strong>1234</strong>端口到容器的<strong>5678</strong></p>
+<div class="highlight"><pre><span></span><code>$ docker run -it --rm -p1234:5678 ubuntu bash
+</code></pre></div>
+
+<p><img alt="iptables-4.jpg" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/iptables-4.jpg"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/linux.html"> Linux</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>树莓派初始化</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>树莓派初始化</h1>
+<div class=date>Sun 25 July 2021</div>
+
+<h3>操作系统</h3>
+<p>从树莓派的 <a href="https://www.raspberrypi.org/software/operating-systems/">下载</a> 地址 下载操作系统 <a href="https://downloads.raspberrypi.org/raspios_full_armhf/images/raspios_full_armhf-2020-12-04/2020-12-02-raspios-buster-armhf-full.zip">Raspberry Pi OS with desktop and recommended software</a></p>
+<p>使用写入软件 <a href="https://downloads.raspberrypi.org/imager/imager_1.5.exe">Raspberry Pi Imager v1.5</a> 把上述镜像写入到TF卡中。</p>
+<p><img alt="imager.jpg" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/imager.jpg"></p>
+<h3>配置ssh</h3>
+<p>默认情况下<strong>sshd</strong>服务已经被关闭，需要在<strong>/boot</strong>文件夹下面，创建一个<strong>ssh</strong>文件</p>
+<h3>登陆</h3>
+<p>使用默认用户名密码登陆</p>
+<ul>
+<li>用户名: pi</li>
+<li>密码: raspberry</li>
+</ul>
+<p><img alt="ras1" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/%E6%A0%91%E8%8E%93%E6%B4%BE.jpg"></p>
+<h3>系统配置</h3>
+<p>替换<a href="https://mirrors.tuna.tsinghua.edu.cn/help/raspbian/">清华源</a>,更新系统</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 编辑 `/etc/apt/sources.list` 文件，删除原文件所有内容，用以下内容取代：</span>
+deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ buster main non-free contrib rpi
+deb-src http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ buster main non-free contrib rpi
+
+<span class="c1"># 编辑 `/etc/apt/sources.list.d/raspi.list` 文件，删除原文件所有内容，用以下内容取代：</span>
+deb http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ buster main ui
+</code></pre></div>
+
+<p>关闭无线网卡</p>
+<div class="highlight"><pre><span></span><code>sudo systemctl stop wpa_supplicant
+sudo systemctl disable wpa_supplicant
+</code></pre></div>
+
+<h3>GO1.15.6</h3>
+<div class="highlight"><pre><span></span><code>wget https://studygolang.com/dl/golang/go1.15.6.linux-armv6l.tar.gz
+tar vzxf go1.15.6.linux-armv6l.tar.gz
+
+<span class="nb">export</span> <span class="nv">GOROOT</span><span class="o">=</span><span class="nv">$HOME</span>/go
+<span class="nb">export</span> <span class="nv">GOBIN</span><span class="o">=</span><span class="nv">$GOROOT</span>/bin
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$GOBIN</span>
+</code></pre></div>
+
+<h3>参考</h3>
+<ul>
+<li><a href="https://blog.csdn.net/qq_43785234/article/details/104021187?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1.control">树莓派4b初始图形化设置 putty+vnc 笔记本电脑连接</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/shu-mei-pai.html"> 树莓派</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

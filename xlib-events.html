@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Xlib-Events(3)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Xlib-Events(3)</h1>
+<div class=date>Thu 14 October 2021</div>
+
+<h4>Event Types</h4>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>Event Category</strong></th>
+<th><strong>Event Type </strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Keyboard events 键盘事件</td>
+<td><strong>KeyPress</strong> <strong>KeyRelease</strong></td>
+</tr>
+<tr>
+<td align="left">Pointer events 鼠标事件</td>
+<td><strong>ButtonPress</strong>  <strong>ButtonRelease</strong>  <strong>MotionNotify(运动事件)</strong></td>
+</tr>
+<tr>
+<td align="left">Window crossing events 窗体进入离开事件</td>
+<td><strong>EnterNotify</strong> <strong>LeaveNotify</strong></td>
+</tr>
+<tr>
+<td align="left">Input focus events</td>
+<td><strong>FocusIn</strong> <strong>FocusOut</strong></td>
+</tr>
+<tr>
+<td align="left">Keymap state notification event</td>
+<td><strong>KeymapNotify</strong></td>
+</tr>
+<tr>
+<td align="left">Exposure events</td>
+<td><strong>Expose</strong> <strong>GraphicsExpose</strong> <strong>NoExpose</strong></td>
+</tr>
+<tr>
+<td align="left">Structure control events</td>
+<td><strong>CirculateRequest</strong> <strong>ConfigureRequest </strong> <strong>MapRequest</strong> <strong>ResizeRequest</strong></td>
+</tr>
+<tr>
+<td align="left">Window state notification events</td>
+<td><strong>CirculateNotify</strong> <strong>ConfigureNotify</strong> <strong>CreateNotify</strong> <strong>DestroyNotify</strong> <strong>GravityNotify</strong> <strong>MapNotify</strong> <strong>MappingNotify</strong> <strong>ReparentNotify</strong> <strong>UnmapNotify</strong> <strong>VisibilityNotify</strong></td>
+</tr>
+<tr>
+<td align="left">Colormap State Change Events</td>
+<td><strong>ColormapNotify</strong></td>
+</tr>
+<tr>
+<td align="left">Client Communication Events</td>
+<td><strong>ClientMessage</strong> <strong>PropertyNotify</strong> <strong>SelectionClear</strong> <strong>SelectionNotify</strong> <strong>SelectionRequest</strong></td>
+</tr>
+</tbody>
+</table>
+<p>下面我们详细测试解释</p>
+<h5>主体结构</h5>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span><span class="cp"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">Display</span><span class="w"> </span><span class="o">*</span><span class="n">dpy</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">screen</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">sw</span><span class="p">,</span><span class="w"> </span><span class="n">sh</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="n">Window</span><span class="w"> </span><span class="n">root</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">running</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">handler</span><span class="p">)(</span><span class="n">XEvent</span><span class="w"> </span><span class="o">*</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">handlers</span><span class="p">[</span><span class="n">LASTEvent</span><span class="p">];</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">default_handler</span><span class="p">(</span><span class="n">XEvent</span><span class="w"> </span><span class="o">*</span><span class="n">ev</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;default event handler: ev.type = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ev</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// ======代码1=============</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">xxxx</span><span class="p">(</span><span class="n">XEvent</span><span class="w"> </span><span class="o">*</span><span class="n">ev</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">// =======================</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">dpy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XOpenDisplay</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">XSetWindowAttributes</span><span class="w"> </span><span class="n">wa</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">screen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DefaultScreen</span><span class="p">(</span><span class="n">dpy</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DisplayWidth</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="n">screen</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DisplayHeight</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="n">screen</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RootWindow</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="n">screen</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// ======代码2=============</span>
+<span class="w">    </span><span class="n">wa</span><span class="p">.</span><span class="n">event_mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Mask</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// =======================</span>
+
+<span class="w">    </span><span class="n">XChangeWindowAttributes</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">CWEventMask</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">wa</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">XSelectInput</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">wa</span><span class="p">.</span><span class="n">event_mask</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">LASTEvent</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">handlers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">default_handler</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// ======代码3=============</span>
+<span class="w">    </span><span class="n">handlers</span><span class="p">[</span><span class="n">XXXX</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xxxx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// =======================</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">XEvent</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">XSync</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="n">False</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">running</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">XNextEvent</span><span class="p">(</span><span class="n">dpy</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ev</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">handler</span><span class="w"> </span><span class="n">caller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">handlers</span><span class="p">[</span><span class="n">ev</span><span class="p">.</span><span class="n">type</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">caller</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">caller</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">init</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">run</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>执行命令</p>
+<div class="highlight"><pre><span></span><code><span class="nf">event_test</span><span class="o">:</span> <span class="n">event_test</span>.<span class="n">c</span>
+    gcc event_test.c -o event_test -lX11
+</code></pre></div>
+
+<p>启动Xephyr，同时启动event_test测试。</p>
+<h4>测试文章</h4>
+<ul>
+<li><a href="http://www.lithum.tech/index.php/archives/30/"><strong>ButtonPress 和 ButtonRelease </strong></a></li>
+<li><a href="http://www.lithum.tech/index.php/archives/31/"><strong>MotionNotify</strong></a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/xlib.html"> Xlib</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

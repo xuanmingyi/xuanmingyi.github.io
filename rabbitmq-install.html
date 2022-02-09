@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>RabbitMQ安装使用</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>RabbitMQ安装使用</h1>
+<div class=date>Tue 02 November 2021</div>
+
+<h4>安装使用</h4>
+<p>在centos7中，我们使用RabbbitMQ比较简单，只需要yum安装就可以了。</p>
+<div class="highlight"><pre><span></span><code>yum install epel-release
+yum install rabbitmq-server
+</code></pre></div>
+
+<h4>启动rabbitmq</h4>
+<div class="highlight"><pre><span></span><code>systemctl start rabbitmq-server
+systemctl <span class="nb">enable</span> rabbitmq-server
+</code></pre></div>
+
+<h4>开启management</h4>
+<div class="highlight"><pre><span></span><code>rabbitmq-plugins list
+rabbitmq-plugins <span class="nb">enable</span> rabbitmq_management
+systemctl restart rabbitmq-server
+</code></pre></div>
+
+<h4>访问管理界面</h4>
+<p>注意需要关闭防火墙和selinux，或者添加例外。访问<strong>15672</strong>端口。默认的用户名密码是<strong>guest/guest</strong></p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211102214325.png"></p>
+<h4>WSL</h4>
+<p>在WSL中使用rabbitmq，我们需要注意。</p>
+<p>修改配置文件<em>/etc/rabbitmq/rabbitmq-env.conf</em></p>
+<div class="highlight"><pre><span></span><code><span class="na">NODE_IP_ADDRESS</span><span class="o">=</span><span class="s">127.0.0.1</span><span class="w"></span>
+</code></pre></div>
+
+<p>重新启动</p>
+<div class="highlight"><pre><span></span><code>sudo /etc/init.d/rabbitmq-server restart
+</code></pre></div>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/rabbitmq.html"> RabbitMQ</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

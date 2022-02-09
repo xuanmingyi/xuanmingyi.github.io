@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Golang Map集合(5)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Golang Map集合(5)</h1>
+<div class=date>Tue 08 June 2021</div>
+
+<h3>基本操作</h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">aMap</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">aMap</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">     </span><span class="c1">// true</span><span class="w"></span>
+<span class="c1">//aMap[&quot;a11&quot;] = &quot;abc&quot;        // 报错</span><span class="w"></span>
+<span class="c1">//fmt.Println(aMap[&quot;a11&quot;])</span><span class="w"></span>
+
+<span class="nx">aMap</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span><span class="w">  </span><span class="c1">// 创建一个map</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">aMap</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">        </span><span class="c1">// false</span><span class="w"></span>
+
+<span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a11&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a11&quot;</span><span class="p">])</span><span class="w">   </span><span class="c1">// 输出&quot;abc&quot;</span><span class="w"></span>
+
+<span class="nx">val</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a12&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="w">  </span><span class="c1">// val == &quot;&quot; </span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">ok</span><span class="p">)</span><span class="w">   </span><span class="c1">// false</span><span class="w"></span>
+</code></pre></div>
+
+<h3>直接赋值</h3>
+<div class="highlight"><pre><span></span><code><span class="nx">aMap</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a11&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a12&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bbc&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a13&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cbc&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a11&quot;</span><span class="p">])</span><span class="w"></span>
+</code></pre></div>
+
+<h3>遍历</h3>
+<div class="highlight"><pre><span></span><code><span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a11&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="w"></span>
+<span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a12&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;bbc&quot;</span><span class="w"></span>
+<span class="nx">aMap</span><span class="p">[</span><span class="s">&quot;a13&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;cbc&quot;</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nx">key</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">aMap</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="w"> </span><span class="nx">aMap</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nx">key</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">aMap</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">//a11 abc</span><span class="w"></span>
+<span class="c1">//a12 bbc</span><span class="w"></span>
+<span class="c1">//a13 cbc</span><span class="w"></span>
+</code></pre></div>
+
+<h3>删除元素</h3>
+<div class="highlight"><pre><span></span><code><span class="nb">delete</span><span class="p">(</span><span class="nx">aMap</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a11&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// 删除a11元素</span><span class="w"></span>
+<span class="nb">delete</span><span class="p">(</span><span class="nx">aMap</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b11&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// 不存在b11元素，不报错</span><span class="w"></span>
+</code></pre></div>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/golang.html"> Golang</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

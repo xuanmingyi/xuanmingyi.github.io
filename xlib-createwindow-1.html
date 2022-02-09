@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>创建窗口 CreateWindow(1)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>创建窗口 CreateWindow(1)</h1>
+<div class=date>Mon 11 October 2021</div>
+
+<h3>介绍</h3>
+<p><a href="https://tronche.com/gui/x/xlib">Xlib手册</a>  is based on X11 release 6。</p>
+<h3>创建窗口 XCreateWindow</h3>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span><span class="cp"></span>
+
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Display</span><span class="w"> </span><span class="o">*</span><span class="n">X</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Window</span><span class="w"> </span><span class="n">win</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">GC</span><span class="w"> </span><span class="n">gc</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">XSetWindowAttributes</span><span class="w"> </span><span class="n">attributes</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">XKeyEvent</span><span class="w"> </span><span class="n">event</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XOpenDisplay</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">attributes</span><span class="p">.</span><span class="n">background_pixel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XWhitePixel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">attributes</span><span class="p">.</span><span class="n">border_pixel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x3344ff</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">win</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreateWindow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">XRootWindow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="mi">15</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">DefaultDepth</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">InputOutput</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">DefaultVisual</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">CWBackPixel</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CWBorderPixel</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="o">&amp;</span><span class="n">attributes</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">XSelectInput</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">KeyPressMask</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">gc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreateGC</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">XMapWindow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">XNextEvent</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">XEvent</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">event</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">switch</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="nl">KeyPress</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="n">XFreeGC</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">gc</span><span class="p">);</span><span class="w"></span>
+<span class="w">                    </span><span class="n">XCloseDisplay</span><span class="p">(</span><span class="n">X</span><span class="p">);</span><span class="w"></span>
+<span class="w">                    </span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="w">                </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">event</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>创建<strong>XCreateWindow</strong>，显示窗口 <strong>XMapWindow</strong>。</p>
+<div class="highlight"><pre><span></span><code><span class="nf">wmgo</span><span class="o">:</span> <span class="n">main</span>.<span class="n">c</span>
+    gcc main.c -o wmgo -lX11 -O3
+</code></pre></div>
+
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211011160753.png"></p>
+<h3>添加cursor</h3>
+<p>上述代码还没有鼠标指针。给窗口添加个向右的<a href="https://tronche.com/gui/x/xlib/window/XDefineCursor.html">XDefineCursor</a>。</p>
+<div class="highlight"><pre><span></span><code><span class="n">XDefineCursor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">XCreateFontCursor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">XC_right_ptr</span><span class="p">));</span><span class="w"></span>
+</code></pre></div>
+
+<p><img alt="cursor.gif" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/cursor.gif"></p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/xlib.html"> Xlib</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

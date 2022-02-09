@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Wingo 桌面使用记录(1)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Wingo 桌面使用记录(1)</h1>
+<div class=date>Sat 18 September 2021</div>
+
+<h3>wingo桌面简介</h3>
+<p>我们了解，<strong>window manager</strong>其实一个应用程序，我们这里开发<a href="https://github.com/xuanmingyi/wingo">wingo fork</a>，当开发到一定程度的时候，作为主要的WM使用，提高工作效率。</p>
+<h3>编译以及启动桌面</h3>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/xuanmingyi/wingo.git
+<span class="nb">cd</span> wingo
+./xephyr-wingo
+</code></pre></div>
+
+<p><img alt="wingo-1" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/wingo-1.png"></p>
+<h4>查看<em>key.wini</em>文件,特殊按键如下</h4>
+<div class="highlight"><pre><span></span><code><span class="c1">#     shift   -&gt; Shift</span><span class="w"></span>
+<span class="c1">#     control -&gt; Control</span><span class="w"></span>
+<span class="c1">#     mod1    -&gt; alt</span><span class="w"></span>
+<span class="c1">#     mod4    -&gt; super (the &quot;windows&quot; key)</span><span class="w"></span>
+</code></pre></div>
+
+<h4>启动urxvt</h4>
+<div class="highlight"><pre><span></span><code><span class="na">Mod4-t :</span><span class="o">=</span><span class="w"> </span><span class="s">Shell &quot;urxvt&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<h4>启动gmrun</h4>
+<div class="highlight"><pre><span></span><code><span class="na">Mod1-F2 :</span><span class="o">=</span><span class="w"> </span><span class="s">Shell &quot;gmrun&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<h4>切换workspace</h4>
+<div class="highlight"><pre><span></span><code><span class="na">Mod4-left :</span><span class="o">=</span><span class="w"> </span><span class="s">Workspace (GetWorkspacePrev)</span><span class="w"></span>
+<span class="na">Mod4-right :</span><span class="o">=</span><span class="w"> </span><span class="s">Workspace (GetWorkspaceNext)</span><span class="w"></span>
+
+<span class="na">Mod1-1 :</span><span class="o">=</span><span class="w"> </span><span class="s">WorkspaceGreedy &quot;1&quot;</span><span class="w"></span>
+<span class="na">Mod1-2 :</span><span class="o">=</span><span class="w"> </span><span class="s">WorkspaceGreedy &quot;2&quot;</span><span class="w"></span>
+<span class="na">Mod1-3 :</span><span class="o">=</span><span class="w"> </span><span class="s">WorkspaceGreedy &quot;3&quot;</span><span class="w"></span>
+<span class="na">Mod1-4 :</span><span class="o">=</span><span class="w"> </span><span class="s">WorkspaceGreedy &quot;4&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/wingo.html"> Wingo</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

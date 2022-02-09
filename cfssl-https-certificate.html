@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>使用CFSSL创建HTTPS证书</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>使用CFSSL创建HTTPS证书</h1>
+<div class=date>Thu 24 June 2021</div>
+
+<h3>创建CA证书</h3>
+<div class="highlight"><pre><span></span><code>$ cat &gt; ca-csr.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;CN&quot;: &quot;我自己的签名中心&quot;,</span>
+<span class="s">    &quot;key&quot;: {</span>
+<span class="s">        &quot;algo&quot;: &quot;rsa&quot;,</span>
+<span class="s">        &quot;size&quot;: 2048</span>
+<span class="s">    },</span>
+<span class="s">    &quot;names&quot;: [{</span>
+<span class="s">        &quot;C&quot;: &quot;CN&quot;,</span>
+<span class="s">        &quot;ST&quot;: &quot;JiangSu&quot;,</span>
+<span class="s">        &quot;L&quot;: &quot;NanJing&quot;,</span>
+<span class="s">        &quot;O&quot;: &quot;私人组织&quot;,</span>
+<span class="s">        &quot;OU&quot;: &quot;15单元&quot;</span>
+<span class="s">    }]</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+$ cfssl gencert -initca ca-csr.json <span class="p">|</span> cfssljson -bare ca
+</code></pre></div>
+
+<h3>签名服务器证书</h3>
+<div class="highlight"><pre><span></span><code>$ cat &gt; config.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;signing&quot;: {</span>
+<span class="s">        &quot;default&quot;: {</span>
+<span class="s">            &quot;expiry&quot;: &quot;87600h&quot;</span>
+<span class="s">        },</span>
+<span class="s">        &quot;profiles&quot;: {</span>
+<span class="s">            &quot;www&quot;: {</span>
+<span class="s">                &quot;usages&quot;: [&quot;signing&quot;, &quot;key encipherment&quot;, &quot;server auth&quot;, &quot;client auth&quot;],</span>
+<span class="s">                &quot;expiry&quot;: &quot;87600h&quot;</span>
+<span class="s">            }</span>
+<span class="s">    }</span>
+<span class="s">    }</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+$ cat &gt; server-csr.json <span class="s">&lt;&lt;EOF</span>
+<span class="s">{</span>
+<span class="s">    &quot;CN&quot;: &quot;我自己的网站&quot;,</span>
+<span class="s">    &quot;key&quot;: {</span>
+<span class="s">        &quot;algo&quot;: &quot;rsa&quot;,</span>
+<span class="s">        &quot;size&quot;: 2048</span>
+<span class="s">    },</span>
+<span class="s">    &quot;names&quot;: [{</span>
+<span class="s">        &quot;C&quot;: &quot;CN&quot;,</span>
+<span class="s">        &quot;ST&quot;: &quot;JiangSu&quot;,</span>
+<span class="s">        &quot;L&quot;: &quot;NanJing&quot;,</span>
+<span class="s">        &quot;O&quot;: &quot;还是私人组织&quot;,</span>
+<span class="s">        &quot;OU&quot;: &quot;还是15单元&quot;</span>
+<span class="s">    }]</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+$ cfssl gencert -ca<span class="o">=</span>ca.pem -ca-key<span class="o">=</span>ca-key.pem -config<span class="o">=</span>config.json -profile<span class="o">=</span>www server-csr.json <span class="p">|</span> cfssljson -bare server
+</code></pre></div>
+
+<p>添加nginx中的配置</p>
+<div class="highlight"><pre><span></span><code><span class="k">listen</span><span class="w"> </span><span class="mi">81</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span><span class="w"></span>
+<span class="k">listen</span><span class="w"> </span><span class="s">[::]:81</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">root</span><span class="w"> </span><span class="s">/usr/share/nginx/html</span><span class="p">;</span><span class="w"></span>
+<span class="k">ssl_certificate</span><span class="w"> </span><span class="s">/etc/nginx/ssl/server.pem</span><span class="p">;</span><span class="w"></span>
+<span class="k">ssl_certificate_key</span><span class="w"> </span><span class="s">/etc/nginx/ssl/server-key.pem</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>使用浏览器查看证书</p>
+<p><img alt="zhengshu.png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/%E8%AF%81%E4%B9%A63.png"></p>
+<h3>参考</h3>
+<ul>
+<li><a href="http://blog.leanote.com/post/criss/CFSSL%E5%88%9B%E5%BB%BAHTTPS%E8%AF%81%E4%B9%A6">CFSSL创建HTTPS证书</a></li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/linux.html"> Linux</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>

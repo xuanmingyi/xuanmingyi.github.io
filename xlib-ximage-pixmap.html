@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>图片显示 XImage与Pixmap(2)</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="blog.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">blog.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>图片显示 XImage与Pixmap(2)</h1>
+<div class=date>Thu 14 October 2021</div>
+
+<h3>XImage与Pixmap的差别</h3>
+<p><strong>XImage</strong>与<strong>Pixmap</strong>都是<strong>Xlib</strong>的数据结构，并且都和图片有关,我们首先分析一下他们之间的区别。</p>
+<p><strong>XImage</strong>的数据结构在<em>xlib.h</em>中定义</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/*</span>
+<span class="cm"> * Data structure for &quot;image&quot; data, used by image manipulation routines.</span>
+<span class="cm"> */</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">;</span><span class="w">      </span><span class="cm">/* size of image */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">xoffset</span><span class="p">;</span><span class="w">        </span><span class="cm">/* number of pixels offset in X direction */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">format</span><span class="p">;</span><span class="w">         </span><span class="cm">/* XYBitmap, XYPixmap, ZPixmap */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">;</span><span class="w">         </span><span class="cm">/* pointer to image data */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">byte_order</span><span class="p">;</span><span class="w">     </span><span class="cm">/* data byte order, LSBFirst, MSBFirst */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bitmap_unit</span><span class="p">;</span><span class="w">        </span><span class="cm">/* quant. of scanline 8, 16, 32 */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bitmap_bit_order</span><span class="p">;</span><span class="w">   </span><span class="cm">/* LSBFirst, MSBFirst */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bitmap_pad</span><span class="p">;</span><span class="w">     </span><span class="cm">/* 8, 16, 32 either XY or ZPixmap */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span><span class="w">          </span><span class="cm">/* depth of image */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bytes_per_line</span><span class="p">;</span><span class="w">     </span><span class="cm">/* accelarator to next line */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bits_per_pixel</span><span class="p">;</span><span class="w">     </span><span class="cm">/* bits per pixel (ZPixmap) */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">red_mask</span><span class="p">;</span><span class="w"> </span><span class="cm">/* bits in z arrangement */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">green_mask</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">blue_mask</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">XPointer</span><span class="w"> </span><span class="n">obdata</span><span class="p">;</span><span class="w">        </span><span class="cm">/* hook for the object routines to hang on */</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">funcs</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="cm">/* image manipulation routines */</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">create_image</span><span class="p">)(</span><span class="w"></span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">_XDisplay</span><span class="o">*</span><span class="w"> </span><span class="cm">/* display */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">Visual</span><span class="o">*</span><span class="w">     </span><span class="cm">/* visual */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="cm">/* depth */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w">     </span><span class="cm">/* format */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w">     </span><span class="cm">/* offset */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">char</span><span class="o">*</span><span class="w">       </span><span class="cm">/* data */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="cm">/* width */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="cm">/* height */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w">     </span><span class="cm">/* bitmap_pad */</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w">     </span><span class="cm">/* bytes_per_line */</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">destroy_image</span><span class="p">)</span><span class="w">        </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="nf">long</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_pixel</span><span class="p">)</span><span class="w">  </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">put_pixel</span><span class="p">)</span><span class="w">            </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">sub_image</span><span class="p">)(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">add_pixel</span><span class="p">)</span><span class="w">            </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">_XImage</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">f</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">XImage</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Pixmap</strong>的数据结构在<em>X.h</em>中定义</p>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="n">XID</span><span class="w"> </span><span class="n">Pixmap</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>从定义我们就能得知，Pixmap是一个简单的句柄。而XImage是一个完整的数据结构。Pixmap是存储在Server端，我们通过句柄操作。而XImage是存储在客户端，我们可以随意操作。</p>
+<h4>Pixmap操作函数</h4>
+<p>从<a href="https://tronche.com/gui/x/xlib/pixmap-and-cursor/pixmap.html">手册</a>了解，操作Pixmap有如下方法</p>
+<ul>
+<li><a href="https://tronche.com/gui/x/xlib/pixmap-and-cursor/XCreatePixmap.html">XCreatePixmap</a></li>
+<li><a href="https://tronche.com/gui/x/xlib/pixmap-and-cursor/XFreePixmap.html">XFreePixmap</a></li>
+<li><a href="https://tronche.com/gui/x/xlib/pixmap-and-cursor/XFreePixmap.html">XCopyArea</a></li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/graphics/XCopyPlane.html">XCopyPlane</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XReadBitmapFile.html">XReadBitmapFile</a>  从文件中读取数据，保存在pixmap中</p>
+</li>
+<li><a href="https://tronche.com/gui/x/xlib/utilities/XWriteBitmapFile.html">XWriteBitmapFile </a> 把一个pixmap写入到文件中</li>
+<li><a href="https://tronche.com/gui/x/xlib/utilities/XReadBitmapFileData.html">XReadBitmapFileData </a> 从文件中读取数据，返回一个char*的data</li>
+<li><a href="https://tronche.com/gui/x/xlib/utilities/XCreatePixmapFromBitmapData.html">XCreatePixmapFromBitmapData</a> 从data数据生成一个pixmap</li>
+<li><a href="https://tronche.com/gui/x/xlib/utilities/XCreateBitmapFromData.html">XCreateBitmapFromData</a> 从data数据创建一个pixmap</li>
+</ul>
+<p>我画了一张简单的图来解释</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211013221132.png"></p>
+<h4>XImage操作函数</h4>
+<p>从 <a href="https://tronche.com/gui/x/xlib/utilities/manipulating-images.html">手册</a>了解，操作XImage数据结构有如下方法</p>
+<ul>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XCreateImage.html">XCreateImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XDestroyImage.html">XDestroyImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/graphics/XInitImage.html">XInitImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/graphics/XPutImage.html">XPutImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/graphics/XGetImage.html">XGetImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/graphics/XGetSubImage.html">XGetSubImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XSubImage.html">XSubImage</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XAddPixel.html">XAddPixel</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XGetPixel.html">XGetPixel</a></p>
+</li>
+<li>
+<p><a href="https://tronche.com/gui/x/xlib/utilities/XPutPixel.html">XPutPixel</a></p>
+</li>
+</ul>
+<h3>Example</h3>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/Xlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;X11/cursorfont.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#define STB_IMAGE_IMPLEMENTATION</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;stb_image.h&quot;</span><span class="cp"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">test_or_die</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// #define Success         0    /* everything&#39;s okay */</span>
+<span class="w">    </span><span class="c1">// #define BadRequest      1    /* bad request code */</span>
+<span class="w">    </span><span class="c1">// #define BadValue    2    /* int parameter out of range */</span>
+<span class="w">    </span><span class="c1">// #define BadWindow       3    /* parameter not a Window */</span>
+<span class="w">    </span><span class="c1">// #define BadPixmap       4    /* parameter not a Pixmap */</span>
+<span class="w">    </span><span class="c1">// #define BadAtom         5    /* parameter not an Atom */</span>
+<span class="w">    </span><span class="c1">// #define BadCursor       6    /* parameter not a Cursor */</span>
+<span class="w">    </span><span class="c1">// #define BadFont         7    /* parameter not a Font */</span>
+<span class="w">    </span><span class="c1">// #define BadMatch    8    /* parameter mismatch */</span>
+<span class="w">    </span><span class="c1">// #define BadDrawable     9    /* parameter not a Pixmap or Window */</span>
+<span class="w">    </span><span class="c1">// #define BadAccess      10    /* depending on context:</span>
+<span class="w">    </span><span class="c1">//           - key/button already grabbed</span>
+<span class="w">    </span><span class="c1">//           - attempt to free an illegal</span>
+<span class="w">    </span><span class="c1">//             cmap entry</span>
+<span class="w">    </span><span class="c1">//          - attempt to store into a read-only</span>
+<span class="w">    </span><span class="c1">//             color map entry.</span>
+<span class="w">    </span><span class="c1">//          - attempt to modify the access control</span>
+<span class="w">    </span><span class="c1">//             list from other than the local host.</span>
+<span class="w">    </span><span class="c1">//          */</span>
+<span class="w">    </span><span class="c1">// #define BadAlloc   11    /* insufficient resources */</span>
+<span class="w">    </span><span class="c1">// #define BadColor   12    /* no such colormap */</span>
+<span class="w">    </span><span class="c1">// #define BadGC          13    /* parameter not a GC */</span>
+<span class="w">    </span><span class="c1">// #define BadIDChoice    14    /* choice not in range or already used */</span>
+<span class="w">    </span><span class="c1">// #define BadName        15    /* font or color name doesn&#39;t exist */</span>
+<span class="w">    </span><span class="c1">// #define BadLength      16    /* Request length incorrect */</span>
+<span class="w">    </span><span class="c1">// #define BadImplementation 17 /* server is defective */</span>
+
+<span class="w">    </span><span class="c1">// #define FirstExtensionError  128</span>
+<span class="w">    </span><span class="c1">// #define LastExtensionError   255</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nl">Success</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rc=%d Success</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nl">BadRequest</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rc=%d BadRequest</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nl">BadValue</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rc=%d BadValue</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rc=%d Unknown error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setimage</span><span class="p">(</span><span class="n">Display</span><span class="w"> </span><span class="o">*</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Window</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">GC</span><span class="w"> </span><span class="n">gc</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">XImage</span><span class="w"> </span><span class="o">*</span><span class="n">ximage</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DefaultDepth</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">idata</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">idata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stbi_load</span><span class="p">(</span><span class="s">&quot;wld.jpg&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">height</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idata</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idata</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idata</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">stbi_image_free</span><span class="p">(</span><span class="n">idata</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ximage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreateImage</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">DefaultVisual</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">depth</span><span class="p">,</span><span class="w"> </span><span class="n">ZPixmap</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XPutImage</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">gc</span><span class="p">,</span><span class="w"> </span><span class="n">ximage</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">test_or_die</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Display</span><span class="w"> </span><span class="o">*</span><span class="n">X</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Window</span><span class="w"> </span><span class="n">win</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">GC</span><span class="w"> </span><span class="n">gc</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">XSetWindowAttributes</span><span class="w"> </span><span class="n">attributes</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">XKeyEvent</span><span class="w"> </span><span class="n">event</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XOpenDisplay</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">attributes</span><span class="p">.</span><span class="n">background_pixel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4433ff</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">attributes</span><span class="p">.</span><span class="n">border_pixel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x3344ff</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">win</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreateWindow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="n">XRootWindow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"></span>
+<span class="w">                        </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">556</span><span class="p">,</span><span class="w"> </span><span class="mi">720</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="mi">15</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="n">DefaultDepth</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"></span>
+<span class="w">                        </span><span class="n">InputOutput</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="n">DefaultVisual</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"></span>
+<span class="w">                        </span><span class="n">CWBackPixel</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CWBorderPixel</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="o">&amp;</span><span class="n">attributes</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">XDefineCursor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">XCreateFontCursor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">XC_right_side</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">XSelectInput</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">KeyPressMask</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ExposureMask</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">gc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XCreateGC</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">XMapWindow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">XNextEvent</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">XEvent</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">event</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">type</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="nl">Expose</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">setimage</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">gc</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="nl">KeyPress</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">XFreeGC</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">gc</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">XCloseDisplay</span><span class="p">(</span><span class="n">X</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">event</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>我们看到图片显示正确！</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211013222118.png"></p>
+<p>这里需要注意一个点：颜色！</p>
+<h5>颜色</h5>
+<p>stbi_load加载图片数据到内存中，内存布局是 R G B， 每一个是一个unsigned char。</p>
+<p>XCreateImage函数接收的内存数据是</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211013230140.png"></p>
+<p>所以，我们需要做一个转换。</p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/xlib.html"> Xlib</a>
+  </p>
+</div>
+
+<div class="author">
+  <a href="">
+    <img src="" alt="sin" width="128" height="108"/>
+  </a>
+  <div class="infos">
+    <h3>A propos de <a href="">sin</a></h3>	
+    <p></p>
+  </div>
+</div>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'blog.lithum.tech';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+  </div>
+</body>
+
+</html>
