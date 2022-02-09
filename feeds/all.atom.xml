@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.lithum.tech</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2022-01-11T23:55:43+08:00</updated><entry><title>自定义节点--建木(3)</title><link href="/jianmu-node-definition.html" rel="alternate"></link><published>2022-01-11T23:55:43+08:00</published><updated>2022-01-11T23:55:43+08:00</updated><author><name>sin</name></author><id>tag:None,2022-01-11:/jianmu-node-definition.html</id><summary type="html">&lt;p&gt;建木自定义节点&lt;/p&gt;</summary><content type="html">&lt;h4&gt;自定义节点&lt;/h4&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>www.lithum.tech</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2022-01-11T23:55:43+08:00</updated><entry><title>自定义节点--建木(3)</title><link href="/jianmu-node-definition.html" rel="alternate"></link><published>2022-01-11T23:55:43+08:00</published><updated>2022-01-11T23:55:43+08:00</updated><author><name>sin</name></author><id>tag:None,2022-01-11:/jianmu-node-definition.html</id><summary type="html">&lt;p&gt;建木自定义节点&lt;/p&gt;</summary><content type="html">&lt;h4&gt;自定义节点&lt;/h4&gt;
 &lt;p&gt;自定义节点我们可以通过docker来做的。&lt;/p&gt;
 &lt;h6&gt;构建镜像&lt;/h6&gt;
 &lt;p&gt;构建的&lt;strong&gt;Dockerfile&lt;/strong&gt;如下所示&lt;/p&gt;
@@ -831,9 +831,9 @@ systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; sshd
 &lt;p&gt;&lt;img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20211022180325.png"&gt;&lt;/p&gt;
 &lt;h4&gt;特别注意&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;我们常用的颜色其实是RGB,而BMP的存储格式是  B G R,但是，正好，xlib中的颜色顺序也是B G R。所以我们一一对应就可以了。如果使用其他图片库，比如&lt;a href="http://www.lithum.tech/index.php/archives/27/"&gt;stb_image操作图片&lt;/a&gt;, 那么一定要注意颜色顺序。&lt;/li&gt;
+&lt;li&gt;我们常用的颜色其实是RGB,而BMP的存储格式是  B G R,但是，正好，xlib中的颜色顺序也是B G R。所以我们一一对应就可以了。如果使用其他图片库，比如&lt;a href="/xlib-stb-image.html"&gt;stb_image操作图片&lt;/a&gt;, 那么一定要注意颜色顺序。&lt;/li&gt;
 &lt;li&gt;注意BMP像素存储顺序和xlib中XImage像素存储顺序的不同。需要做一个转换&lt;/li&gt;
-&lt;/ul&gt;</content><category term="misc"></category><category term="Xlib"></category></entry><entry><title>Events后续 MotionNotify(5)</title><link href="/xlib-events-motionnofity.html" rel="alternate"></link><published>2021-10-22T17:21:43+08:00</published><updated>2021-10-22T17:21:43+08:00</updated><author><name>sin</name></author><id>tag:None,2021-10-22:/xlib-events-motionnofity.html</id><summary type="html">&lt;p&gt;Xlib中的MotionNotify事件&lt;/p&gt;</summary><content type="html">&lt;p&gt;这是&lt;a href="http://www.lithum.tech/index.php/archives/29/"&gt;上一篇文章Events(3)&lt;/a&gt;的补充说明&lt;/p&gt;
+&lt;/ul&gt;</content><category term="misc"></category><category term="Xlib"></category></entry><entry><title>Events后续 MotionNotify(5)</title><link href="/xlib-events-motionnofity.html" rel="alternate"></link><published>2021-10-22T17:21:43+08:00</published><updated>2021-10-22T17:21:43+08:00</updated><author><name>sin</name></author><id>tag:None,2021-10-22:/xlib-events-motionnofity.html</id><summary type="html">&lt;p&gt;Xlib中的MotionNotify事件&lt;/p&gt;</summary><content type="html">&lt;p&gt;这是&lt;a href="/xlib-events.html"&gt;上一篇文章Events(3)&lt;/a&gt;的补充说明&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -901,7 +901,7 @@ systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; sshd
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;运行后，我按动滚轮移动来验证代码&lt;/p&gt;
-&lt;p&gt;&lt;img alt="gif" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/motion.gif"&gt;&lt;/p&gt;</content><category term="misc"></category><category term="Xlib"></category></entry><entry><title>Events后续 ButtonPress 和 ButtonRelease(4)</title><link href="/xlib-events-buttonpress-buttonrelease.html" rel="alternate"></link><published>2021-10-14T23:28:43+08:00</published><updated>2021-10-14T23:28:43+08:00</updated><author><name>sin</name></author><id>tag:None,2021-10-14:/xlib-events-buttonpress-buttonrelease.html</id><summary type="html">&lt;p&gt;Xlib中 ButtonPress 和 ButtonRelease 事件&lt;/p&gt;</summary><content type="html">&lt;p&gt;这是&lt;a href="http://www.lithum.tech/index.php/archives/29/"&gt;上一篇文章Events(3)&lt;/a&gt;的补充说明&lt;/p&gt;
+&lt;p&gt;&lt;img alt="gif" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/motion.gif"&gt;&lt;/p&gt;</content><category term="misc"></category><category term="Xlib"></category></entry><entry><title>Events后续 ButtonPress 和 ButtonRelease(4)</title><link href="/xlib-events-buttonpress-buttonrelease.html" rel="alternate"></link><published>2021-10-14T23:28:43+08:00</published><updated>2021-10-14T23:28:43+08:00</updated><author><name>sin</name></author><id>tag:None,2021-10-14:/xlib-events-buttonpress-buttonrelease.html</id><summary type="html">&lt;p&gt;Xlib中 ButtonPress 和 ButtonRelease 事件&lt;/p&gt;</summary><content type="html">&lt;p&gt;这是&lt;a href="/xlib-events.html"&gt;上一篇文章Events(3)&lt;/a&gt;的补充说明&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -1118,8 +1118,8 @@ systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; sshd
 &lt;p&gt;启动Xephyr，同时启动event_test测试。&lt;/p&gt;
 &lt;h4&gt;测试文章&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="http://www.lithum.tech/index.php/archives/30/"&gt;&lt;strong&gt;ButtonPress 和 ButtonRelease &lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.lithum.tech/index.php/archives/31/"&gt;&lt;strong&gt;MotionNotify&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="/xlib-events-buttonpress-buttonrelease.html"&gt;&lt;strong&gt;ButtonPress 和 ButtonRelease &lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="/xlib-events-motionnofity.html"&gt;&lt;strong&gt;MotionNotify&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content><category term="misc"></category><category term="Xlib"></category></entry><entry><title>图片显示 XImage与Pixmap(2)</title><link href="/xlib-ximage-pixmap.html" rel="alternate"></link><published>2021-10-14T00:06:43+08:00</published><updated>2021-10-14T00:06:43+08:00</updated><author><name>sin</name></author><id>tag:None,2021-10-14:/xlib-ximage-pixmap.html</id><summary type="html">&lt;p&gt;Xlib 中 数据结构XImage与Pixamp&lt;/p&gt;</summary><content type="html">&lt;h3&gt;XImage与Pixmap的差别&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;XImage&lt;/strong&gt;与&lt;strong&gt;Pixmap&lt;/strong&gt;都是&lt;strong&gt;Xlib&lt;/strong&gt;的数据结构，并且都和图片有关,我们首先分析一下他们之间的区别。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;XImage&lt;/strong&gt;的数据结构在&lt;em&gt;xlib.h&lt;/em&gt;中定义&lt;/p&gt;
