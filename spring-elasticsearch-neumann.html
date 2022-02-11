@@ -197,32 +197,32 @@
 <h4>根据条件做复杂查询</h4>
 <p>做一个比较复杂的查询</p>
 <div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">metric_server</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;agenttest&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="s1">&#39;2021-02-10 00:00:00&#39;</span><span class="w"></span>
+</code></pre></div>
 
+<p>同样的，我们可以使用下面代码做测试</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">testQuery</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">long</span> <span class="n">sinceTime</span> <span class="o">=</span> <span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1000L</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">;;</span>
 
-<span class="p">:::</span><span class="n">java</span><span class="w"></span>
-<span class="o">@</span><span class="n">Test</span><span class="w"></span>
-<span class="n">void</span><span class="w"> </span><span class="n">testQuery</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">long</span><span class="w"> </span><span class="n">sinceTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">System</span><span class="p">.</span><span class="n">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1000</span><span class="n">L</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">;;</span><span class="w"></span>
+    <span class="n">BoolQueryBuilder</span> <span class="n">boolQueryBuilder</span> <span class="o">=</span> <span class="n">QueryBuilders</span><span class="p">.</span><span class="na">boolQuery</span><span class="p">();</span>
 
-<span class="w">    </span><span class="n">BoolQueryBuilder</span><span class="w"> </span><span class="n">boolQueryBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QueryBuilders</span><span class="p">.</span><span class="n">boolQuery</span><span class="p">();</span><span class="w"></span>
+    <span class="n">boolQueryBuilder</span><span class="p">.</span><span class="na">must</span><span class="p">(</span><span class="n">termQuery</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;agenttest&quot;</span><span class="p">));</span>
+    <span class="n">boolQueryBuilder</span><span class="p">.</span><span class="na">must</span><span class="p">(</span><span class="n">QueryBuilders</span><span class="p">.</span><span class="na">rangeQuery</span><span class="p">(</span><span class="s">&quot;timestamp&quot;</span><span class="p">).</span><span class="na">gte</span><span class="p">(</span><span class="n">sinceTime</span><span class="p">));</span>
+    <span class="c1">// boolQueryBuilder.filter(QueryBuilders.rangeQuery(&quot;timestamp&quot;).gte(sinceTime));</span>
+    <span class="c1">// 同上</span>
 
-<span class="w">    </span><span class="n">boolQueryBuilder</span><span class="p">.</span><span class="n">must</span><span class="p">(</span><span class="n">termQuery</span><span class="p">(</span><span class="ss">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;agenttest&quot;</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="n">boolQueryBuilder</span><span class="p">.</span><span class="n">must</span><span class="p">(</span><span class="n">QueryBuilders</span><span class="p">.</span><span class="n">rangeQuery</span><span class="p">(</span><span class="ss">&quot;timestamp&quot;</span><span class="p">).</span><span class="n">gte</span><span class="p">(</span><span class="n">sinceTime</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">boolQueryBuilder</span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">QueryBuilders</span><span class="p">.</span><span class="n">rangeQuery</span><span class="p">(</span><span class="ss">&quot;timestamp&quot;</span><span class="p">).</span><span class="n">gte</span><span class="p">(</span><span class="n">sinceTime</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="err">同上</span><span class="w"></span>
+    <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NativeSearchQueryBuilder</span><span class="p">()</span>
+            <span class="p">.</span><span class="na">withQuery</span><span class="p">(</span><span class="n">boolQueryBuilder</span><span class="p">)</span>
+            <span class="p">.</span><span class="na">build</span><span class="p">();</span>
 
-<span class="w">    </span><span class="n">Query</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NativeSearchQueryBuilder</span><span class="p">()</span><span class="w"></span>
-<span class="w">            </span><span class="p">.</span><span class="n">withQuery</span><span class="p">(</span><span class="n">boolQueryBuilder</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="p">.</span><span class="n">build</span><span class="p">();</span><span class="w"></span>
+    <span class="n">IndexCoordinates</span> <span class="n">indexCoordinates</span> <span class="o">=</span> <span class="n">IndexCoordinates</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;metric_server&quot;</span><span class="p">);</span>
 
-<span class="w">    </span><span class="n">IndexCoordinates</span><span class="w"> </span><span class="n">indexCoordinates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IndexCoordinates</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="ss">&quot;metric_server&quot;</span><span class="p">);</span><span class="w"></span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">TestObject</span><span class="o">&gt;</span> <span class="n">objs</span> <span class="o">=</span>  <span class="n">elasticsearchRestTemplate</span><span class="p">.</span><span class="na">queryForList</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">TestObject</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">indexCoordinates</span><span class="p">);</span>
 
-<span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">TestObject</span><span class="o">&gt;</span><span class="w"> </span><span class="n">objs</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">elasticsearchRestTemplate</span><span class="p">.</span><span class="n">queryForList</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">TestObject</span><span class="p">.</span><span class="k">class</span><span class="p">,</span><span class="w"> </span><span class="n">indexCoordinates</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">objs</span><span class="p">.</span><span class="k">size</span><span class="p">()</span><span class="w"> </span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">System</span><span class="p">.</span><span class="k">out</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="na">size</span><span class="p">()</span> <span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 
 <p>运行如下图</p>
@@ -233,17 +233,54 @@
 <li><a href="https://blog.csdn.net/weixin_45362084/article/details/112171627?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;utm_relevant_index=1">Es检索 must与filter区别</a></li>
 </ul>
 <h3>查询并排序</h3>
-<h3>分页</h3>
-<h3>集合</h3>
+<p>查询并测试</p>
+<div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">metric_server</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;agenttest&#39;</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>使用下面代码测试</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Data</span>
+<span class="kd">class</span> <span class="nc">TestObject</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">region</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">resourceId</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">timestamp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">testQuery</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">TermQueryBuilder</span> <span class="n">termQuery</span> <span class="o">=</span> <span class="n">QueryBuilders</span><span class="p">.</span><span class="na">termQuery</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;agenttest&quot;</span><span class="p">);</span>
+
+    <span class="n">SortBuilder</span> <span class="n">sortBuilder</span> <span class="o">=</span> <span class="n">SortBuilders</span><span class="p">.</span><span class="na">fieldSort</span><span class="p">(</span><span class="s">&quot;timestamp&quot;</span><span class="p">).</span><span class="na">order</span><span class="p">(</span><span class="n">SortOrder</span><span class="p">.</span><span class="na">DESC</span><span class="p">);</span>
+
+    <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NativeSearchQueryBuilder</span><span class="p">()</span>
+            <span class="p">.</span><span class="na">withQuery</span><span class="p">(</span><span class="n">termQuery</span><span class="p">)</span>
+            <span class="p">.</span><span class="na">withSort</span><span class="p">(</span><span class="n">sortBuilder</span><span class="p">)</span>
+            <span class="p">.</span><span class="na">build</span><span class="p">();</span>
+
+    <span class="n">IndexCoordinates</span> <span class="n">indexCoordinates</span> <span class="o">=</span> <span class="n">IndexCoordinates</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;metric_server&quot;</span><span class="p">);</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">TestObject</span><span class="o">&gt;</span> <span class="n">objs</span> <span class="o">=</span>  <span class="n">elasticsearchRestTemplate</span><span class="p">.</span><span class="na">queryForList</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">TestObject</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">indexCoordinates</span><span class="p">);</span>
+
+    <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="na">size</span><span class="p">());</span>
+
+    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="na">size</span><span class="p">()</span> <span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>查看结果</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220211115650.png"></p>
 <h3>参考</h3>
 <ul>
-<li>https://www.cnblogs.com/jelly12345/p/14765477.html</li>
-<li>https://www.jianshu.com/p/56e755415e63</li>
-<li>https://blog.csdn.net/weixin_43814195/article/details/85281287</li>
-<li>https://www.cnblogs.com/moxiaotao/p/10843523.html</li>
-<li>https://blog.csdn.net/xx105/article/details/83827755</li>
-<li>https://blog.51cto.com/shadowisper/2393555</li>
-<li>https://blog.csdn.net/qq_42764468/article/details/107570357</li>
+<li><a href="https://www.cnblogs.com/jelly12345/p/14765477.html">springboot中ElasticSearch入门与进阶：组合查询、聚合查询</a></li>
+<li><a href="https://www.jianshu.com/p/56e755415e63">Spring Data Elasticsearch使用</a></li>
+<li><a href="https://blog.csdn.net/weixin_43814195/article/details/85281287">【必看】SpringBoot整合Spring Data Elasticsearch</a></li>
+<li><a href="https://www.cnblogs.com/moxiaotao/p/10843523.html">ElasticSearch AggregationBuilders java api常用聚会查询</a></li>
+<li><a href="https://blog.csdn.net/xx105/article/details/83827755">ElasticSearch-AggregationBuilders查询遇到的坑</a></li>
+<li><a href="https://blog.51cto.com/shadowisper/2393555">Elasticsearch Aggregation 笔记</a></li>
+<li><a href="https://blog.csdn.net/qq_42764468/article/details/107570357">Spring Data Elasticsearch</a></li>
 </ul>
 
 <div class="tags">
