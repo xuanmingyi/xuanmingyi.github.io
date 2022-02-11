@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Spring Elasticsearch Neumann</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="www.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">www.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Spring Elasticsearch Neumann</h1>
+<div class=date>Fri 11 February 2022 / Post by <a href="">sin</a></div>
+
+<h3>简介</h3>
+<p>从文档 <a href="https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/">Spring Data Elasticsearch - Reference Documentation</a> 可以查看到Spring 与 Elasticsearch之间的版本关系。</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220210152607.png"></p>
+<p>这里由于项目的需要，我们选取的是 Neumann版本，对应的是</p>
+<ul>
+<li>Spring Data Elasticsearch 4.0.x</li>
+<li>Elasticsearch 7.6.2</li>
+<li>Spring Framework 5.2.12</li>
+<li>Spring Boot 2.3.x</li>
+</ul>
+<p>官方文档 <a href="https://spring.io/blog/2020/05/12/spring-data-neumann-goes-ga">Spring Data Neumann goes GA</a>，注意需要使用的是这个文档。</p>
+<h3>Elasticsearch 和 数据库 对比</h3>
+<table>
+<thead>
+<tr>
+<th align="center">SQL数据库</th>
+<th align="center">Elasticsearch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">column(列)</td>
+<td align="center">field(字段)</td>
+</tr>
+<tr>
+<td align="center">row(行)</td>
+<td align="center">document(文档)</td>
+</tr>
+<tr>
+<td align="center">table(表)</td>
+<td align="center">index(索引)</td>
+</tr>
+<tr>
+<td align="center">schema(模式)</td>
+<td align="center">mapping(映射)</td>
+</tr>
+<tr>
+<td align="center">database server(数据库服务器)</td>
+<td align="center">Elasticsearch 集群实例</td>
+</tr>
+</tbody>
+</table>
+<h3>测试方法</h3>
+<p>我们使用如下测试代码作为测试基础</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span> <span class="nn">com.example.demo</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
+
+<span class="nd">@SpringBootTest</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ElasticsearchTests</span> <span class="p">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">ElasticsearchRestTemplate</span> <span class="n">elasticsearchRestTemplate</span><span class="p">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">testQuery</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// 测试代码</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>只需要修改<strong>testQuery</strong>内代码，就可以完成针对不同代码的测试。</p>
+<h4>查询所有文档</h4>
+<p>查询一个索引中的所有数据。类似于查询语句</p>
+<div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">metric_server</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>接下来是获取Elasticsearch数据</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Data</span>
+<span class="kd">class</span> <span class="nc">TestObject</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">region</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">resourceId</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">testQuery</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NativeSearchQueryBuilder</span><span class="p">()</span>
+            <span class="p">.</span><span class="na">withQuery</span><span class="p">(</span><span class="n">matchAllQuery</span><span class="p">())</span>
+            <span class="p">.</span><span class="na">build</span><span class="p">();</span>
+
+    <span class="n">IndexCoordinates</span> <span class="n">indexCoordinates</span> <span class="o">=</span> <span class="n">IndexCoordinates</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;metric_server&quot;</span><span class="p">);</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">TestObject</span><span class="o">&gt;</span> <span class="n">objs</span> <span class="o">=</span>  <span class="n">elasticsearchRestTemplate</span><span class="p">.</span><span class="na">queryForList</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">TestObject</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">indexCoordinates</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="na">size</span><span class="p">()</span> <span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220210213133.png"></p>
+<h4>根据条件简单查询</h4>
+<p>加上条件再做查询,类似于以下</p>
+<div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">metric_server</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;agenttest&#39;</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>代码也比较简单，使用<strong>termQuery</strong>来匹配</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">testQuery</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">TermQueryBuilder</span> <span class="n">termQueryBuilder</span> <span class="o">=</span> <span class="n">QueryBuilders</span><span class="p">.</span><span class="na">termQuery</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;agenttest&quot;</span><span class="p">);</span>
+
+    <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NativeSearchQueryBuilder</span><span class="p">()</span>
+            <span class="p">.</span><span class="na">withQuery</span><span class="p">(</span><span class="n">termQueryBuilder</span><span class="p">)</span>
+            <span class="p">.</span><span class="na">build</span><span class="p">();</span>
+
+    <span class="n">IndexCoordinates</span> <span class="n">indexCoordinates</span> <span class="o">=</span> <span class="n">IndexCoordinates</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;metric_server&quot;</span><span class="p">);</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">TestObject</span><span class="o">&gt;</span> <span class="n">objs</span> <span class="o">=</span>  <span class="n">elasticsearchRestTemplate</span><span class="p">.</span><span class="na">queryForList</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">TestObject</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">indexCoordinates</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="na">size</span><span class="p">()</span> <span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h5>各匹配类型说明</h5>
+<table>
+<thead>
+<tr>
+<th align="center">Query类型</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">matchQuery</td>
+<td align="center">分词，然后调用termQuery</td>
+</tr>
+<tr>
+<td align="center">termQuery</td>
+<td align="center">不分词，严格匹配</td>
+</tr>
+<tr>
+<td align="center">wildcardQuery</td>
+<td align="center">通配符匹配</td>
+</tr>
+<tr>
+<td align="center">fuzzyQuery</td>
+<td align="center">模糊匹配</td>
+</tr>
+<tr>
+<td align="center">rangeQuery</td>
+<td align="center">范围匹配</td>
+</tr>
+<tr>
+<td align="center">booleanQuery</td>
+<td align="center">布尔匹配(几个匹配之间做布尔运算)</td>
+</tr>
+</tbody>
+</table>
+<h4>根据条件做复杂查询</h4>
+<p>做一个比较复杂的查询</p>
+<div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">metric_server</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;agenttest&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="s1">&#39;2021-02-10 00:00:00&#39;</span><span class="w"></span>
+
+
+<span class="p">:::</span><span class="n">java</span><span class="w"></span>
+<span class="o">@</span><span class="n">Test</span><span class="w"></span>
+<span class="n">void</span><span class="w"> </span><span class="n">testQuery</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">long</span><span class="w"> </span><span class="n">sinceTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">System</span><span class="p">.</span><span class="n">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1000</span><span class="n">L</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">;;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">BoolQueryBuilder</span><span class="w"> </span><span class="n">boolQueryBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QueryBuilders</span><span class="p">.</span><span class="n">boolQuery</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">boolQueryBuilder</span><span class="p">.</span><span class="n">must</span><span class="p">(</span><span class="n">termQuery</span><span class="p">(</span><span class="ss">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;agenttest&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">boolQueryBuilder</span><span class="p">.</span><span class="n">must</span><span class="p">(</span><span class="n">QueryBuilders</span><span class="p">.</span><span class="n">rangeQuery</span><span class="p">(</span><span class="ss">&quot;timestamp&quot;</span><span class="p">).</span><span class="n">gte</span><span class="p">(</span><span class="n">sinceTime</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">boolQueryBuilder</span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">QueryBuilders</span><span class="p">.</span><span class="n">rangeQuery</span><span class="p">(</span><span class="ss">&quot;timestamp&quot;</span><span class="p">).</span><span class="n">gte</span><span class="p">(</span><span class="n">sinceTime</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="err">同上</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">Query</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NativeSearchQueryBuilder</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="p">.</span><span class="n">withQuery</span><span class="p">(</span><span class="n">boolQueryBuilder</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="p">.</span><span class="n">build</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">IndexCoordinates</span><span class="w"> </span><span class="n">indexCoordinates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IndexCoordinates</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="ss">&quot;metric_server&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">TestObject</span><span class="o">&gt;</span><span class="w"> </span><span class="n">objs</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">elasticsearchRestTemplate</span><span class="p">.</span><span class="n">queryForList</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">TestObject</span><span class="p">.</span><span class="k">class</span><span class="p">,</span><span class="w"> </span><span class="n">indexCoordinates</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">objs</span><span class="p">.</span><span class="k">size</span><span class="p">()</span><span class="w"> </span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">System</span><span class="p">.</span><span class="k">out</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>运行如下图</p>
+<p><img alt="png" src="https://gitee.com/xuanmingyi/imagebed/raw/master/img/20220211000208.png"></p>
+<p>其中<strong>filter</strong>和<strong>must</strong>在这里是一致的，但是他们在ES里还是有差别的，详细参考 </p>
+<ul>
+<li><a href="https://blog.csdn.net/fechinchu/article/details/112235154">ElasticSearch中must和filter的区别</a></li>
+<li><a href="https://blog.csdn.net/weixin_45362084/article/details/112171627?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;utm_relevant_index=1">Es检索 must与filter区别</a></li>
+</ul>
+<h3>查询并排序</h3>
+<h3>分页</h3>
+<h3>集合</h3>
+<h3>参考</h3>
+<ul>
+<li>https://www.cnblogs.com/jelly12345/p/14765477.html</li>
+<li>https://www.jianshu.com/p/56e755415e63</li>
+<li>https://blog.csdn.net/weixin_43814195/article/details/85281287</li>
+<li>https://www.cnblogs.com/moxiaotao/p/10843523.html</li>
+<li>https://blog.csdn.net/xx105/article/details/83827755</li>
+<li>https://blog.51cto.com/shadowisper/2393555</li>
+<li>https://blog.csdn.net/qq_42764468/article/details/107570357</li>
+</ul>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/spring.html"> Spring</a>
+    <a href="/tag/elasticsearch.html">, Elasticsearch</a>
+    <a href="/tag/java.html">, Java</a>
+  </p>
+</div>
+
+
+
+    </div>
+  </div>
+</body>
+
+</html>
