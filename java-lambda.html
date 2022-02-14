@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Java Lambda</title>
+
+  <!-- meta -->
+  <meta charset="utf-8" />
+  <meta name="author" content="sin" />
+
+  <!-- Feeds -->
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+    title="www.lithum.tech Atom Feed" />
+
+  <link rel="stylesheet" href="/theme/fonts/leaguespartan.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/junction.css" type="text/css">
+  <link rel="stylesheet" href="/theme/fonts/firamono.css" type="text/css">
+  <link rel="stylesheet" href="/theme/css/main.css?11639233881" type="text/css" />
+  <link rel="stylesheet" href="/theme/css/pygments.css?1639233881" type="text/css" />
+  <link rel="shortcut icon" href="/theme/favicon.ico" />
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="blogtitle">
+      <a href="/">www.lithum.tech</a>
+    </div>
+
+    <ul id="mainnav">
+      <li><a href="/">home</a></li>
+      <li><a href="/archives.html">archive</a></li>
+      <li><a href="/tags.html">tags</a></li>
+      <li><a href="/about-this-blog.html">about this blog</a></li>
+      <li><a href="/wechat.html">wechat</a></li>
+    </ul>
+
+    <div class="clearboth"></div>
+    <div id="content">
+
+<h1>Java Lambda</h1>
+<div class=date>Mon 14 February 2022 / Post by <a href="">sin</a></div>
+
+<h3>Java中的函数式编程</h3>
+<h4>filter</h4>
+<p>filter 用来过滤出数据,下列代码把大于10的元素过滤出来</p>
+<div class="highlight"><pre><span></span><code><span class="n">Integer</span><span class="o">[]</span> <span class="n">mylist</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">64</span><span class="p">};</span>
+<span class="n">Arrays</span><span class="p">.</span><span class="na">stream</span><span class="p">(</span><span class="n">mylist</span><span class="p">).</span><span class="na">filter</span><span class="p">(</span><span class="n">number</span> <span class="o">-&gt;</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">).</span><span class="na">forEach</span><span class="p">(</span><span class="n">item</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">));</span>
+</code></pre></div>
+
+<h4>map</h4>
+<p>map 用来对每一个元素做操作,下列代码把每个元素扩大3倍</p>
+<div class="highlight"><pre><span></span><code><span class="n">Integer</span><span class="o">[]</span> <span class="n">mylist</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">64</span><span class="p">};</span>
+<span class="n">Arrays</span><span class="p">.</span><span class="na">stream</span><span class="p">(</span><span class="n">mylist</span><span class="p">).</span><span class="na">map</span><span class="p">(</span><span class="n">number</span> <span class="o">-&gt;</span> <span class="n">number</span> <span class="o">*</span> <span class="mi">3</span><span class="p">).</span><span class="na">forEach</span><span class="p">(</span><span class="n">item</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">));</span>
+</code></pre></div>
+
+<h4>forEach</h4>
+<p>forEach用来操作每个元素</p>
+<p>虽然都是对所有元素进行操作，而map和forEach差别还是蛮大的。 </p>
+<p>map主要关注于返回值，返回值组成一个新的stream</p>
+<p>forEach主要关注于操作，而忽略返回值</p>
+
+<div class="tags">
+  <p>
+    This entry was tagged
+    <a href="/tag/java.html"> Java</a>
+    <a href="/tag/lambda.html">, Lambda</a>
+  </p>
+</div>
+
+
+
+    </div>
+  </div>
+</body>
+
+</html>
